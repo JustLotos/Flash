@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationFailureListener implements EventSubscriberInterface
 {
+    public const AUTH_FAILURE_MESSAGE = 'invalid credentials';
+
     /**
      * @return array
      */
@@ -23,7 +25,7 @@ class AuthenticationFailureListener implements EventSubscriberInterface
     {
         $response = new Response(
             json_encode(
-                ['errors' => ['auth'=>'invalid credentials']]
+                ['errors' => ['auth'=>self::AUTH_FAILURE_MESSAGE]]
             ),
             Response::HTTP_UNAUTHORIZED
         );

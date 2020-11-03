@@ -15,8 +15,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use DomainException;
 use DateTimeImmutable;
 use Webmozart\Assert\Assert;
+use Swagger\Annotations as SWG;
 
 /**
+ * @SWG\Definition
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user_users", uniqueConstraints={
@@ -44,6 +46,7 @@ class User implements UserInterface
      * @ORM\Column(type="users_user_email", name="email")
      * @Serializer\Type(name="string")
      * @Serializer\Groups({User::GROUP_SIMPLE})
+     * @SWG\Property(example="test@test.test")
      */
     private $email;
     /**
@@ -68,6 +71,7 @@ class User implements UserInterface
      * @var string
      * @ORM\Column(type="string", length=16)
      * @Serializer\Groups({User::GROUP_SIMPLE})
+     * @SWG\Property(enum={User::GROUP_SIMPLE})
      */
     private $status;
 
@@ -90,6 +94,7 @@ class User implements UserInterface
      * @ORM\Column(type="users_user_role", length=16)
      * @Serializer\Type(name="string")
      * @Serializer\Groups({User::GROUP_SIMPLE})
+     * @SWG\Property(example="ROLE_USER")
      */
     private $role;
 
