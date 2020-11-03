@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\API\User\Change;
 
 use App\Controller\ControllerHelper;
+use App\Domain\User\Entity\User;
 use App\Domain\User\UseCase\Change\Email\Confirm\Command as ConfirmCommand;
 use App\Domain\User\UseCase\Change\Email\Confirm\Handler as ConfirmHandler;
 use App\Domain\User\UseCase\Change\Email\Request\Command as RequestCommand;
@@ -32,7 +33,9 @@ class ChangeEmailController extends AbstractController
     /** @Route("/confirm/{token}", name="changeEmailConfirm", methods={"GET"}) */
     public function confirm(ConfirmHandler $handler, string $token): RedirectResponse
     {
-        $handler->handle(new ConfirmCommand($token));
+        /** @var User $user */
+        $user = $this->getUser();
+        $handler->handle(new ConfirmCommand($token), $user);
         return $this->redirectToRoute('index', [
             'vueRouting' => '',
             'changeEmail' => 'confirm'

@@ -8,6 +8,7 @@ use App\Domain\User\Entity\Types\Email;
 use App\Domain\User\Entity\Types\Id;
 use App\Domain\User\Entity\Types\Password;
 use App\Domain\User\Entity\Types\Role;
+use App\Domain\User\Entity\Types\Status;
 use App\Domain\User\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -27,9 +28,11 @@ class UserFixtures extends BaseFixture implements ContainerAwareInterface
                 new DateTimeImmutable(),
                 Role::createAdmin(),
                 new Email(getenv('TEST_USER_EMAIL')),
-                new Password(getenv('TEST_USER_PASSWORD'))
+                new Password(getenv('TEST_USER_PASSWORD')),
+                Status::createWait()
             );
-            $user->activate();
+
+            $user->getStatus()->activate();
             return $user;
         });
 
@@ -39,9 +42,11 @@ class UserFixtures extends BaseFixture implements ContainerAwareInterface
                 new DateTimeImmutable(),
                 Role::createUser(),
                 new Email('test@test.test'),
-                new Password('12345678Ab')
+                new Password('12345678Ab'),
+                Status::createWait()
             );
-            $user->activate();
+
+            $user->getStatus()->activate();
             return $user;
         });
 

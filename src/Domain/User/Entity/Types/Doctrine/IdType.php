@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Entity\Types\Doctrine;
 
+use App\Domain\User\Entity\Types\Id;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\GuidType;
 
@@ -13,12 +14,12 @@ class IdType extends GuidType
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return $value instanceof \App\Domain\User\Entity\Types\Id ? $value->getValue() : $value;
+        return $value instanceof Id ? $value->getValue() : $value;
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return !empty($value) ? new \App\Domain\User\Entity\Types\Id($value) : null;
+        return !empty($value) ? new Id($value) : null;
     }
 
     public function getName(): string

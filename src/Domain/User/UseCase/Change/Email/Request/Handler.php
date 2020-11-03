@@ -49,6 +49,7 @@ class Handler
         $this->validator->validate($command);
         /** @var User $user */
         $user = $this->repository->getByEmail($command->oldEmail);
+        /** @var ConfirmToken $token */
         $token = $this->tokenizer->generateTokenByClass(ConfirmToken::class);
         $user->requestChangeEmail($token, new Email($command->newEmail));
         $this->flusher->flush();
@@ -58,21 +59,16 @@ class Handler
 
     public function sendConfirmMessage(User $user): void
     {
-        $confirmLink = $this->generator->generate('changeEmailConfirm', ['token' => $user->getConfirmToken()->getToken()]);
+        $token = $user->getConfirmToken()->getToken();
+        $confirmLink = $this->generator->generate('changeEmailConfirm', ['token' => $token]);
+        $subject = 'Запрос смены пароля в приложении Flash';
 
         $bodyMessage = $this->builder
             ->setParam('url', $confirmLink)
             ->setParam('token', $user->getConfirmToken()->getToken())
             ->build('mail/user/change/email/request.html.twig');
 
-
-        $message = BaseMessage::getDefaultMessage(
-            $user->getEmail(),
-            'Запрос смены пароля в приложении Flash',
-            'Запрос смены пароля в приложении Flash',
-            $bodyMessage
-        );
-
+        $message = BaseMessage::getDefaultMessage($user->getEmail(), $subject, $bodyMessage);
         $this->sender->send($message);
     }
 }

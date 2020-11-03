@@ -46,7 +46,7 @@ abstract class AbstractTest extends WebTestCase
     protected function setUp() : void
     {
         static::getClient();
-        $this->url = getenv('DEFAULT_HOST').'/api/v1';
+        $this->url = getenv('DEFAULT_HOST').'/api';
         $this->loadFixtures($this->getFixtures());
     }
 

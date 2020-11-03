@@ -7,11 +7,8 @@ namespace App\Tests\Functional\Domain\User\Change\Role;
 use App\DataFixtures\User\UserFixtures;
 use App\Domain\User\Entity\Types\Role;
 use App\Tests\AbstractTest;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\RawMessage;
 
 class RequestActionTest extends AbstractTest
 {

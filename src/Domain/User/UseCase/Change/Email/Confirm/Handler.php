@@ -24,6 +24,7 @@ class Handler
     private $sender;
     private $builder;
     private $generator;
+    private $redis;
 
     public function __construct(
         UserRepository $repository,
@@ -41,7 +42,7 @@ class Handler
         $this->generator = $generator;
     }
 
-    public function handle(Command $command): void
+    public function handle(Command $command, User $user): void
     {
         $this->validator->validate($command);
 
@@ -57,13 +58,9 @@ class Handler
 
     public function sendConfirmMessage(User $user): void
     {
-        $message = BaseMessage::getDefaultMessage(
-            $user->getEmail(),
-            'Успешная смена email в приложении Flash',
-            'Успешная смена email в приложении Flash',
-            $this->builder->build('mail/user/change/email/confirm.html.twig')
-        );
-
+        $subject = 'Успешная смена email в приложении Flash';
+        $body = $this->builder->build('mail/user/change/email/confirm.html.twig');
+        $message = BaseMessage::getDefaultMessage($user->getEmail(), $subject, $body);
         $this->sender->send($message);
     }
 }

@@ -9,12 +9,12 @@ use App\Domain\User\Entity\Types\Id;
 use App\Domain\User\Entity\Types\Password;
 use App\Domain\User\Entity\Types\Role;
 use App\Domain\User\Entity\Types\ConfirmToken;
+use App\Domain\User\Entity\Types\Status;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Security\Core\User\UserInterface;
 use DomainException;
 use DateTimeImmutable;
-use Webmozart\Assert\Assert;
 use Swagger\Annotations as SWG;
 
 /**
@@ -28,10 +28,6 @@ use Swagger\Annotations as SWG;
  */
 class User implements UserInterface
 {
-    public const STATUS_WAIT = 'WAIT';
-    public const STATUS_ACTIVE = 'ACTIVE';
-    public const STATUS_BLOCKED = 'BLOCKED';
-
     /**
      * @var Id
      * @ORM\Column(type="users_user_id")
@@ -49,6 +45,7 @@ class User implements UserInterface
      * @SWG\Property(example="test@test.test")
      */
     private $email;
+
     /**
      * @var Email|null
      * @ORM\Column(type="users_user_email", nullable=true)
@@ -68,8 +65,8 @@ class User implements UserInterface
     private $confirmToken;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", length=16)
+     * @var Status
+     * @ORM\Embedded(class="App\Domain\User\Entity\Types\Status", columnPrefix="confirm_token_")
      * @Serializer\Groups({User::GROUP_SIMPLE})
      * @SWG\Property(enum={User::GROUP_SIMPLE})
      */
@@ -108,20 +105,19 @@ class User implements UserInterface
         $this->updatedAt = $date;
     }
 
-    public static function createByEmail(Id $id, DateTimeImmutable $date, Role $role, Email $email, Password $password): self
+    public static function createByEmail(Id $id, DateTimeImmutable $date, Role $role, Email $email, Password $password, Status $status): self
     {
-        Assert::email($email);
         $user = new self($id, $date);
         $user->role = $role;
         $user->email = $email;
         $user->password = $password;
-        $user->status = self::STATUS_WAIT;
+        $user->status = $status;
         return $user;
     }
 
     public function requestRegisterByEmail(ConfirmToken $token): ConfirmToken
     {
-        if (!$this->isWait()) {
+        if (!$this->status->isWait()) {
             throw new DomainException('User is already confirmed.');
         }
         if ($this->confirmToken && !$this->confirmToken->isExpiredToNow()) {
@@ -129,13 +125,13 @@ class User implements UserInterface
         }
 
         $this->confirmToken = $token;
-        $this->status = self::STATUS_WAIT;
+        $this->status->changeStatus(Status::STATUS_WAIT);
         return $this->confirmToken;
     }
 
     public function confirmRegisterByEmail(DateTimeImmutable $date = null): void
     {
-        if (!$this->confirmToken && $this->isActive()) {
+        if (!$this->confirmToken && $this->status->isActive()) {
             throw new DomainException('Confirm user in not requested.');
         }
         if ($this->confirmToken->isExpiredTo($date ? $date : new DateTimeImmutable())) {
@@ -143,25 +139,25 @@ class User implements UserInterface
         }
 
         $this->confirmToken = null;
-        $this->activate();
+        $this->status->activate();
     }
 
     public function requestResetPassword(ConfirmToken $token): void
     {
-        if (!$this->isActive()) {
+        if (!$this->status->isActive()) {
             throw new DomainException('User is not active.');
         }
         if ($this->confirmToken && !$this->confirmToken->isExpiredToNow()) {
             throw new DomainException('Resetting is already requested.');
         }
 
-        $this->block();
+        $this->status->block();
         $this->confirmToken = $token;
     }
 
     public function confirmResetPassword(Password $password, DateTimeImmutable $date = null): void
     {
-        if (!$this->confirmToken && $this->isActive()) {
+        if (!$this->confirmToken && $this->status->isActive()) {
             throw new DomainException('Resetting is not requested.');
         }
 
@@ -169,14 +165,14 @@ class User implements UserInterface
             throw new DomainException('Reset token is expired.');
         }
 
-        $this->activate();
+        $this->status->activate();
         $this->password = $password;
         $this->confirmToken = null;
     }
 
     public function requestChangeEmail(ConfirmToken $token, Email $email): void
     {
-        if (!$this->isActive()) {
+        if (!$this->status->isActive()) {
             throw new DomainException('User is not active.');
         }
         if ($this->confirmToken && !$this->confirmToken->isExpiredToNow() && $this->temporaryEmail) {
@@ -186,14 +182,14 @@ class User implements UserInterface
             throw new DomainException('Email is same.');
         }
 
-        $this->block();
+        $this->getStatus();
         $this->confirmToken = $token;
         $this->temporaryEmail = $email;
     }
 
     public function confirmChangeEmail(DateTimeImmutable $date = null): void
     {
-        if (!$this->confirmToken && $this->isActive() && !$this->temporaryEmail) {
+        if (!$this->confirmToken && $this->status->isActive() && !$this->temporaryEmail) {
             throw new DomainException('Changing is not requested.');
         }
         if ($this->confirmToken->isExpiredTo($date ? $date : new DateTimeImmutable())) {
@@ -202,7 +198,7 @@ class User implements UserInterface
         $this->email = $this->temporaryEmail;
         $this->temporaryEmail = null;
         $this->confirmToken = null;
-        $this->activate();
+        $this->status->activate();
     }
 
     public function resetTemporaryEmail(): self
@@ -218,37 +214,6 @@ class User implements UserInterface
         }
         $this->role = $role;
         $this->updatedAt = new DateTimeImmutable();
-    }
-
-    public function activate(): void
-    {
-        if ($this->isActive()) {
-            throw new DomainException('User is already active.');
-        }
-
-        $this->status = self::STATUS_ACTIVE;
-        $this->updatedAt = new DateTimeImmutable();
-    }
-    public function block(): void
-    {
-        if ($this->isBlocked()) {
-            throw new DomainException('User is already blocked.');
-        }
-        $this->status = self::STATUS_BLOCKED;
-        $this->updatedAt = new DateTimeImmutable();
-    }
-
-    public function isWait(): bool
-    {
-        return $this->status === self::STATUS_WAIT;
-    }
-    public function isActive(): bool
-    {
-        return $this->status === self::STATUS_ACTIVE;
-    }
-    public function isBlocked(): bool
-    {
-        return $this->status === self::STATUS_BLOCKED;
     }
 
     public function getId(): Id
@@ -267,7 +232,7 @@ class User implements UserInterface
     {
         return $this->role;
     }
-    public function getStatus(): string
+    public function getStatus(): Status
     {
         return $this->status;
     }
@@ -304,11 +269,9 @@ class User implements UserInterface
 
     public function getSalt()
     {
-        // TODO: Implement getSalt() method.
     }
 
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
     }
 }
