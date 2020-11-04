@@ -42,7 +42,7 @@ class Handler
         $this->generator = $generator;
     }
 
-    public function handle(Command $command, User $user): void
+    public function handle(Command $command): void
     {
         $this->validator->validate($command);
 
