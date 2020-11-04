@@ -16,12 +16,49 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Swagger\Annotations as SWG;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 /** @Route(value="api/user/register/email") */
 class RegisterByEmailController extends AbstractController
 {
     use ControllerHelper;
-    /** @Route("/request/", name="registerByEmail", methods={"POST"}, options={"no_auth": true}) */
+    /**
+     * @Route("/request/", name="registerByEmail", methods={"POST"}, options={"no_auth": true})
+     *
+     * @SWG\Post(
+     *     summary="Регистрация нового пользователя (email и пароль)",
+     *     tags={"User"},
+     *     description="Регистрация нового пользователя по email адрессу и паролю. В ответе содержится jwt токен.",
+     *     @SWG\Parameter(
+     *          name="credentials",
+     *          required=true,
+     *          in="body",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="email", type="string", example="test@test.test"),
+     *              @SWG\Property(property="password", type="string", example="12345678Ab"),
+     *              @SWG\Property(property="plainPassword", type="string", example="12345678Ab"),
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="Пользователь успешно зарегестрированн",
+     *          @SWG\Schema( allOf={
+     *              @SWG\Schema(ref=@Model(
+     *                  type="App\Domain\User\Entity\User",
+     *                  groups={App\Domain\User\Entity\User::GROUP_SIMPLE}
+     *              )),
+     *              @SWG\Schema(
+     *                  type="object",
+     *                  @SWG\Property(type="string", example="hash", property="accessToken"),
+     *                  @SWG\Property(type="string", example="hash", property="token")
+     *              )
+     *         })
+     *     ),
+     * )
+     */
     public function register(
         Request $request,
         RegisterHandler $handler,

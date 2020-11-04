@@ -20,9 +20,9 @@ class LoginController extends AbstractController
      * @SWG\Post(
      *     summary="Авториазция пользователя по jwt токену (авторизация по умолчанию)",
      *     tags={"Auth"},
-     *     description="Авториазция пользователя по jwt токену.
-                        Функционал реализован с помощью библиотеки lexik-jwt-authentication.
-                        Время жизни токена 1 час.",
+     *     description="Авториазция пользователя по email вдрессу и паролю.
+     *                  После авторизации пользователю выдается jwt токен. Время жизни токена 1 час.
+                        Функционал реализован с помощью библиотеки lexik-jwt-authentication.",
      *     @SWG\Parameter(
      *          name="credentials",
      *          required=true,
