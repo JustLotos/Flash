@@ -28,6 +28,8 @@ class ConfirmActionTest extends AbstractTest
             'plainPassword' => '12345678Ab',
         ], '/user/register/email/request/', 'POST');
 
+        var_dump($this->response);
+
         self::assertResponseOk($this->response);
         self::assertEmailCount(1);
 
