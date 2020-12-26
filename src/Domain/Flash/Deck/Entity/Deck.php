@@ -64,10 +64,11 @@ class Deck
         $this->updatedAt = $date;
     }
 
-    public function update(string $name, string $description = ''): Deck
+    public function update(string $name, DateTimeImmutable $updatedAt, string $description = ''): Deck
     {
         $this->name = $name;
         $this->description = $description;
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 
@@ -86,5 +87,9 @@ class Deck
     public function getDescription() : ?string
     {
         return $this->description;
+    }
+    public function getUpdatedAt(): DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }
