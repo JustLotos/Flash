@@ -10,6 +10,7 @@ use App\Domain\User\Entity\Types\Email;
 use App\Domain\User\Entity\Types\Id;
 use App\Domain\User\Entity\Types\Password;
 use App\Domain\User\Entity\Types\Role;
+use App\Domain\User\Entity\Types\Status;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Events\UserCreatedEvent;
 use App\Domain\User\Service\TokenService;
@@ -63,7 +64,8 @@ class Handler
             new DateTimeImmutable(),
             Role::createUser(),
             new Email($command->email),
-            new Password($command->password)
+            new Password($command->password),
+            Status::createWait()
         );
         $user->requestRegisterByEmail($this->tokenizer->generateTokenByClass(ConfirmToken::class));
 

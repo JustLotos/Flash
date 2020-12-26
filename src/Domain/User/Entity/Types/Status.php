@@ -66,7 +66,7 @@ class Status
     public function activate(): void
     {
         if ($this->isActive()) {
-            throw new DomainException('User is already active.');
+            throw new \DomainException('User is already active.');
         }
 
         $this->value = self::STATUS_ACTIVE;
@@ -74,7 +74,7 @@ class Status
     public function block(): void
     {
         if ($this->isBlocked()) {
-            throw new DomainException('User is already blocked.');
+            throw new \DomainException('User is already blocked.');
         }
         $this->value = self::STATUS_BLOCKED;
     }
