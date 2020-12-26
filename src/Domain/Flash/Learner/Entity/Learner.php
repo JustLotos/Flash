@@ -32,27 +32,12 @@ class Learner
      * @Serializer\Groups({Learner::GROUP_SIMPLE})
      */
     private $name;
-//
-//    /**
-//     * @ORM\OneToMany(targetEntity="App\Domain\Flash\Deck\Entity\Deck", mappedBy="learner", orphanRemoval=true, cascade={"persist"})
-//     */
-//    private $decks;
 
-//    /**
-//     * @var Settings
-//     * @ORM\Embedded(class="App\Domain\Flash\Entity\Learner\Types\Settings")
-//     * @Serializer\Type(name="App\Domain\Flash\Entity\Learner\Types\Settings")
-//     * @Serializer\Groups({Learner::GROUP_SETTINGS, Learner::GROUP_DETAILS})
-//     */
-//    private $settings;
-//
-//    /**
-//     * @var Session
-//     * @ORM\Embedded(class="App\Domain\Flash\Entity\Learner\Types\Session")
-//     * @Serializer\Type(name="App\Domain\Flash\Entity\Learner\Types\Session")
-//     * @Serializer\Groups({Learner::GROUP_DETAILS})
-//     */
-//    private $session;
+    /**
+     * @ORM\OneToMany(targetEntity="App\Domain\Flash\Deck\Entity\Deck", mappedBy="learner", orphanRemoval=true, cascade={"persist"})
+     */
+    private $decks;
+
 
     public const GROUP_SIMPLE   = 'GROUP_SIMPLE';
     public const GROUP_SETTINGS = 'GROUP_SETTINGS';
@@ -61,8 +46,6 @@ class Learner
     private function __construct(Id $id)
     {
         $this->id = $id;
-//        $this->session = new Session();
-//        $this->settings = new Settings(true);
     }
 
     public function getId(): Id
@@ -86,14 +69,4 @@ class Learner
         $this->name = $name;
         return $this;
     }
-
-//    public function getSession(): Session
-//    {
-//        return $this->session;
-//    }
-//
-//    public function getSettings(): Settings
-//    {
-//        return $this->getSettings();
-//    }
 }
