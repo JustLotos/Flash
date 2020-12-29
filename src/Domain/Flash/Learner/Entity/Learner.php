@@ -27,8 +27,8 @@ class Learner
 
     /**
      * @var Name
-     * @ORM\Embedded(class="App\Domain\Flash\Entity\Learner\Types\Name")
-     * @Serializer\Type(name="App\Domain\Flash\Entity\Learner\Types\Name")
+     * @ORM\Embedded(class="App\Domain\Flash\Learner\Entity\Types\Name")
+     * @Serializer\Type(name="App\Domain\Flash\Learner\Entity\Types\Name")
      * @Serializer\Groups({Learner::GROUP_SIMPLE})
      */
     private $name;

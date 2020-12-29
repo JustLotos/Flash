@@ -2,26 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\DeckController;
+namespace App\Tests\Functional\Domain\Flash\DeckController;
 
-use App\DataFixtures\DeckFixture;
-use App\DataFixtures\UserFixtures;
-use App\Entity\Deck;
-use App\Entity\User;
+use App\DataFixtures\Flash\DeckFixtures;
+use App\DataFixtures\User\UserFixtures;
 use App\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 
 class CGetActionTest extends AbstractTest
 {
     private $clientAuth;
-
-    public function getFixtures() : array
-    {
-        return [
-            UserFixtures::class,
-            DeckFixture::class
-        ];
-    }
 
     public function setUp() : void
     {
@@ -39,9 +29,9 @@ class CGetActionTest extends AbstractTest
         $content = json_decode($response->getContent(), true);
 
         $this->assertResponseOk($response);
-        $this->assertArrayHasKey('id', $content[0]);
-        $this->assertArrayHasKey('name', $content[0]);
-        $this->assertArrayHasKey('description', $content[0]);
+        static::assertArrayHasKey('id', $content[0]);
+        static::assertArrayHasKey('name', $content[0]);
+        static::assertArrayHasKey('description', $content[0]);
     }
 
     public function testStrangeCGetDeckValid() : void
@@ -63,5 +53,11 @@ class CGetActionTest extends AbstractTest
             }
         }
         $this->assertFalse($check);
+    }
+
+
+    public function getFixtures() : array
+    {
+        return [ UserFixtures::class, DeckFixtures::class ];
     }
 }

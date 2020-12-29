@@ -18,16 +18,12 @@ use function strpos;
 abstract class BaseFixture extends Fixture
 {
     protected $container;
-
-    public function setContainer(
-        ?ContainerInterface $container = null
-    ) : void {
+    public function setContainer(?ContainerInterface $container = null) : void
+    {
         $this->container = $container;
     }
 
-    /** @var ObjectManager */
     private $manager;
-    /** @var Generator */
     protected $faker;
     private $referencesIndex = [];
 
@@ -72,17 +68,7 @@ abstract class BaseFixture extends Fixture
 
     protected function getRandomReference(string $groupName)
     {
-        if (! isset($this->referencesIndex[$groupName])) {
-            $this->referencesIndex[$groupName] = [];
-            foreach ($this->referenceRepository->getReferences() as $key => $ref) {
-                if (strpos($key, $groupName . '_') !== 0) {
-                    continue;
-                }
-
-                $this->referencesIndex[$groupName][] = $key;
-            }
-        }
-
+        $this->prepareIndex($groupName);
         if (empty($this->referencesIndex[$groupName])) {
             throw new InvalidArgumentException(
                 sprintf('Did not find any references saved with the group name "%s"', $groupName)
@@ -94,7 +80,7 @@ abstract class BaseFixture extends Fixture
         return $this->getReference($randomReferenceKey);
     }
 
-    protected function getRandomReferences(string $className, int $count)
+    protected function getRandomReferences(string $className, int $count): array
     {
         $references = [];
         while (count($references) < $count) {
@@ -102,5 +88,25 @@ abstract class BaseFixture extends Fixture
         }
 
         return $references;
+    }
+
+    protected function getReferenceByNumber(string $group, int $number)
+    {
+        $this->prepareIndex($group);
+        return $this->getReference($this->referencesIndex[$group][$number]);
+    }
+
+    private function prepareIndex($groupName): void
+    {
+        if (!isset($this->referencesIndex[$groupName])) {
+            $this->referencesIndex[$groupName] = [];
+            foreach ($this->referenceRepository->getReferences() as $key => $ref) {
+                if (strpos($key, $groupName . '_') !== 0) {
+                    continue;
+                }
+
+                $this->referencesIndex[$groupName][] = $key;
+            }
+        }
     }
 }

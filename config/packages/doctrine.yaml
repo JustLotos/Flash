@@ -28,5 +28,11 @@ doctrine:
                 is_bundle: false
                 type: annotation
                 dir: '%kernel.project_dir%/src/Domain/Flash/Learner/Entity'
-                prefix: 'App\Domain\Flash\Entity'
-                alias: Flash
+                prefix: 'App\Domain\Flash\Learner\Entity'
+                alias: Learner
+            Deck:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Domain/Flash/Deck/Entity'
+                prefix: 'App\Domain\Flash\Deck\Entity'
+                alias: Deck

@@ -15,13 +15,11 @@ class Name
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type(name="string")
-     * @Serializer\Groups({App\Domain\Flash\Entity\Learner\Learner::GROUP_SIMPLE})
      */
     private $first;
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type(name="string")
-     * @Serializer\Groups({App\Domain\Flash\Entity\Learner\Learner::GROUP_SIMPLE})
      */
     private $last;
 

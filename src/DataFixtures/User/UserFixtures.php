@@ -19,6 +19,7 @@ class UserFixtures extends BaseFixture implements ContainerAwareInterface
 {
     public const ADMINS = 'ADMINS';
     public const USERS = 'USERS';
+    public const USER_COUNT = 100;
 
     public function loadData(ObjectManager $manager) : void
     {
@@ -36,12 +37,12 @@ class UserFixtures extends BaseFixture implements ContainerAwareInterface
             return $user;
         });
 
-        $this->createMany(1, self::USERS, function () {
+        $this->createMany(self::USER_COUNT, self::USERS, function (int  $i) {
             $user = User::createByEmail(
                 Id::next(),
                 new DateTimeImmutable(),
                 Role::createUser(),
-                new Email('test@test.test'),
+                new Email("test$i@test.test"),
                 new Password('12345678Ab'),
                 Status::createWait()
             );

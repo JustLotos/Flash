@@ -50,7 +50,7 @@ class Deck
 
     /**
      * @var Learner
-     * @ORM\ManyToOne(targetEntity="App\Domain\Flash\Entity\Learner\Learner", inversedBy="decks")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Flash\Learner\Entity\Learner", inversedBy="decks")
      * @ORM\JoinColumn(name="learner_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $learner;
