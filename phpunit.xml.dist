@@ -17,11 +17,6 @@
         <!-- env name="TRUSTED_PROXIES" value="127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16" -->
         <!-- env name="TRUSTED_HOSTS" value="'^(localhost|example\.com)$'" -->
         <!-- ###- symfony/framework-bundle ### -->
-
-        <!-- ###+ snc/redis-bundle ### -->
-        <!-- passwords that contain special characters (@, %, :, +) must be urlencoded -->
-        <env name="REDIS_URL" value="redis://localhost"/>
-        <!-- ###- snc/redis-bundle ### -->
     </php>
 
     <testsuites>

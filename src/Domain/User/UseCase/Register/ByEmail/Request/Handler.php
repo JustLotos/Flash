@@ -67,8 +67,8 @@ class Handler
             new Password($command->password),
             Status::createWait()
         );
-        $user->requestRegisterByEmail($this->tokenizer->generateTokenByClass(ConfirmToken::class));
 
+        $user->requestRegisterByEmail($this->tokenizer->generateTokenByClass(ConfirmToken::class));
         $event = new UserCreatedEvent($user);
         $this->dispatcher->dispatch($event, UserCreatedEvent::NAME);
         $this->repository->add($user);
@@ -82,13 +82,12 @@ class Handler
 
     public function sendConfirmMessage(User $user): void
     {
-        $url = $this->generator->generate(
-            'registerByEmailConfirm',
-            ['token' => $user->getConfirmToken()->getToken()]
-        );
+        $url = $this->generator->generate('registerByEmailConfirm', [
+            'token' => $user->getConfirmToken()->getToken()
+        ]);
+
         $message = BaseMessage::getDefaultMessage(
             $user->getEmail(),
-            'Регистрация в приложении Flash',
             'Подтверждение регистрации',
             $this->builder
                 ->setParam('url', $url)

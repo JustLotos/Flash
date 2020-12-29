@@ -149,6 +149,9 @@
     "knplabs/knp-menu-bundle": {
         "version": "v3.0.0"
     },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.1.1"
+    },
     "lcobucci/jwt": {
         "version": "3.3.2"
     },
@@ -213,9 +216,6 @@
     "phpstan/phpdoc-parser": {
         "version": "0.4.4"
     },
-    "predis/predis": {
-        "version": "v1.1.6"
-    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -242,18 +242,6 @@
     },
     "slevomat/coding-standard": {
         "version": "6.3.9"
-    },
-    "snc/redis-bundle": {
-        "version": "2.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "2.0",
-            "ref": "85bbdb3d2db531e20874de29bab0587f93604fa8"
-        },
-        "files": [
-            "config/packages/snc_redis.yaml"
-        ]
     },
     "sonata-project/admin-bundle": {
         "version": "3.64",
@@ -356,6 +344,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v4.4.10"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v4.4.10"

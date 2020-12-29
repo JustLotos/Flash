@@ -1,6 +1,7 @@
 version: "3.1"
 volumes:
   postgres: ~
+  redis: ~
 services:
   nginx:
     image: nginx:alpine
@@ -21,6 +22,14 @@ services:
       POSTGRES_PASSWORD: pguser
     ports:
       - "5432:5432"
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/var/lib/redis/data
   php:
     build: docker/images/php
     working_dir: /app
@@ -48,15 +57,3 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
-  redis:
-    image: "redis:alpine"
-    command: redis-server --requirepass sOmE_sEcUrE_pAsS
-    ports:
-      - "6379:6379"
-    volumes:
-      - $PWD/redis-data:/var/lib/redis
-      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
-    environment:
-      - REDIS_REPLICATION_MODE=master
-
-
