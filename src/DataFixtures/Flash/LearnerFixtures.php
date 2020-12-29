@@ -21,13 +21,13 @@ class LearnerFixtures extends BaseFixture implements ContainerAwareInterface, De
 
     public function loadData(ObjectManager $manager) : void
     {
-//        $this->createMany(1, self::ADMINS, function (int $i) {
-//            /** @var User $user */
-//            $user = $this->getReferenceByNumber(UserFixtures::ADMINS, $i);
-//            $name = new Name('Roman', 'Ignashov');
-//            $id = new Id($user->getId()->getValue());
-//            return Learner::create($id, $name);
-//        });
+        $this->createMany(1, self::ADMINS, function (int $i) {
+            /** @var User $user */
+            $user = $this->getReferenceByNumber(UserFixtures::ADMINS, $i);
+            $name = new Name('Roman', 'Ignashov');
+            $id = new Id($user->getId()->getValue());
+            return Learner::create($id, $name);
+        });
 
         $this->createMany(UserFixtures::USER_COUNT, self::USERS, function (int $i) {
             /** @var User $user */

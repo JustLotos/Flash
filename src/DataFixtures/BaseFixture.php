@@ -23,7 +23,9 @@ abstract class BaseFixture extends Fixture
         $this->container = $container;
     }
 
+    /** @var ObjectManager|null */
     private $manager;
+    /** @var Generator */
     protected $faker;
     private $referencesIndex = [];
 

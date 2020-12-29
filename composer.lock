@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "13b03db3a3d82765260bb78560ef81f8",
+    "content-hash": "e81d4ce24f8d8a1d4c9a75676772aaba",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -3174,16 +3174,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.77.0",
+            "version": "3.79.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "a70186f2ec95c729cea8f21bb3a7e6a7ea44991f"
+                "reference": "228e1fb1c455d87c2c02fde2c403c646fd052f89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/a70186f2ec95c729cea8f21bb3a7e6a7ea44991f",
-                "reference": "a70186f2ec95c729cea8f21bb3a7e6a7ea44991f",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/228e1fb1c455d87c2c02fde2c403c646fd052f89",
+                "reference": "228e1fb1c455d87c2c02fde2c403c646fd052f89",
                 "shasum": ""
             },
             "require": {
@@ -3238,6 +3238,7 @@
                 "matthiasnoback/symfony-dependency-injection-test": "^4.1",
                 "phpdocumentor/reflection-docblock": "^5.2",
                 "phpstan/phpstan": "^0.12.29",
+                "phpstan/phpstan-symfony": "^0.12.10",
                 "psalm/plugin-symfony": "^1.4",
                 "psr/event-dispatcher": "^1.0",
                 "sonata-project/intl-bundle": "^2.4",
@@ -3302,9 +3303,13 @@
                 {
                     "url": "https://github.com/core23",
                     "type": "github"
+                },
+                {
+                    "url": "https://github.com/wbloszyk",
+                    "type": "github"
                 }
             ],
-            "time": "2020-10-17T15:52:15+00:00"
+            "time": "2020-11-09T19:22:23+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -3564,12 +3569,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle.git",
-                "reference": "21d223550299707a598a4e1433011c3a8cfb6cff"
+                "reference": "09fbe95548e8485aece076d555ca75b45d243a48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/21d223550299707a598a4e1433011c3a8cfb6cff",
-                "reference": "21d223550299707a598a4e1433011c3a8cfb6cff",
+                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/09fbe95548e8485aece076d555ca75b45d243a48",
+                "reference": "09fbe95548e8485aece076d555ca75b45d243a48",
                 "shasum": ""
             },
             "require": {

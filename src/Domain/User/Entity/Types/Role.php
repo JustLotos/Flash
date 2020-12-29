@@ -17,11 +17,7 @@ class Role
 
     public function __construct(string $name)
     {
-        Assert::oneOf($name, [
-            self::USER,
-            self::ADMIN,
-        ]);
-
+        Assert::oneOf($name, self::getAllRoles());
         $this->name = $name;
     }
 
@@ -48,6 +44,13 @@ class Role
     public function isEqual(self $role): bool
     {
         return $this->getName() === $role->getName();
+    }
+
+    public static function getAllRoles(): array {
+        return [
+            'Администратор' => self::ADMIN,
+            'Обычный пользователь' => self::USER
+        ];
     }
 
     /**

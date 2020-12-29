@@ -220,7 +220,7 @@ class User implements UserInterface
     {
         return $this->id;
     }
-    public function getEmail(): Email
+    public function getEmail(): ?Email
     {
         return $this->email;
     }
@@ -228,15 +228,15 @@ class User implements UserInterface
     {
         return $this->confirmToken;
     }
-    public function getRole(): Role
+    public function getRole(): ?Role
     {
         return $this->role;
     }
-    public function getStatus(): Status
+    public function getStatus(): ?Status
     {
         return $this->status;
     }
-    public function getPassword(): Password
+    public function getPassword(): ?Password
     {
         return $this->password;
     }

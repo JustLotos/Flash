@@ -71,3 +71,13 @@ services:
         class: App\Validator\ExistEntityConstraint\ExistEntityValidator
         tags:
             - { name: validator.constraint_validator, alias: ExistEntity }
+    # ADMIN
+    App\Admin\UserAdmin:
+        arguments: [ ~, App\Domain\User\Entity\User, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: User }
+    App\Admin\LearnerAdmin:
+        arguments: [ ~, App\Domain\Flash\Learner\Entity\Learner, ~ ]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Learner }
+

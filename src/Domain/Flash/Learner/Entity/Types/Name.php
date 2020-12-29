@@ -46,4 +46,9 @@ class Name
             $this->last
         ]);
     }
+
+    public function __toString(): string
+    {
+        return $this->getFull();
+    }
 }

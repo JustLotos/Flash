@@ -44,9 +44,9 @@ class Status
     public static function getAllStatus(): array
     {
         return [
-            self::STATUS_ACTIVE,
-            self::STATUS_BLOCKED,
-            self::STATUS_WAIT
+            'Активирован' => self::STATUS_ACTIVE,
+            'Заблокирован' => self::STATUS_BLOCKED,
+            'Ожидает подтверждения' => self::STATUS_WAIT
         ];
     }
 
@@ -77,5 +77,10 @@ class Status
             throw new \DomainException('User is already blocked.');
         }
         $this->value = self::STATUS_BLOCKED;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getValue();
     }
 }
