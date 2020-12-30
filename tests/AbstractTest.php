@@ -56,27 +56,16 @@ abstract class AbstractTest extends WebTestCase
         static::$client = null;
     }
 
-    /**
-     * Shortcut
-     */
     protected static function getEntityManager()
     {
         return static::$container->get('doctrine')->getManager();
     }
 
-    /**
-     * List of fixtures for certain test
-     */
     protected function getFixtures() : array
     {
         return [];
     }
 
-    /**
-     * Load fixtures before test
-     *
-     * @param array $fixtures
-     */
     protected function loadFixtures(array $fixtures = []) : void
     {
         $loader = new Loader();
@@ -269,7 +258,6 @@ abstract class AbstractTest extends WebTestCase
 
         $client->request($method, $url, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($data));
         $this->response = $client->getResponse();
-        var_dump($this->response);
         $this->content = json_decode($this->response->getContent(), true);
         return $client;
     }

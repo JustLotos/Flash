@@ -6,11 +6,11 @@ namespace App\Controller\API\User\Register;
 
 use App\Controller\ControllerHelper;
 use App\Domain\User\Entity\User;
-use App\Domain\User\Entity\UserDTO;
 use App\Domain\User\UseCase\Register\ByEmail\Confirm\Command as ConfirmCommand;
 use App\Domain\User\UseCase\Register\ByEmail\Confirm\Handler as ConfirmHandler;
 use App\Domain\User\UseCase\Register\ByEmail\Request\Command as RegisterPayloads;
 use App\Domain\User\UseCase\Register\ByEmail\Request\Handler as RegisterHandler;
+use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationSuccessResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler as AuthHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -59,22 +59,23 @@ class RegisterByEmailController extends AbstractController
      *     ),
      * )
      */
-    public function register(Request $request, RegisterHandler $handler, AuthHandler $ash)
+    public function register(Request $request, RegisterHandler $handler, AuthHandler $ash): JWTAuthenticationSuccessResponse
     {
         /** @var RegisterPayloads $command */
         $command = $this->serializer->deserialize($request, RegisterPayloads::class);
+        $this->validator->validate($command);
         /** @var User $user */
         $user = $handler->handle($command);
         return $ash->handleAuthenticationSuccess($user);
     }
 
-    /** @Route("/confirm/{token}/", name="registerByEmailConfirm", methods={"GET"}, options={"no_auth": true}) */
-    public function confirm(ConfirmHandler $handler, string $token): RedirectResponse
+    /** @Route("/confirm/{email}/{token}/", name="registerByEmailConfirm", methods={"GET"}, options={"no_auth": false}) */
+    public function confirm(ConfirmHandler $handler, string $email, string $token): RedirectResponse
     {
-        $handler->handle(new ConfirmCommand($token));
-        return $this->redirectToRoute('index', [
-            'vueRouting' => '',
-            'registerByEmail' => 'confirm'
-        ]);
+        $command = new ConfirmCommand($email, $token);
+        $this->validator->validate($command);
+        $result = $handler->handle($command);
+
+        return $this->redirectToRoute('index', [ 'vueRouting' => '', 'registerByEmail' => $result]);
     }
 }

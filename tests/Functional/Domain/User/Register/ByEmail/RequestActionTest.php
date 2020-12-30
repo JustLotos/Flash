@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Domain\User\Register\ByEmail;
 
 use App\DataFixtures\User\UserFixtures;
+use App\Domain\User\Entity\Types\Role;
+use App\Domain\User\Entity\Types\Status;
 use App\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RequestActionTest extends AbstractTest
 {
-    private $email =  'email@email.eamil';
+    private $email = 'email@email.eamil';
     private $password = '12345678Ab';
 
     protected $method = 'POST';
@@ -36,19 +38,15 @@ class RequestActionTest extends AbstractTest
         self::assertArrayHasKey('role', $this->content);
         self::assertArrayHasKey('email', $this->content);
         self::assertEquals($this->email, $this->content['email']);
-        self::assertEquals('WAIT', $this->content['status']);
+        self::assertEquals(Status::STATUS_WAIT, $this->content['status']);
     }
 
     /**
      * @dataProvider getInvalidCredential
      */
-    public function testInvalidValue(string $password) : void
+    public function testInvalidValue(string $value) : void
     {
-        $this->makeRequest([
-            'email' => $password ? $password : '',
-            'password' => $password,
-            'plainPassword' => ''
-        ]);
+        $this->makeRequest(['email' => $value, 'password' => $value, 'plainPassword' => '']);
 
         self::assertResponseCode(JsonResponse::HTTP_NOT_FOUND, $this->response);
         self::assertArrayHasKey('errors', $this->content);

@@ -15,7 +15,7 @@ class Command
      * @Assert\NotBlank()
      * @Assert\Email()
      * @UniqueEntity(
-     *     message="Пользователь с таким email-адресом уже существует",
+     *     message="User with this email address already exists",
      *     class="App\Domain\User\Entity\User",
      *     attribute="email",
      * )

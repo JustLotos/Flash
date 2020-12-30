@@ -22,6 +22,7 @@ class HTTPExceptionListener
     {
         $error = $event->getThrowable();
         $this->logger->critical($error->getMessage());
+
         if ($error instanceof ApplicationException) {
             $response = $this->handleKnownExceptions($error);
         } elseif ($error instanceof AccessDeniedHttpException || $error instanceof NotFoundHttpException) {
