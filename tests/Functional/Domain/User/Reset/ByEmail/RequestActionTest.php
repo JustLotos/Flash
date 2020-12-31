@@ -8,6 +8,7 @@ use App\DataFixtures\User\UserFixtures;
 use App\Tests\AbstractTest;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\RawMessage;
 
 class RequestActionTest extends AbstractTest
@@ -27,7 +28,6 @@ class RequestActionTest extends AbstractTest
             'password' => '12345678Ab',
             'plainPassword' => '12345678Ab'
         ]);
-        var_dump($this->response);
         self::assertResponseOk($this->response);
         self::assertEmailCount(1);
         self::assertArrayHasKey('success', $this->content);
@@ -40,15 +40,33 @@ class RequestActionTest extends AbstractTest
         self::assertIsString($code);
     }
 
+    public function testIsAlreadyRequested(): void
+    {
+        $email = getenv('TEST_USER_EMAIL');
+        $this->makeRequest(['email' =>$email, 'password' => '12345678Ab', 'plainPassword' => '12345678Ab']);
+        $this->makeRequest(['email' => $email, 'password' => '12345678Ab', 'plainPassword' => '12345678Ab']);
+
+        self::assertResponseCode(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response);
+        self::assertArrayHasKey('errors', $this->content);
+        self::assertArrayHasKey('domain', $this->content['errors']);
+        self::assertArrayHasKey('reset', $this->content['errors']['domain']);
+    }
+
+//    public function testIsNotActive(): void
+//    {
+//        $email = 'test5@test.test';
+//        $this->makeRequest(['email' =>$email, 'password' => '12345678Ab', 'plainPassword' => '12345678Ab']);
+//
+//        self::assertResponseCode(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response);
+//        self::assertArrayHasKey('errors', $this->content);
+//        self::assertArrayHasKey('domain', $this->content['errors']);
+//        self::assertArrayHasKey('user', $this->content['errors']['domain']);
+//    }
+
     public function testNotExistingEmail() : void
     {
-        $this->makeRequest([
-            'email' => 'not@found.email',
-            'password' => '12345678Ab',
-            'plainPassword' => '12345678Ab'
-        ]);
-
-        $this->assertResponseCode(JsonResponse::HTTP_NOT_FOUND, $this->response);
+        $this->makeRequest(['email' => 'not@found.email', 'password' => '12345678Ab', 'plainPassword' => '12345678Ab']);
+        $this->assertResponseCode(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, $this->response);
         self::assertArrayHasKey('errors', $this->content);
         self::assertArrayHasKey('email', $this->content['errors']);
     }

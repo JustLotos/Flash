@@ -10,7 +10,6 @@ use DomainException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Throwable;
 
 class HTTPExceptionListener
 {
@@ -64,6 +63,6 @@ class HTTPExceptionListener
     private function responseDomainException(DomainException $exception): Response
     {
         $message = ['errors'=> ['domain'=> json_decode($exception->getMessage())]];
-        return new Response(json_encode($message), Response::HTTP_NOT_FOUND);
+        return new Response(json_encode($message), Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

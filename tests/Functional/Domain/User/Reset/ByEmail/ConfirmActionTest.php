@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Domain\User\Reset\ByEmail;
 
 use App\DataFixtures\User\UserFixtures;
+use App\Service\RedisService;
 use App\Tests\AbstractTest;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,9 @@ class ConfirmActionTest extends AbstractTest
 
     public function testValid()
     {
-        $mail = 'test5@test.test';
+        (RedisService::getOriginalClient())->flushAll();
+
+        $mail = 'test4@test.test';
 
         $this->makeRequest([
             'email' => $mail,
@@ -61,7 +64,7 @@ class ConfirmActionTest extends AbstractTest
             'plainPassword' => '12345678Ba'
         ], $this->uri.'/');
 
-        self::assertResponseNotFound($this->response);
+        self::assertResponseCode( Response::HTTP_UNPROCESSABLE_ENTITY, $this->response);
         self::assertArrayHasKey('errors', $this->content);
         self::assertArrayHasKey('domain', $this->content['errors']);
         self::assertArrayHasKey('reset', $this->content['errors']['domain']);

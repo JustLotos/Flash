@@ -36,10 +36,7 @@ class ValidateService
                 $errors[$violation->getPropertyPath()] = $violation->getMessage();
             }
 
-            throw new ValidationException(
-                json_encode(['errors' => $errors]),
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
+            throw new ValidationException(json_encode($errors), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return $entity;

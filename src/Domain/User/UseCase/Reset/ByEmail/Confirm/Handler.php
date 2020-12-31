@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\User\UseCase\Reset\ByEmail\Confirm;
 
 use App\Domain\User\Entity\Types\Password;
+use App\Domain\User\Entity\User;
 use App\Domain\User\UserRepository;
 use App\Domain\User\Service\PasswordEncoder;
 use App\Exception\ValidationException;
@@ -26,6 +27,7 @@ class Handler
     private $sender;
     private $builder;
     private $generator;
+    /** @var User */
     private $user;
     private $redis;
 
@@ -61,13 +63,15 @@ class Handler
     {
         $redisToken = $this->redis->get($this->user->getEmail()->getValue().'_reset_password');
         if(!$redisToken) {
+            $this->redis->del($this->user->getEmail()->getValue().'_reset_password');
             throw new DomainException(json_encode(['reset'=> 'is not requested']), Response::HTTP_NOT_FOUND);
         }
 
         if($redisToken !== $token) {
+            $this->redis->del($this->user->getEmail()->getValue().'_reset_password');
             throw new ValidationException(json_encode(['token' => 'token is expired']), Response::HTTP_NOT_FOUND);
         }
-        $this->redis->del($this->user->getEmail()->getValue().'_reset_password');
+
     }
 
     public function sendSuccessMessage(): void

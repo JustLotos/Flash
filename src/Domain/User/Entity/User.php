@@ -125,7 +125,7 @@ class User implements UserInterface
     public function requestResetPassword(): void
     {
         if (!$this->status->isActive()) {
-            throw new DomainException('User is not active.');
+            throw new DomainException(json_encode(['user' => 'User is not active.']));
         }
         $this->status->block();
     }
@@ -142,7 +142,7 @@ class User implements UserInterface
     public function requestChangeEmail(Email $email): void
     {
         if (!$this->status->isActive()) {
-            throw new DomainException('User is not active.');
+            throw new DomainException(json_encode(['user' => 'User is not active.']));
         }
         if ($this->getEmail()->isEqual($email)) {
             throw new DomainException('Email is same.');

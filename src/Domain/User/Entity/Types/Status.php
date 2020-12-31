@@ -68,7 +68,7 @@ class Status
     public function activate(): void
     {
         if ($this->isActive()) {
-            throw new DomainException('User is already active.');
+            throw new DomainException(json_encode(['status' => 'User is active.']));
         }
 
         $this->value = self::STATUS_ACTIVE;

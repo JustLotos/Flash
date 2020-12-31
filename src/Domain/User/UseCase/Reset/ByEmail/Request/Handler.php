@@ -15,6 +15,7 @@ use App\Service\MailService\MailBuilderService;
 use App\Service\MailService\MailSenderService;
 use App\Service\RedisService;
 use App\Service\ValidateService;
+use DomainException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -51,18 +52,23 @@ class Handler
     public function handle(Command $command): User
     {
         $this->user = $this->repository->getByEmail($command->email);
-        $this->user->getStatus()->activate();
         $token = $this->tokenizer->getToken();
-        $this->redis->set(
-            $this->user->getEmail()->getValue().'_reset_password',
-            $token,
-            (int)getenv('REDIS_DEFAULT_TTL')
-        );
+
+        $this->setToken($token);
 
         $this->user->requestResetPassword();
         $this->flusher->flush();
         $this->sendConfirmMessage($token);
         return $this->user;
+    }
+
+    public function setToken(string $token): void
+    {
+        $key = $this->user->getEmail()->getValue().'_reset_password';
+        if($this->redis->get($key)) {
+            throw new DomainException(json_encode(['reset' => 'already requested']));
+        }
+        $this->redis->set($key, $token, (int)getenv('REDIS_DEFAULT_TTL'));
     }
 
     public function sendConfirmMessage(string $token): void

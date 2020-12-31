@@ -33,4 +33,12 @@ class RedisService
     {
         $this->redis->del($key);
     }
+
+    public static function getOriginalClient(): Redis
+    {
+        $redis = new \Redis();
+        $redis->connect(getenv('REDIS_URL'), +getenv('REDIS_PORT'));
+
+        return $redis;
+    }
 }
