@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace App\Domain\User\UseCase\Reset\ByEmail\Confirm;
 
 use App\Domain\User\Entity\Types\Password;
-use App\Domain\User\Entity\User;
 use App\Domain\User\UserRepository;
 use App\Domain\User\Service\PasswordEncoder;
+use App\Exception\ValidationException;
 use App\Service\FlushService;
 use App\Service\MailService\BaseMessage;
 use App\Service\MailService\MailBuilderService;
 use App\Service\MailService\MailSenderService;
+use App\Service\RedisService;
 use App\Service\ValidateService;
-use DateTimeImmutable;
 use DomainException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Handler
@@ -25,6 +26,8 @@ class Handler
     private $sender;
     private $builder;
     private $generator;
+    private $user;
+    private $redis;
 
     public function __construct(
         UserRepository $repository,
@@ -32,7 +35,8 @@ class Handler
         FlushService $flusher,
         MailSenderService $sender,
         MailBuilderService $builder,
-        UrlGeneratorInterface $generator
+        UrlGeneratorInterface $generator,
+        RedisService $redis
     ) {
         $this->repository = $repository;
         $this->flusher = $flusher;
@@ -40,26 +44,36 @@ class Handler
         $this->sender = $sender;
         $this->builder = $builder;
         $this->generator = $generator;
+        $this->redis = $redis;
     }
 
     public function handle(Command $command): void
     {
-        $this->validator->validate($command);
+        $this->user = $this->repository->findOneBy(['email' => $command->email]);
+        $this->checkExistToken($command->token);
 
-        /** @var User $user */
-        if (!$user = $this->repository->findByConfirmToken($command->token)) {
-            throw new DomainException('Invalid or not found token.');
-        }
-
-        $user->confirmResetPassword(new Password($command->password), new DateTimeImmutable());
+        $this->user->confirmResetPassword(new Password($command->password));
         $this->flusher->flush();
-        $this->sendSuccessMessage($user);
+        $this->sendSuccessMessage();
     }
 
-    public function sendSuccessMessage(User $user): void
+    public function checkExistToken(string $token): void
+    {
+        $redisToken = $this->redis->get($this->user->getEmail()->getValue().'_reset_password');
+        if(!$redisToken) {
+            throw new DomainException(json_encode(['reset'=> 'is not requested']), Response::HTTP_NOT_FOUND);
+        }
+
+        if($redisToken !== $token) {
+            throw new ValidationException(json_encode(['token' => 'token is expired']), Response::HTTP_NOT_FOUND);
+        }
+        $this->redis->del($this->user->getEmail()->getValue().'_reset_password');
+    }
+
+    public function sendSuccessMessage(): void
     {
         $message = BaseMessage::getDefaultMessage(
-            $user->getEmail(),
+            $this->user->getEmail(),
             'Успешная смена проля в приложении Flash',
             $this->builder->build('mail/user/reset/byEmail/confirm.html.twig')
         );

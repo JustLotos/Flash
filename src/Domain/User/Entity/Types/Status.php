@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\User\Entity\Types;
 
 use Doctrine\ORM\Mapping as ORM;
+use DomainException;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,7 +28,8 @@ class Status
         $this->value = $value;
     }
 
-    public static function createWait() {
+    public static function createWait(): Status
+    {
         return new self(self::STATUS_WAIT);
     }
 
@@ -66,7 +68,7 @@ class Status
     public function activate(): void
     {
         if ($this->isActive()) {
-            throw new \DomainException('User is already active.');
+            throw new DomainException('User is already active.');
         }
 
         $this->value = self::STATUS_ACTIVE;
@@ -74,7 +76,7 @@ class Status
     public function block(): void
     {
         if ($this->isBlocked()) {
-            throw new \DomainException('User is already blocked.');
+            throw new DomainException('User is already blocked.');
         }
         $this->value = self::STATUS_BLOCKED;
     }

@@ -19,7 +19,7 @@ class UserFixtures extends BaseFixture implements ContainerAwareInterface
 {
     public const ADMINS = 'ADMINS';
     public const USERS = 'USERS';
-    public const USER_COUNT = 100;
+    public const USER_COUNT = 10;
 
     public function loadData(ObjectManager $manager) : void
     {
@@ -49,7 +49,10 @@ class UserFixtures extends BaseFixture implements ContainerAwareInterface
                 Status::createWait()
             );
 
-            $user->getStatus()->activate();
+
+            if($i !== 5) {
+                $user->getStatus()->activate();
+            }
             return $user;
         });
 

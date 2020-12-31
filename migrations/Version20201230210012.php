@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20201229200328 extends AbstractMigration
+final class Version20201230210012 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -33,14 +33,14 @@ final class Version20201229200328 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN flash_learners.id IS \'(DC2Type:flash_learner_id)\'');
         $this->addSql('CREATE TABLE refresh_tokens (id INT NOT NULL, refresh_token VARCHAR(128) NOT NULL, username VARCHAR(255) NOT NULL, valid TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_9BACE7E1C74F2195 ON refresh_tokens (refresh_token)');
-        $this->addSql('CREATE TABLE user_users (id UUID NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, role VARCHAR(16) NOT NULL, confirm_token_value VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE user_users (id UUID NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, role VARCHAR(16) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, status_value VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F6415EB1E7927C74 ON user_users (email)');
         $this->addSql('COMMENT ON COLUMN user_users.id IS \'(DC2Type:users_user_id)\'');
         $this->addSql('COMMENT ON COLUMN user_users.email IS \'(DC2Type:users_user_email)\'');
         $this->addSql('COMMENT ON COLUMN user_users.password IS \'(DC2Type:users_user_password)\'');
+        $this->addSql('COMMENT ON COLUMN user_users.role IS \'(DC2Type:users_user_role)\'');
         $this->addSql('COMMENT ON COLUMN user_users.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN user_users.updated_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('COMMENT ON COLUMN user_users.role IS \'(DC2Type:users_user_role)\'');
         $this->addSql('ALTER TABLE flash_decks ADD CONSTRAINT FK_51A583726209CB66 FOREIGN KEY (learner_id) REFERENCES flash_learners (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 

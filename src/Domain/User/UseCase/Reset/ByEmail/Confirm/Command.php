@@ -11,15 +11,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Command
 {
     /**
+     * @Assert\Length(max="255")
      * @Assert\NotBlank()
-     * @Serializer\Type(name="string")
+     * @Assert\Email()
      * @ExistEntity(
      *     class="App\Domain\User\Entity\User",
-     *     attribute="confirmToken.token",
-     *     message="Пользователя с таким токеном не существует"
+     *     attribute="email",
+     *     message="Пользователя с таким адресом не существует"
      * )
+     * @Serializer\Type(name="string")
      */
-    public $token;
+    public $email;
 
     /**
      * @Assert\NotBlank()
@@ -50,5 +52,11 @@ class Command
      * @Serializer\Type(name="string")
      */
     public $plainPassword;
+
+    /**
+     * @Assert\NotBlank()
+     * @Serializer\Type(name="string")
+     */
+    public $token;
 }
 

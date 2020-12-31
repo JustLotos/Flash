@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Event;
 
+use App\Exception\ApplicationException;
+use App\Exception\ValidationException;
+use DomainException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -22,39 +25,45 @@ class HTTPExceptionListener
     {
         $error = $event->getThrowable();
         $this->logger->critical($error->getMessage());
+        $response = false;
 
-        if ($error instanceof ApplicationException) {
-            $response = $this->handleKnownExceptions($error);
-        } elseif ($error instanceof AccessDeniedHttpException || $error instanceof NotFoundHttpException) {
-            $response = $this->handle404($error);
-        } else {
-            $response = $this->handleUnknownExceptions($error);
+        switch (get_class($error)) {
+            case ApplicationException::class:
+                /** @var ApplicationException $error */
+                $response = $this->responseApplicationException($error);
+                break;
+            case DomainException::class:
+                /** @var DomainException $error */
+                $response = $this->responseDomainException($error);
+                break;
+            case ValidationException::class:
+                /** @var ValidationException $error */
+                $response = $this->responseValidationException($error);
+                break;
+            default:
+
+                break;
         }
-        $response->headers->set('Content-Type', 'application/json');
-        $event->setResponse($response);
-    }
 
-    private function handle404(Throwable $exception)
-    {
-        return new Response(
-            $exception->getMessage(),
-            Response::HTTP_NOT_FOUND
-        );
-    }
-
-    private function handleKnownExceptions(Throwable $exception)
-    {
-        return new Response($exception->getMessage(), $exception->getStatusCode());
-    }
-
-    private function handleUnknownExceptions(Throwable $exception) : Response
-    {
-        try {
-            //$statusCode = $exception->getStatusCode();
-        } catch (\Exception $exception) {
-            $statusCode = Response::HTTP_NOT_FOUND;
+        if($response) {
+            $response->headers->set('Content-Type', 'application/json');
+            $event->setResponse($response);
         }
-        $statusCode = Response::HTTP_NOT_FOUND;
-        return new Response($exception->getMessage(), $statusCode);
+    }
+
+    private function responseValidationException(ValidationException $exception): Response
+    {
+        return new Response($exception->handle(), $exception->getStatusCode());
+    }
+
+    private function responseApplicationException(ApplicationException $exception): Response
+    {
+        return new Response($exception->handle(), $exception->getCode());
+    }
+
+    private function responseDomainException(DomainException $exception): Response
+    {
+        $message = ['errors'=> ['domain'=> json_decode($exception->getMessage())]];
+        return new Response(json_encode($message), Response::HTTP_NOT_FOUND);
     }
 }

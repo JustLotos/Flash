@@ -254,8 +254,6 @@ abstract class AbstractTest extends WebTestCase
 
         $client = $this->createAuthenticatedClient();
 
-        ;
-
         $client->request($method, $url, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($data));
         $this->response = $client->getResponse();
         $this->content = json_decode($this->response->getContent(), true);

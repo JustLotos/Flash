@@ -13,4 +13,9 @@ abstract class ApplicationException extends HttpException
     {
         parent::__construct($code, $message, $previous);
     }
+
+    public function handle()
+    {
+        return json_encode(['errors' => $this->getMessage()]);
+    }
 }

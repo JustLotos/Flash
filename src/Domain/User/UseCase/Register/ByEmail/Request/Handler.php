@@ -73,7 +73,7 @@ class Handler
 
         $this->user->requestRegisterByEmail();
 
-        $token = Uuid::uuid4()->toString();
+        $token = $this->tokenizer->getToken();
         $this->setToken($token);
 
         $event = new UserCreatedEvent($this->user);
@@ -97,6 +97,7 @@ class Handler
         $key = $this->user->getEmail()->getValue().'_register';
         $this->redis->set($key, $token, (int)getenv('REDIS_DEFAULT_TTL'));
     }
+
     public function sendConfirmMessage(string $token): void
     {
         $url = getenv('DEFAULT_HOST').$this->generator->generate('registerByEmailConfirm', [

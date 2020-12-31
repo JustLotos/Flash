@@ -41,14 +41,19 @@ class Handler
     {
         $this->user = $this->repository->findOneBy(['email' => $command->email]);
         if($this->user->getStatus()->isWait()) {
-            $this->checkExistToken($command->token);
-            $this->user->confirmRegisterByEmail();
-            $this->flusher->flush();
-            $this->sendMessage();
-            return 'confirm';
+            return $this->confirm($command);
         } else {
             return 'alreadyConfirm';
         }
+    }
+
+    public function confirm(Command $command): string
+    {
+        $this->checkExistToken($command->token);
+        $this->user->confirmRegisterByEmail();
+        $this->flusher->flush();
+        $this->sendMessage();
+        return 'confirm';
     }
 
     public function checkExistToken(string $token): void

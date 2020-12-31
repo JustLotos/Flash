@@ -35,7 +35,7 @@ class DeckFixtures extends BaseFixture implements DependentFixtureInterface
             );
         });
 
-        $this->createMany(UserFixtures::USER_COUNT * 100, self::USERS_ID, function () {
+        $this->createMany(UserFixtures::USER_COUNT * 10, self::USERS_ID, function () {
             $date = $this->faker->dateTimeBetween($startDate = '-3 years', $endDate = 'now', $timezone = null);
             /** @var Learner $learner */
             $learner = $this->getRandomReference(LearnerFixtures::USERS);

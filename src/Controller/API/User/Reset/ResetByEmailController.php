@@ -9,8 +9,7 @@ use App\Domain\User\UseCase\Reset\ByEmail\Confirm\Command as ConfirmCommand;
 use App\Domain\User\UseCase\Reset\ByEmail\Confirm\Handler as ConfirmHandler;
 use App\Domain\User\UseCase\Reset\ByEmail\Request\Command as RequestCommand;
 use App\Domain\User\UseCase\Reset\ByEmail\Request\Handler as RequestHandler;
-use App\Domain\User\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,30 +25,15 @@ class ResetByEmailController extends AbstractController
     {
         /** @var RequestCommand $command */
         $command = $this->serializer->deserialize($request, RequestCommand::class);
+        $this->validator->validate($command);
         $handler->handle($command);
         return $this->response($this->getSimpleSuccessResponse());
     }
 
 
     /** @Route("/form/{token}", name="resetByEmailGetForm", methods={"GET"}, options={"no_auth": true}) */
-    public function getForm(UserRepository $repository, string $token)
+    public function getForm(string $token): RedirectResponse
     {
-        if (!$user = $repository->findByConfirmToken($token)) {
-            return $this->redirectToRoute('index', [
-                'vueRouting' => '',
-                'resetByEmailGetForm' => 'tokenNotFound',
-                'token' => 'Токен не найден'
-            ]);
-        }
-
-        if ($user->getConfirmToken()->isExpiredToNow()) {
-            return $this->redirectToRoute('index', [
-                'vueRouting' => '',
-                'resetByEmailGetForm' => 'tokenIsExpired',
-                'token' => 'Время действия истекло'
-            ]);
-        }
-
         return $this->redirectToRoute('index', [
             'vueRouting' => '',
             'resetByEmailGetForm' => 'request',
@@ -61,11 +45,8 @@ class ResetByEmailController extends AbstractController
     public function confirm(Request $request, ConfirmHandler $handler): RedirectResponse
     {
         $command = $this->serializer->deserialize($request, ConfirmCommand::class);
+        $this->validator->validate($command);
         $handler->handle($command);
-
-        return $this->redirectToRoute('index', [
-            'vueRouting' => '',
-            'resetByEmail' => 'confirm'
-        ]);
+        return $this->redirectToRoute('index', ['vueRouting' => '', 'resetByEmail' => 'confirm']);
     }
 }

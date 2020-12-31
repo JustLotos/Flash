@@ -21,4 +21,9 @@ class TokenService
             (new DateTimeImmutable())->add($interval)
         );
     }
+
+    public function getToken(): string
+    {
+        return Uuid::uuid4()->toString();
+    }
 }

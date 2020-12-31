@@ -52,7 +52,7 @@ class User implements UserInterface
 
     /**
      * @var Status
-     * @ORM\Embedded(class="App\Domain\User\Entity\Types\Status", columnPrefix="confirm_token_")
+     * @ORM\Embedded(class="App\Domain\User\Entity\Types\Status", columnPrefix="status_")
      * @Serializer\Groups({User::GROUP_SIMPLE})
      * @SWG\Property(enum={User::GROUP_SIMPLE})
      */
@@ -127,21 +127,13 @@ class User implements UserInterface
         if (!$this->status->isActive()) {
             throw new DomainException('User is not active.');
         }
-//        if ($this->confirmToken && !$this->confirmToken->isExpiredToNow()) {
-//            throw new DomainException('Resetting is already requested.');
-//        }
         $this->status->block();
     }
-
     public function confirmResetPassword(Password $password): void
     {
         if ($this->status->isActive()) {
             throw new DomainException('Resetting is not requested.');
         }
-
-//        if ($this->confirmToken && $this->confirmToken->isExpiredTo($date ? $date : new DateTimeImmutable())) {
-//            throw new DomainException('Reset token is expired.');
-//        }
 
         $this->status->activate();
         $this->password = $password;
@@ -152,13 +144,9 @@ class User implements UserInterface
         if (!$this->status->isActive()) {
             throw new DomainException('User is not active.');
         }
-//        if ($this->confirmToken && !$this->confirmToken->isExpiredToNow() && $this->temporaryEmail) {
-//            throw new DomainException('Resetting is already requested.');
-//        }
         if ($this->getEmail()->isEqual($email)) {
             throw new DomainException('Email is same.');
         }
-
         $this->getStatus();
     }
 
@@ -167,9 +155,6 @@ class User implements UserInterface
         if ($this->status->isActive()) {
             throw new DomainException('Changing is not requested.');
         }
-//        if ($this->confirmToken->isExpiredTo($date ? $date : new DateTimeImmutable())) {
-//            throw new DomainException('Reset token is expired.');
-//        }
         $this->status->activate();
     }
 

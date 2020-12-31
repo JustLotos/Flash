@@ -12,7 +12,7 @@ use Symfony\Component\Mime\RawMessage;
 
 class ConfirmActionTest extends AbstractTest
 {
-    protected $method = 'GET';
+    protected $method = 'POST';
     protected $uri = '/user/reset/email/confirm';
 
     public function getFixtures() : array
@@ -22,8 +22,10 @@ class ConfirmActionTest extends AbstractTest
 
     public function testValid()
     {
+        $mail = 'test5@test.test';
+
         $this->makeRequest([
-            'email' => getenv('TEST_USER_EMAIL'),
+            'email' => $mail,
             'password' => '12345678Ab',
             'plainPassword' => '12345678Ab'
         ], '/user/reset/email/request/', 'POST');
@@ -33,28 +35,35 @@ class ConfirmActionTest extends AbstractTest
 
         $crawler = new Crawler($email->serialize());
         $code = $crawler->filter('a.confirm-link')->attr('data-token');
+        $client = $this->makeRequest([
+            'email' => $mail,
+            'token' => $code,
+            'password' => '12345678Ba',
+            'plainPassword' => '12345678Ba'
+        ], "$this->uri/");
 
-        $client = $this->makeRequest([], "$this->uri/$code/");
         self::assertTrue($this->response->isRedirect());
 
         /** @var Response $response */
         $response = $client->getResponse();
         $content = new Crawler($response->getContent());
 
-
         $link = $content->filter('a[href="/?resetByEmail=confirm"]');
         self::assertEquals('/?resetByEmail=confirm', $link->text());
     }
 
-    public function testNotExistingValue()
+    public function testNotRequested()
     {
-        $client = $this->makeRequest([], $this->uri.'/123/');
-        /** @var Response $response */
-        $response = $client->getResponse();
-        $content = $response->getContent();
+        $this->makeRequest([
+            'email' => 'test5@test.test',
+            'token' => 'test',
+            'password' => '12345678Ba',
+            'plainPassword' => '12345678Ba'
+        ], $this->uri.'/');
 
-        var_dump($response);
-        self::assertResponseNotFound($response);
-        self::assertEquals('Invalid or not found token.', $content);
+        self::assertResponseNotFound($this->response);
+        self::assertArrayHasKey('errors', $this->content);
+        self::assertArrayHasKey('domain', $this->content['errors']);
+        self::assertArrayHasKey('reset', $this->content['errors']['domain']);
     }
 }

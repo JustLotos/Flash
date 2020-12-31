@@ -13,7 +13,9 @@ use App\Service\FlushService;
 use App\Service\MailService\BaseMessage;
 use App\Service\MailService\MailBuilderService;
 use App\Service\MailService\MailSenderService;
+use App\Service\RedisService;
 use App\Service\ValidateService;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Handler
@@ -22,52 +24,62 @@ class Handler
     private $repository;
     private $tokenizer;
     private $sender;
-    private $validator;
     private $builder;
     private $generator;
+    private $redis;
+    /** @var User $user */
+    private $user;
 
     public function __construct(
-        ValidateService $validator,
         FlushService $flusher,
         UserRepository $repository,
         TokenService $tokenizer,
         MailSenderService $sender,
         MailBuilderService $builder,
-        UrlGeneratorInterface $generator
+        UrlGeneratorInterface $generator,
+        RedisService $redis
     ) {
         $this->flusher = $flusher;
         $this->repository = $repository;
         $this->tokenizer = $tokenizer;
         $this->sender = $sender;
-        $this->validator = $validator;
         $this->builder = $builder;
         $this->generator = $generator;
+        $this->redis = $redis;
     }
 
     public function handle(Command $command): User
     {
-        $this->validator->validate($command);
-        /** @var User $user */
-        $user = $this->repository->getByEmail($command->email);
+        $this->user = $this->repository->getByEmail($command->email);
+        $this->user->getStatus()->activate();
+        $token = $this->tokenizer->getToken();
+        $this->redis->set(
+            $this->user->getEmail()->getValue().'_reset_password',
+            $token,
+            (int)getenv('REDIS_DEFAULT_TTL')
+        );
 
-        $user->requestResetPassword($this->tokenizer->generateTokenByClass(ConfirmToken::class));
+        $this->user->requestResetPassword();
         $this->flusher->flush();
-        $this->sendConfirmMessage($user);
-        return $user;
+        $this->sendConfirmMessage($token);
+        return $this->user;
     }
 
-    public function sendConfirmMessage(User $user): void
+    public function sendConfirmMessage(string $token): void
     {
+        $url = $this->generator->generate(
+            'resetByEmailGetForm',
+            ['token' => $token],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
         $message = BaseMessage::getDefaultMessage(
-            $user->getEmail(),
+            $this->user->getEmail(),
             'Восстановление доступа в приложении FLashBack',
-            $this->builder->setParam('url', $this->generator->generate(
-                'resetByEmailGetForm',
-                ['token' => $user->getConfirmToken()->getToken()],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            ))
-            ->setParam('token', $user->getConfirmToken()->getToken())
-            ->build('mail/user/reset/byEmail/request.html.twig')
+            $this->builder
+                ->setParam('url', $url)
+                ->setParam('token', $token)
+                ->build('mail/user/reset/byEmail/request.html.twig')
         );
 
         $this->sender->send($message);
