@@ -20,7 +20,7 @@ export default class User {
     }
 
     public login(data: LoginResponse | RegisterResponse) {
-        this.accessToken = data.accessToken;
+        this.accessToken = data.token;
         this.refreshToken = data.refreshToken;
         this.status = <Status>data.status;
         this.role = <Role>data.role;
@@ -38,7 +38,7 @@ export default class User {
     }
 
     public refresh (data: RefreshTokenResponse) {
-        this.accessToken = data.accessToken;
+        this.accessToken = data.token;
         this.refreshToken = data.refreshToken;
         localStorage.setItem(ACCESS_TOKEN, this.accessToken);
         localStorage.setItem(REFRESH_TOKEN, this.refreshToken);

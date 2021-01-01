@@ -41,7 +41,9 @@ export default class LoginPage extends Vue{
         UserModule.login(payloads).then(() => {
             this.$router.push(AppModule.getRedirectToAuth);
         }).catch((error: AxiosError)=>{
+          console.log(error);
             if(error.response?.data.errors) {
+
                 this.error = error.response?.data.errors;
             }
         });

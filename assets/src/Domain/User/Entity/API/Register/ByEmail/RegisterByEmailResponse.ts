@@ -1,5 +1,5 @@
 export default interface RegisterByEmailResponse{
-    accessToken: string;
+    token: string;
     refreshToken: string;
     role: string;
     status: string;

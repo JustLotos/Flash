@@ -34,27 +34,22 @@ export default class ResetByEmailPage extends Vue{
     modal: boolean = false;
     modalMessage: string = '';
     errorsRequest: ResetByEmailRequest = {email: '' };
-    errorsResponse: ResetByEmailConfirm = {password: '', plainPassword: '', token: ''};
+    errorsResponse: ResetByEmailConfirm = {email: '', password: '', plainPassword: '', token: ''};
     isReset: boolean = !!localStorage.getItem('temporaryToken');
-
-    beforeRouteEnter (to, from, next) {
-        UserModule.isAuthenticated ? next(AppModule.getRedirectOnUnguardedPath) : next();
-        if (to.query && to.query.isReset && to.query.token) {
-            localStorage.setItem('temporaryToken', to.query.token);
-        } else {
-            localStorage.removeItem('temporaryToken');
-        }
-    }
 
     private handleConfirm(payloads: ResetByEmailConfirm) {
         payloads.token = <string>localStorage.getItem('temporaryToken');
+        payloads.email = <string>localStorage.getItem('temporaryEmail');
+        //localStorage.removeItem('temporaryToken');
+        //localStorage.removeItem('temporaryEmail');
+
         if(!payloads.token) {
             this.modal = !this.modal;
             this.modalMessage = 'Токен не установлен';
         }
 
         UserModule.resetByEmailConfirm(payloads).then((response) => {
-            debugger
+            console.log(response);
             this.modalMessage = 'Пароль успешно изменен';
             this.modal = !this.modal;
         }).catch((error: AxiosError) => {
@@ -69,20 +64,31 @@ export default class ResetByEmailPage extends Vue{
         });
     }
 
-    redirect() {
-      return this.$router.push({name: "Login"});
-    }
+    redirect() { return this.$router.push({name: "Login"}); }
 
     private handleRequest(payloads: ResetByEmailRequest) {
+        localStorage.setItem('temporaryEmail', payloads.email);
         UserModule.resetByEmailRequest(payloads).then((response) => {
-            debugger;
             this.modal = !this.modal;
             this.modalMessage = 'Письмо отправелно!, поверьте ваш email';
         }).catch((error: AxiosError) => {
             if(error.response?.data.errors) {
               this.errorsRequest = error.response?.data.errors;
+              if(error.response?.data.errors.domain) {
+                  this.errorsRequest = error.response?.data.errors.domain;
+              }
             }
         });
+    }
+
+    beforeRouteEnter (to, from, next) {
+      UserModule.isAuthenticated ? next(AppModule.getRedirectOnUnguardedPath) : next();
+      if (to.query && to.query.isReset && to.query.token) {
+        localStorage.setItem('temporaryToken', to.query.token);
+      } else {
+        localStorage.removeItem('temporaryToken');
+        localStorage.removeItem('temporaryEmail');
+      }
     }
 }
 </script>

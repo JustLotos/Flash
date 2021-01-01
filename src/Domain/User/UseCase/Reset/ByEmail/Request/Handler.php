@@ -66,7 +66,7 @@ class Handler
     {
         $key = $this->user->getEmail()->getValue().'_reset_password';
         if($this->redis->get($key)) {
-            throw new DomainException(json_encode(['reset' => 'already requested']));
+            throw new DomainException(json_encode(['email' => 'already requested, check email box']));
         }
         $this->redis->set($key, $token, (int)getenv('REDIS_DEFAULT_TTL'));
     }

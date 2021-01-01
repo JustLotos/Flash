@@ -2,6 +2,7 @@ import axios, {AxiosRequestConfig} from "axios";
 import { router as Router } from "../Domain/User/Guard";
 import { UserModule } from "../Domain/User/UserModule";
 import {RouterApi} from "../Domain/App/RouterAPI";
+import Logger from "../Utils/Logger";
 
 let Axios = axios.create({
     headers: { "Content-type": "application/json" }
