@@ -41,14 +41,12 @@ class RequestActionTest extends AbstractTest
         self::assertEquals(Status::STATUS_WAIT, $this->content['status']);
     }
 
-    /**
-     * @dataProvider getInvalidCredential
-     */
+    /** @dataProvider getInvalidCredential */
     public function testInvalidValue(string $value) : void
     {
         $this->makeRequest(['email' => $value, 'password' => $value, 'plainPassword' => '']);
 
-        self::assertResponseCode(JsonResponse::HTTP_NOT_FOUND, $this->response);
+        self::assertResponseCode(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, $this->response);
         self::assertArrayHasKey('errors', $this->content);
         self::assertArrayHasKey('email', $this->content['errors']);
         self::assertArrayHasKey('password', $this->content['errors']);
@@ -71,7 +69,7 @@ class RequestActionTest extends AbstractTest
             'plainPassword' => '12345678Ab'
         ]);
 
-        self::assertResponseCode(JsonResponse::HTTP_NOT_FOUND, $this->response);
+        self::assertResponseCode(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, $this->response);
         self::assertArrayHasKey('errors', $this->content);
         self::assertArrayHasKey('email', $this->content['errors']);
     }

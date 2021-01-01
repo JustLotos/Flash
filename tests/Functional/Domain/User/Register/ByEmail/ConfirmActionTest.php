@@ -22,8 +22,9 @@ class ConfirmActionTest extends AbstractTest
 
     public function testValid() : void
     {
+        $mail = 'test@test.com';
         $this->makeRequest([
-            'email' => 'test@test.com',
+            'email' => $mail,
             'password' => '12345678Ab',
             'plainPassword' => '12345678Ab',
         ], '/user/register/email/request/', 'POST');
@@ -31,34 +32,41 @@ class ConfirmActionTest extends AbstractTest
         self::assertResponseOk($this->response);
         self::assertEmailCount(1);
 
-        $client = $this->createAuthenticatedClient('test@test.com'. '12345678Ab');
         /** @var RawMessage $email */
         $email = self::getMailerMessage(0);
-        self::assertEmailHeaderSame($email, 'To', 'test@test.com');
+        self::assertEmailHeaderSame($email, 'To', $mail);
 
         $crawler = new Crawler($email->serialize());
         $code = $crawler->filter('a#confirm-link')->attr('data-token');
         self::assertIsString($code);
 
-        $client->request();
-        $this->makeRequestWithAuth([], $this->uri.$code.'/');
+        $this->makeRequestWithAuth([], $this->uri.$mail.'/'.$code.'/');
 
         $content = new Crawler($this->response->getContent());
         $link = $content->filter('a[href="/?registerByEmail=confirm"]');
 
-       // self::assertTrue($this->response->isRedirect());
-       // self::assertEquals('/?registerByEmail=confirm', $link->text());
+        self::assertTrue($this->response->isRedirect());
+        self::assertEquals('/?registerByEmail=confirm', $link->text());
     }
 
 
+    public function testNonExistingUser() : void
+    {
+        $mail = 'test@test.test';
+        $this->makeRequestWithAuth([], $this->uri.$mail.'/'.'code'.'/');
+
+        self::assertResponseCode(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response);
+        self::assertArrayHasKey('errors', $this->content);
+        self::assertArrayHasKey('email', $this->content['errors']);
+    }
+
     public function testNonExistingToken() : void
     {
-        $client = $this->makeRequestWithAuth([], $this->uri.'123/');
+        $mail = 'test5@test.test';
+        $this->makeRequestWithAuth([], $this->uri.$mail.'/'.'code'.'/');
 
-        /** @var Response $response */
-        $response = $client->getResponse();
-
-        self::assertResponseNotFound($response);
-        self::assertEquals('Incorrect or confirmed token.', $response->getContent());
+        self::assertResponseCode(Response::HTTP_NOT_FOUND, $this->response);
+        self::assertArrayHasKey('errors', $this->content);
+        self::assertArrayHasKey('confirm', $this->content['errors']);
     }
 }

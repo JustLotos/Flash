@@ -12,6 +12,7 @@ use App\Service\MailService\MailSenderService;
 use App\Service\MailService\BaseMessage;
 use App\Service\MailService\MailBuilderService;
 use App\Service\RedisService;
+use Symfony\Component\HttpFoundation\Response;
 
 class Handler
 {
@@ -59,8 +60,12 @@ class Handler
     public function checkExistToken(string $token): void
     {
         $redisToken = $this->redis->get($this->user->getEmail()->getValue().'_register');
+        if(!$redisToken) {
+            throw new ValidationException(json_encode(['confirm' => 'is not requested']), Response::HTTP_NOT_FOUND);
+        }
+
         if($redisToken !== $token) {
-            throw new ValidationException(json_encode(['token' => 'token is expired']), 404);
+            throw new ValidationException(json_encode(['token' => 'token is expired']), Response::HTTP_NOT_FOUND);
         }
         $this->redis->del($this->user->getEmail()->getValue().'_register');
     }
