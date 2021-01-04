@@ -14,6 +14,8 @@
                     >{{ lang.label }}</option>
                 </select>
             </v-col>
+
+            <modal v-model="modal"><v-alert type="error">ой что-то пошло не так</v-alert></modal>
         </v-row>
     </v-footer>
 </template>
@@ -22,11 +24,17 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { AppModule } from "../../AppModule";
 import { RouteConfig } from "vue-router";
-@Component
+import Modal from "../../Components/Modal/Modal.vue";
+import App from "../../../../App.vue";
+@Component({
+  components: {Modal}
+})
 export default class BaseFooter extends Vue {
     footerMenu: Array<RouteConfig> = AppModule.getApp.menu.getFooterMenu;
     localeList: Array<Object> = AppModule.getApp.locale.getLocaleList;
     selectLocale: string = this.$root.$i18n.locale;
+    get modal():boolean {return AppModule.getApp.commonModal}
+    set modal(value: boolean) { AppModule.getApp.commonModal = value }
 
     public setLocale() {
         this.$root.$i18n.locale = this.selectLocale;

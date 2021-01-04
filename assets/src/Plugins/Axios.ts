@@ -3,10 +3,13 @@ import { router as Router } from "../Domain/User/Guard";
 import { UserModule } from "../Domain/User/UserModule";
 import {RouterApi} from "../Domain/App/RouterAPI";
 import Logger from "../Utils/Logger";
+import {AppModule} from "../Domain/App/AppModule";
 
 let Axios = axios.create({
     headers: { "Content-type": "application/json" }
 });
+
+
 
 Axios.interceptors.response.use(
     (response) => {
@@ -17,7 +20,15 @@ Axios.interceptors.response.use(
         UserModule.UNSET_LOADING();
         const originalRequest: AxiosRequestConfig = error.config;
 
-        if (error.response?.status === 401 && originalRequest.url === RouterApi.getUrlByName('refreshToken').path) {
+        if(error.message === "Network Error") {
+            AppModule.getApp.commonModal = true;
+            return;
+        }
+
+        if (
+            error.response?.status === 401 &&
+            originalRequest.url === RouterApi.getUrlByName('refreshToken').path
+        ) {
             UserModule.LOGOUT();
             return Router.push({name: 'Login'});
         }
@@ -29,12 +40,11 @@ Axios.interceptors.response.use(
             originalRequest._retry = true;
             UserModule.refreshToken().then(() => {
                 originalRequest.headers.common['Authorization'] = 'Bearer' + UserModule.user.accessToken;
-                return axios(originalRequest);
+                return originalRequest;
             });
         }
 
         Logger.logAPIError(error);
-        //debugger;
         return Promise.reject(error);
     }
 );
