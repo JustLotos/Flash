@@ -68,6 +68,19 @@ abstract class BaseFixture extends Fixture
         }
     }
 
+
+    protected function createOne(string $groupUnique, string $groupName, callable $factory) {
+        $entity = $factory();
+        if ($entity === null) {
+            throw new LogicException(
+                'Did you forget to return the entity object from your callback to BaseFixture::createMany()?'
+            );
+        }
+
+        $this->manager->persist($entity);
+        $this->addReference(sprintf('%s_%s', $groupName, $groupUnique), $entity);
+    }
+
     protected function getRandomReference(string $groupName)
     {
         $this->prepareIndex($groupName);

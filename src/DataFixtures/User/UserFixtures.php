@@ -50,12 +50,28 @@ class UserFixtures extends BaseFixture implements ContainerAwareInterface
             );
 
 
-            if($i !== 5) {
-                $user->getStatus()->activate();
-            }
+            if($i !== 5) {$user->getStatus()->activate();}
             return $user;
         });
 
+
+        $this->createOne( 'RegisterResendCode', self::USERS, function () {
+            return $this->buildUser(new Email("registerResend@test.test"));
+        });
+
         $manager->flush();
+    }
+
+    public function buildUser(Email $email): User {
+        $date = $this->faker->dateTimeBetween($startDate = '-3 years', $endDate = 'now', $timezone = null);
+
+        return User::createByEmail(
+            Id::next(),
+            DateTimeImmutable::createFromMutable($date),
+            Role::createUser(),
+            $email,
+            new Password('12345678Ab'),
+            Status::createWait()
+        );
     }
 }

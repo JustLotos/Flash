@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use App\Service\RedisService;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
@@ -46,6 +47,7 @@ abstract class AbstractTest extends WebTestCase
     protected function setUp() : void
     {
         static::getClient();
+        (RedisService::getOriginalClient())->flushAll();
         $this->url = getenv('DEFAULT_HOST').'/api';
         $this->loadFixtures($this->getFixtures());
     }

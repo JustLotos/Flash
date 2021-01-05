@@ -10,11 +10,14 @@ use App\Domain\User\UseCase\Register\ByEmail\Confirm\Command as ConfirmCommand;
 use App\Domain\User\UseCase\Register\ByEmail\Confirm\Handler as ConfirmHandler;
 use App\Domain\User\UseCase\Register\ByEmail\Request\Command as RegisterPayloads;
 use App\Domain\User\UseCase\Register\ByEmail\Request\Handler as RegisterHandler;
+use App\Domain\User\UseCase\Register\ByEmail\Resend\Command as ResendCommand;
+use App\Domain\User\UseCase\Register\ByEmail\Resend\Handler as ResendHandler;
 use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationSuccessResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler as AuthHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -23,6 +26,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 class RegisterByEmailController extends AbstractController
 {
     use ControllerHelper;
+
     /**
      * @Route("/request/", name="registerByEmail", methods={"POST"}, options={"no_auth": true})
      *
@@ -69,7 +73,21 @@ class RegisterByEmailController extends AbstractController
         return $ash->handleAuthenticationSuccess($user);
     }
 
-    /** @Route("/confirm/{email}/{token}/", name="registerByEmailConfirm", methods={"GET"}, options={"no_auth": false}) */
+    /**
+     *  @Route("/resend/", name="resedCodeRegisterByEmail", methods={"POST"}, options={"no_auth": true})
+     */
+    public function resend(Request $request, ResendHandler $handler): Response
+    {
+        /** @var ResendCommand $command */
+        $command = $this->serializer->deserialize($request, ResendCommand::class);
+        $this->validator->validate($command);
+        $handler->handle($command);
+        return $this->response($this->getSimpleSuccessResponse());
+    }
+
+    /**
+     * @Route("/confirm/{email}/{token}/", name="registerByEmailConfirm", methods={"GET"}, options={"no_auth": true})
+     */
     public function confirm(ConfirmHandler $handler, string $email, string $token): RedirectResponse
     {
         $command = new ConfirmCommand($email, $token);
