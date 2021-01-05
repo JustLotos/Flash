@@ -49,19 +49,8 @@ class RequestActionTest extends AbstractTest
         self::assertResponseCode(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response);
         self::assertArrayHasKey('errors', $this->content);
         self::assertArrayHasKey('domain', $this->content['errors']);
-        self::assertArrayHasKey('reset', $this->content['errors']['domain']);
+        self::assertArrayHasKey('email', $this->content['errors']['domain']);
     }
-
-//    public function testIsNotActive(): void
-//    {
-//        $email = 'test5@test.test';
-//        $this->makeRequest(['email' =>$email, 'password' => '12345678Ab', 'plainPassword' => '12345678Ab']);
-//
-//        self::assertResponseCode(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response);
-//        self::assertArrayHasKey('errors', $this->content);
-//        self::assertArrayHasKey('domain', $this->content['errors']);
-//        self::assertArrayHasKey('user', $this->content['errors']['domain']);
-//    }
 
     public function testNotExistingEmail() : void
     {
