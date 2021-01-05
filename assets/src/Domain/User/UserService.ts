@@ -24,5 +24,8 @@ export default {
     },
     async resetByEmailConfirm(payloads: ResetByEmailConfirm): AxiosResponse<any> {
         return Axios.post( RouterApi.getUrlByName('resetByEmailConfirm').path, payloads);
+    },
+    async confirmEmail(payloads: {email: string}): AxiosResponse<any> {
+        return Axios.post( RouterApi.getUrlByName('resendCodeRegisterByEmail').path, payloads);
     }
 };

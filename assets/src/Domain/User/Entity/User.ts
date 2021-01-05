@@ -15,6 +15,11 @@ export default class User {
     public _accessToken: string;
     private _refreshToken: string;
 
+
+    public isConfirmed(): boolean {
+        return this.status === 'ACTIVE';
+    }
+
     public static isResetByEmail(route) {
         return route.query.hasOwnProperty('resetByEmailGetForm');
     }
@@ -28,6 +33,7 @@ export default class User {
         this.id = data.id
         this.saveToLocalStorage();
     }
+
     logout() {
         this.refreshToken = '';
         this.accessToken = '';

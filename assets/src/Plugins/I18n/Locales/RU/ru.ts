@@ -5,6 +5,7 @@ export default {
             "login": "Войти",
             "register": "Присоедениться",
             "logout": "Выйти",
+            "lk": "Личный кабинет"
         }
     },
     "link": {

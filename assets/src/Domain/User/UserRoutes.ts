@@ -5,8 +5,13 @@ import LogoutPage from "./Pages/LogoutPage.vue";
 import LoginPage from "./Pages/LoginPage.vue";
 import ResetByEmailPage from "./Pages/ResetByEmailPage.vue";
 import i18n from "../../Plugins/I18n/I18n";
+import ProfilePage from "./Pages/ProfilePage.vue";
 
 export const UserRoutes: Array<RouteConfig> = [
+    {
+        path: '/lk/', name: 'lk', component: ProfilePage,
+        meta: { label: i18n.t('menu.main.lk'), icon: 'mdi-face', menu: true, auth: true, layout: BaseLayout},
+    },
     {
         path: '/login/', name: 'Login', component: LoginPage,
         meta: { label: i18n.t('menu.main.login'), icon: 'mdi-login', menu: true, auth: false, layout: BaseLayout}

@@ -74,9 +74,9 @@ class Handler
     private function setToken($token): void
     {
         $key = $this->user->getEmail()->getValue().'_register';
-        if(!$this->redis->get($key)) {
+        if($this->redis->get($key)) {
             throw new DomainException(
-                json_encode(['token' => 'token is not requested']),
+                json_encode(['token' => 'token is requested']),
                 Response::HTTP_NOT_FOUND
             );
         }

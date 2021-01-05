@@ -4,7 +4,8 @@ export default {
         "main": {
             "login": "Sign In",
             "register": "Sign Up",
-            "logout": "Sign Out"
+            "logout": "Sign Out",
+            "lk": "Profile"
         }
     },
     "link": {

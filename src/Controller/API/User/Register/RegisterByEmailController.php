@@ -74,7 +74,7 @@ class RegisterByEmailController extends AbstractController
     }
 
     /**
-     *  @Route("/resend/", name="resedCodeRegisterByEmail", methods={"POST"}, options={"no_auth": true})
+     *  @Route("/resend/", name="resendCodeRegisterByEmail", methods={"POST"}, options={"no_auth": true})
      */
     public function resend(Request $request, ResendHandler $handler): Response
     {

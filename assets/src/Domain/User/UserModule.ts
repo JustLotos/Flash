@@ -7,7 +7,6 @@ import LoginResponse from "./Entity/API/Login/LoginResponse";
 import LoginRequest from "./Entity/API/Login/LoginRequest";
 import RegisterResponse from "./Entity/API/Register/ByEmail/RegisterByEmailResponse";
 import ResetByEmailRequest from "./Entity/API/Reset/ByEmail/ResetByEmailRequest";
-import ResetByEmailResponse from "./Entity/API/Reset/ByEmail/ResetByEmailConfirm";
 import RegisterByEmailRequest from "./Entity/API/Register/ByEmail/RegisterByEmailRequest";
 import ResetByEmailConfirm from "./Entity/API/Reset/ByEmail/ResetByEmailConfirm";
 
@@ -81,6 +80,16 @@ class VuexUser extends VuexModule {
         const response = await AuthService.refreshToken({refreshToken: this.user.refreshToken});
         this.REFRESH_TOKEN(response.data);
         this.UNSET_LOADING();
+        return response.data;
+    }
+
+
+    @Action({rawError: true})
+    public async confirmEmail() {
+        this.LOADING();
+        const response = await AuthService.confirmEmail({email: this.user.email});
+        this.UNSET_LOADING();
+        debugger
         return response.data;
     }
 }
