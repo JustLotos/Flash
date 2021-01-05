@@ -17,10 +17,14 @@ class DefaultController extends AbstractController
     public function indexAction(RouterInterface $router) : Response
     {
         $routes = [];
+        $indexRoute = false;
         foreach ($router->getRouteCollection()->all() as $name => $route) {
             if ($route->getPath()[0] === '_' || $name[0] === '_') {
                 continue;
             }
+
+            if(mb_strpos($name, 'admin') !== false) continue;
+            if(mb_strpos($name, 'swagger') !== false) continue;
 
             $routes[] = [
                 'name' => $name,
