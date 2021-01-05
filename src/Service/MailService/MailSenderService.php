@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\MailService;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -24,7 +25,15 @@ class MailSenderService
             ->subject($message->getSubject())
             ->text($message->getText())
             ->html($message->getBody());
-        $this->mailer->send($email);
+
+        try {
+            $this->mailer->send($email);
+        } catch (\Exception $exception) {
+            throw new \DomainException([
+                'mail' => $exception->getMessage()
+            ], Response::HTTP_NOT_FOUND);
+        }
+
         return true;
     }
 }
