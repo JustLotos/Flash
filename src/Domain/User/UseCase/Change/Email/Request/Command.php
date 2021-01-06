@@ -15,10 +15,10 @@ class Command
      * @Assert\Length(max="255")
      * @Assert\NotBlank()
      * @Assert\Email()
-     * @UniqueEntity(
+     * @UniqueEntity (
      *     class="App\Domain\User\Entity\User",
      *     attribute="email",
-     *     message="Пользователя с таким адресом уже существует"
+     *     message="Пользователь с таким адресом уже существует"
      * )
      * @Serializer\Type(name="string")
      */

@@ -22,36 +22,41 @@ class ConfirmActionTest extends AbstractTest
 
     public function testValid()
     {
-        $this->makeRequestWithAuth([
-            'oldEmail' => getenv('TEST_USER_EMAIL'),
-            'newEmail' => 'test@test.jest'
-        ], '/user/change/email/request/', 'POST');
+        $data = ['email' => 'email@test.test'];
+        $this->makeRequestWithAuth($data,'/user/change/email/request/','POST');
 
         /** @var RawMessage $email */
         $email = self::getMailerMessage(0);
-
         $crawler = new Crawler($email->serialize());
         $code = $crawler->filter('a.confirm-link')->attr('data-token');
-
-        $client = $this->makeRequest([], $this->uri.'/'.$code);
+        $this->makeRequestWithAuth([], $this->uri.'/'.$code.'/');
 
         self::assertTrue($this->response->isRedirect());
 
-        /** @var Response $response */
-        $response = $client->getResponse();
-        $content = new Crawler($response->getContent());
-
+        $content = new Crawler($this->response->getContent());
         $link = $content->filter('a[href="/?changeEmail=confirm"]');
+
         self::assertEquals('/?changeEmail=confirm', $link->text());
+        self::assertEmailCount(1);
     }
 
-    public function testNotExistingValue()
-    {
-        $client = $this->makeRequestWithAuth([], $this->uri.'/123');
-        /** @var Response $response */
-        $response = $client->getResponse();
-        $content = $response->getContent();
-        self::assertResponseNotFound($response);
-        self::assertEquals('Invalid or not found token.', $content);
+    public function testNotRequested() {
+        $this->makeRequestWithAuth([], $this->uri.'/code/');
+
+        self::assertResponseCode(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response);
+        self::assertArrayHasKey('errors', $this->content);
+        self::assertArrayHasKey('domain', $this->content['errors']);
+        self::assertArrayHasKey('token',  $this->content['errors']['domain']);
+    }
+
+    public function testNotValidToken() {
+        $data = ['email' => 'email@test.test'];
+        $this->makeRequestWithAuth($data,'/user/change/email/request/','POST');
+        $this->makeRequestWithAuth([], $this->uri.'/code/');
+
+        self::assertResponseCode(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response);
+        self::assertArrayHasKey('errors', $this->content);
+        self::assertArrayHasKey('domain', $this->content['errors']);
+        self::assertArrayHasKey('token',  $this->content['errors']['domain']);
     }
 }

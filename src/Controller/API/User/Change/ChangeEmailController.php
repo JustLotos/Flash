@@ -35,10 +35,16 @@ class ChangeEmailController extends AbstractController
         return $this->response($this->getSimpleSuccessResponse());
     }
 
-    /** @Route("/confirm/{token}", name="changeEmailConfirm", methods={"GET"}) */
+    /** @Route("/confirm/{token}/", name="changeEmailConfirm", methods={"GET"}) */
     public function confirm(ConfirmHandler $handler, string $token): RedirectResponse
     {
-        $handler->handle(new ConfirmCommand($token));
+        $command = new ConfirmCommand($token);
+        $this->validator->validate($command);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $handler->handle($command, $user);
         return $this->redirectToRoute('index', ['vueRouting' => '', 'changeEmail' => 'confirm']);
     }
 }

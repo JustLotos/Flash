@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Domain\User\UseCase\Change\Email\Confirm;
 
+use App\Domain\User\Entity\Types\Email;
 use App\Domain\User\Entity\User;
 use App\Domain\User\UserRepository;
 use App\Domain\User\Service\PasswordEncoder;
+use App\Exception\BusinessException;
 use App\Service\FlushService;
 use App\Service\MailService\BaseMessage;
 use App\Service\MailService\MailBuilderService;
 use App\Service\MailService\MailSenderService;
+use App\Service\RedisService;
 use App\Service\ValidateService;
 use DateTimeImmutable;
 use DomainException;
@@ -25,6 +28,8 @@ class Handler
     private $builder;
     private $generator;
     private $redis;
+    /** @var User */
+    private $user;
 
     public function __construct(
         UserRepository $repository,
@@ -32,7 +37,8 @@ class Handler
         FlushService $flusher,
         MailSenderService $sender,
         MailBuilderService $builder,
-        UrlGeneratorInterface $generator
+        UrlGeneratorInterface $generator,
+        RedisService $redis
     ) {
         $this->repository = $repository;
         $this->flusher = $flusher;
@@ -40,27 +46,39 @@ class Handler
         $this->sender = $sender;
         $this->builder = $builder;
         $this->generator = $generator;
+        $this->redis = $redis;
     }
 
-    public function handle(Command $command): void
+    public function handle(Command $command, User $user): void
     {
-        $this->validator->validate($command);
+        $this->user = $user;
+        $email = $this->getEmailFromRedis($command->token);
+        $this->user->confirmChangeEmail(new DateTimeImmutable(), $email);
+        $this->flusher->flush();
+        $this->sendConfirmMessage();
+    }
 
-        /** @var User $user */
-        if (!$user = $this->repository->findByConfirmToken($command->token)) {
-            throw new DomainException('Invalid or not found token.');
+    public function getEmailFromRedis(string $token): Email
+    {
+        $key = $this->user->getEmail()->getValue().'_change_email';
+
+        if(!($redisData = $this->redis->get($key))) {
+            throw new BusinessException(['token' => 'change email is not requested or expired']);
         }
 
-        $user->confirmChangeEmail(new DateTimeImmutable());
-        $this->flusher->flush();
-        $this->sendConfirmMessage($user);
+        $redisData = unserialize($redisData);
+        if($redisData['token'] !== $token) {
+            throw new BusinessException(['token' => 'token is not valid']);
+        }
+
+        return new Email($redisData['email']);
     }
 
-    public function sendConfirmMessage(User $user): void
+    public function sendConfirmMessage(): void
     {
         $subject = 'Успешная смена email в приложении Flash';
         $body = $this->builder->build('mail/user/change/email/confirm.html.twig');
-        $message = BaseMessage::getDefaultMessage($user->getEmail(), $subject, $body);
+        $message = BaseMessage::getDefaultMessage($this->user->getEmail(), $subject, $body);
         $this->sender->send($message);
     }
 }

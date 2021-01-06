@@ -9,6 +9,7 @@ use App\Domain\User\Entity\Types\Id;
 use App\Domain\User\Entity\Types\Password;
 use App\Domain\User\Entity\Types\Role;
 use App\Domain\User\Entity\Types\Status;
+use App\Exception\BusinessException;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -140,12 +141,10 @@ class User implements UserInterface
         $this->password = $password;
     }
 
-    public function confirmChangeEmail(): void
+    public function confirmChangeEmail(DateTimeImmutable $date, Email $email): void
     {
-        if ($this->status->isActive()) {
-            throw new DomainException('Changing is not requested.');
-        }
-        $this->status->activate();
+        $this->email = $email;
+        $this->updatedAt = $date;
     }
 
     public function changeRole(Role $role, DateTimeImmutable $date): void

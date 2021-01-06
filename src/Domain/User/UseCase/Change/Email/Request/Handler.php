@@ -9,12 +9,15 @@ use App\Domain\User\Entity\Types\Email;
 use App\Domain\User\Entity\User;
 use App\Domain\User\UserRepository;
 use App\Domain\User\Service\TokenService;
+use App\Exception\ValidationException;
 use App\Service\FlushService;
 use App\Service\MailService\BaseMessage;
 use App\Service\MailService\MailBuilderService;
 use App\Service\MailService\MailSenderService;
 use App\Service\RedisService;
 use App\Service\ValidateService;
+use DomainException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Handler
@@ -49,16 +52,28 @@ class Handler
 
     public function handle(Command $command, User $user): User
     {
+        $this->user = $user;
+
+        if($this->user->getEmail()->getValue() === $command->email) {
+            throw new ValidationException(
+                json_encode(['email' => 'email the same']),
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
+        }
+
         $token = $this->tokenizer->getToken();
-        $email = new Email($command->email);
-        $this->setToken($token, $email);
+        $this->setToken($token,  new Email($command->email));
         $this->sendConfirmMessage($token);
         return $user;
     }
 
     public function setToken(string $token, Email $email) {
         $key = $this->user->getEmail()->getValue().'_change_email';
-        $this->redisService->set($key, ['token' => $token, 'email' => $email->getValue()]);
+        if($this->redisService->get($key)) {
+            throw new DomainException(json_encode(['token' => 'token already send']));
+        }
+
+        $this->redisService->set($key, serialize(['token' => $token, 'email' => $email->getValue()]));
     }
 
     public function sendConfirmMessage(string $token): void

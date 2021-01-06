@@ -22,10 +22,7 @@ class RequestActionTest extends AbstractTest
 
     public function testValid(): void
     {
-        $this->makeRequestWithAuth([
-            'oldEmail' => getenv('TEST_USER_EMAIL'),
-            'newEmail' => 'test@test.jest'
-        ]);
+        $this->makeRequestWithAuth(['email' => getenv('TEST_USER_EMAIL')]);
 
         self::assertResponseOk($this->response);
         self::assertEmailCount(1);
@@ -41,14 +38,21 @@ class RequestActionTest extends AbstractTest
 
     public function testNotValidEmails() : void
     {
-        $this->makeRequestWithAuth([
-            'newEmail' => getenv('TEST_USER_EMAIL'),
-            'oldEmail' => 'test@test.jest'
-        ]);
-
-        $this->assertResponseCode(JsonResponse::HTTP_NOT_FOUND, $this->response);
+        $this->makeRequestWithAuth(['email' => getenv('TEST_USER_EMAIL')]);
+        self::assertResponseCode(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, $this->response);
         self::assertArrayHasKey('errors', $this->content);
-        self::assertArrayHasKey('newEmail', $this->content['errors']);
-        self::assertArrayHasKey('oldEmail', $this->content['errors']);
+        self::assertArrayHasKey('email', $this->content['errors']);
+    }
+
+    public function testTokenSent(): void
+    {
+        $this->makeRequestWithAuth(['email' => 'test@test.test']);
+        $this->makeRequestWithAuth(['email' => 'test@test.test']);
+
+        self::assertResponseCode(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, $this->response);
+        self::assertArrayHasKey('errors', $this->content);
+        self::assertArrayHasKey('domain', $this->content['errors']);
+        self::assertArrayHasKey('token',  $this->content['errors']['domain']);
+
     }
 }

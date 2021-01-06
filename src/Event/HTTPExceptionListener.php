@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\Exception\ApplicationException;
+use App\Exception\BusinessException;
 use App\Exception\ValidationException;
 use DomainException;
 use Psr\Log\LoggerInterface;
@@ -32,6 +33,7 @@ class HTTPExceptionListener
                 $response = $this->responseApplicationException($error);
                 break;
             case DomainException::class:
+            case BusinessException::class:
                 /** @var DomainException $error */
                 $response = $this->responseDomainException($error);
                 break;
