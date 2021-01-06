@@ -15,7 +15,6 @@ class Password
         $this->checkLowercase();
         $this->checkUppercase();
         $this->checkNumber();
-        $this->checkDictionary();
     }
 
     public function getValue(): string

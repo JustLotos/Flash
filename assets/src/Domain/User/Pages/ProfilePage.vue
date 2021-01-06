@@ -3,7 +3,10 @@
     <v-flex sm10 md8 lg6>
       <v-sheet elevation="10">
         <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Профиль пользоввтеля</v-toolbar-title>
+            <v-toolbar-title>
+              <v-icon>mdi-face</v-icon>
+              Профиль пользователя
+            </v-toolbar-title>
         </v-toolbar>
         <v-row justify="center" class="mt-5 pb-5">
           <v-simple-table>
@@ -11,11 +14,20 @@
               <tbody>
               <tr>
                 <td>Email: </td>
-                <td>{{ user.email }}
-                  <span v-if="isConfirmed()">Подтвержден</span>
-                  <span v-else-if="isSuccessConfirmed()">Проверьте ваш почтовый ящик</span>
-                  <span v-else-if="isErrorConfirmed()">Проверьте ваш почтовый ящик</span>
-                  <v-btn v-else @click="confirmEmail" :loading="isConfirmLoading()" class="ml-2">Подтвердить</v-btn>
+                <td>
+                  <span>{{ user.email }}
+                    <v-icon v-if="isConfirmed()" color="green" class="mb-1">mdi-account-check-outline </v-icon>
+                    <v-btn v-else @click="confirmEmail" :loading="isConfirmLoading()" class="ml-2" small outlined>Подтвердить</v-btn>
+                  </span>
+                  <span v-if="isSuccessConfirmed() || isErrorConfirmed()">Проверьте ваш почтовый ящик</span>
+                  <v-btn @click="updateEmail" small depressed outlined class="ml-2">Изменить</v-btn>
+                </td>
+              </tr>
+              <tr>
+                <td>Пароль:</td>
+                <td>
+                  <span> ******* </span>
+                  <v-btn @click="updatePassword" small depressed outlined class="ml-2" >Изменить</v-btn>
                 </td>
               </tr>
               <tr>
@@ -53,10 +65,16 @@ export default class ProfilePage extends Vue{
     isConfirmLoading() { return this.confirmLoading }
     isSuccessConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_SUCCESS'}
     isErrorConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_ERROR'}
+    getStatus() { return UserModule.user.getFormattedStatus()}
 
-    getStatus() {
-      return UserModule.user.getFormattedStatus();
+    updatePassword() {
+      console.log('updatePassword');
     }
+
+    updateEmail() {
+      console.log('updateEmail');
+    }
+
     confirmEmail() {
       this.confirmLoading = true;
       UserModule.confirmEmail().then((res) => {
