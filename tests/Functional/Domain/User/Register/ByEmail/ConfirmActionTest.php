@@ -43,10 +43,12 @@ class ConfirmActionTest extends AbstractTest
         $this->makeRequestWithAuth([], $this->uri.$mail.'/'.$code.'/');
 
         $content = new Crawler($this->response->getContent());
-        $link = $content->filter('a[href="/?registerByEmail=confirm"]');
+
+        $linkToRedirectAfter = '/lk/?registerByEmail=confirm';
+        $link = $content->filter('a[href="'.$linkToRedirectAfter.'"]');
 
         self::assertTrue($this->response->isRedirect());
-        self::assertEquals('/?registerByEmail=confirm', $link->text());
+        self::assertEquals($linkToRedirectAfter, $link->text());
     }
 
 

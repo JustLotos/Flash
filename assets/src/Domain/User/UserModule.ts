@@ -39,6 +39,11 @@ class VuexUser extends VuexModule {
         this.loading = false;
     }
 
+    @Mutation
+    private UPDATE_USER_INFO(data: User) {
+        this.user.update(data);
+    }
+
     @Action({ rawError: true })
     public async login(payload: LoginRequest): Promise<LoginResponse> {
         this.LOADING();
@@ -83,13 +88,20 @@ class VuexUser extends VuexModule {
         return response.data;
     }
 
-
     @Action({rawError: true})
     public async confirmEmail() {
         this.LOADING();
         const response = await AuthService.confirmEmail({email: this.user.email});
         this.UNSET_LOADING();
-        debugger
+        return response.data;
+    }
+
+    @Action({rawError: true})
+    public async updateCurrentUserInfo() {
+        this.LOADING();
+        const response = await AuthService.getCurrentUserInfo();
+        this.UPDATE_USER_INFO(response.data);
+        this.UNSET_LOADING();
         return response.data;
     }
 }

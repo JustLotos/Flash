@@ -1,7 +1,7 @@
-import axios, {AxiosRequestConfig} from "axios";
+import axios, {AxiosError, AxiosRequestConfig} from "axios";
 import { router as Router } from "../Domain/User/Guard";
 import { UserModule } from "../Domain/User/UserModule";
-import {RouterApi} from "../Domain/App/RouterAPI";
+import {ApiRouter} from "../Domain/App/ApiRouter";
 import Logger from "../Utils/Logger";
 import {AppModule} from "../Domain/App/AppModule";
 
@@ -9,38 +9,32 @@ let Axios = axios.create({
     headers: { "Content-type": "application/json" }
 });
 
-
-
 Axios.interceptors.response.use(
-    (response) => {
-        return response
-    },
-
+    (response) => { return response },
     function (error) {
         UserModule.UNSET_LOADING();
         const originalRequest: AxiosRequestConfig = error.config;
 
-        if(error.message === "Network Error") {
-            AppModule.getApp.commonModal = true;
-            return;
-        }
+        if (error.message === "Network Error") return AppModule.getApp.showCommonModal();
 
         if (
             error.response?.status === 401 &&
-            originalRequest.url === RouterApi.getUrlByName('refreshToken').path
+            originalRequest.url === ApiRouter.getRouteByName('refreshToken').path
         ) {
             UserModule.LOGOUT();
             return Router.push({name: 'Login'});
         }
 
-        if ( error.response?.status === 401 &&
+        if (
+            error.response?.status === 401 &&
             !originalRequest._retry &&
-            RouterApi.isNotAuthRequiredRoute({ path: <string>originalRequest.url})
+            ApiRouter.isProtectedRoute({ path: <string>originalRequest.url})
         ) {
             originalRequest._retry = true;
+            // noinspection TypeScriptValidateTypes
             UserModule.refreshToken().then(() => {
-                originalRequest.headers.common['Authorization'] = 'Bearer' + UserModule.user.accessToken;
-                return originalRequest;
+                originalRequest.headers['Authorization'] = 'Bearer' + UserModule.user.accessToken;
+                return Axios(originalRequest);
             });
         }
 

@@ -18,6 +18,11 @@ export class Application {
         this._logo = { path: '/', name: 'logo', meta: { label: 'FlashBack', icon: 'mdi-home'}};
     }
 
+    public showCommonModal(): boolean {
+        this.commonModal = true;
+        return true;
+    }
+
     get commonModal(): boolean{
         return this._commonModal;
     }

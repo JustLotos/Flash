@@ -9,14 +9,10 @@ import { AppModule } from "./Domain/App/AppModule";
 Component.registerHooks(['beforeRouteEnter']);
 @Component
 export default class App extends Vue {
-    mounted() {
-        AppModule.INIT(this.$router.routes);
-    }
+    mounted() { AppModule.INIT(this.$router.routes) }
 }
 </script>
 <style>
     .centered-input >>> input { text-align: center }
-    .text--white {
-        color: #FFFFFF !important;
-    }
+    .text--white { color: #FFFFFF !important }
 </style>

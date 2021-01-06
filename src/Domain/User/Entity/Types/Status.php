@@ -6,6 +6,7 @@ namespace App\Domain\User\Entity\Types;
 
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
+use JMS\Serializer\Annotation as Serializer;
 use Webmozart\Assert\Assert;
 
 /**
@@ -38,6 +39,11 @@ class Status
         $this->value = $value;
     }
 
+    /**
+     * @Serializer\VirtualProperty()
+     * @Serializer\SerializedName("status")
+     * @Serializer\Groups({App\Domain\User\Entity\User::GROUP_SIMPLE})
+     */
     public function getValue(): string
     {
         return $this->value;

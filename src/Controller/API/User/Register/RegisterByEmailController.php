@@ -93,7 +93,7 @@ class RegisterByEmailController extends AbstractController
         $command = new ConfirmCommand($email, $token);
         $this->validator->validate($command);
         $result = $handler->handle($command);
-
-        return $this->redirectToRoute('index', [ 'vueRouting' => '', 'registerByEmail' => $result]);
+        $linkToRedirectAfter = 'lk/';
+        return $this->redirectToRoute('index', [ 'vueRouting' => $linkToRedirectAfter, 'registerByEmail' => $result]);
     }
 }

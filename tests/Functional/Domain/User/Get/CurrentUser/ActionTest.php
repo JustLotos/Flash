@@ -29,5 +29,10 @@ class ActionTest extends AbstractTest
         self::assertArrayHasKey('status', $this->content);
         self::assertArrayHasKey('createdAt', $this->content);
         self::assertArrayHasKey('updatedAt', $this->content);
+
+        self::assertIsString($this->content['id']);
+        self::assertIsString($this->content['role']);
+        self::assertIsString($this->content['email']);
+        self::assertIsString($this->content['status']);
     }
 }

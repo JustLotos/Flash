@@ -2,7 +2,14 @@
     <v-footer app padless>
         <v-row class="flex primary">
             <v-col class="text-center">
-                <v-btn v-for="item in footerMenu" :key="item.path" :to="item.path" class="mx-4" icon text color="white">
+                <v-btn
+                    class="mx-4"
+                    icon text
+                    color="white"
+                    v-for="item in footerMenu"
+                    :key="item.path"
+                    :to="item.path"
+                >
                     <v-icon size="24px">{{ item.meta.icon }}</v-icon>
                 </v-btn>
                 <label for="selectLocale"></label>

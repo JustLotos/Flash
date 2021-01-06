@@ -15,9 +15,22 @@ export default class User {
     public _accessToken: string;
     private _refreshToken: string;
 
+    public update(data: User) {
+        this.email = data.email;
+        this.status = data.status;
+        this.role = data.role;
+        this.saveToLocalStorage();
+    }
 
     public isConfirmed(): boolean {
         return this.status === 'ACTIVE';
+    }
+
+    public getFormattedStatus(): string {
+        if(this.status === 'ACTIVE') return 'Активный'
+        if(this.status === 'WAIT') return 'Ожидает подтверждения';
+        if(this.status === 'BLOCK') return 'Заблокирован';
+        return 'Не определен';
     }
 
     public static isResetByEmail(route) {

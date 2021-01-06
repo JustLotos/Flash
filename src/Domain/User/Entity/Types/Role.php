@@ -6,7 +6,6 @@ namespace App\Domain\User\Entity\Types;
 
 use JMS\Serializer\Annotation as Serializer;
 use Webmozart\Assert\Assert;
-use App\Domain\User\Entity\User;
 
 class Role
 {
@@ -56,7 +55,7 @@ class Role
     /**
      * @Serializer\VirtualProperty()
      * @Serializer\SerializedName("roles")
-     * @Serializer\Groups({USER::GROUP_SIMPLE})
+     * @Serializer\Groups({App\Domain\User\Entity\User::GROUP_SIMPLE})
      */
     public function getName(): string
     {

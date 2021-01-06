@@ -54,6 +54,7 @@ class User implements UserInterface
      * @var Status
      * @ORM\Embedded(class="App\Domain\User\Entity\Types\Status", columnPrefix="status_")
      * @Serializer\Groups({User::GROUP_SIMPLE})
+     * @Serializer\Type(name="string")
      * @SWG\Property(enum={User::GROUP_SIMPLE})
      */
     private $status;
