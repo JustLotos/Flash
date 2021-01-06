@@ -26,7 +26,12 @@ class ChangeEmailController extends AbstractController
     {
         /** @var RequestCommand $command */
         $command = $this->serializer->deserialize($request, RequestCommand::class);
-        $handler->handle($command);
+        $this->validator->validate($command);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $handler->handle($command, $user);
         return $this->response($this->getSimpleSuccessResponse());
     }
 

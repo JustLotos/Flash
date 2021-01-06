@@ -13,21 +13,39 @@
             <template v-slot:default>
               <tbody>
               <tr>
-                <td>Email: </td>
                 <td>
-                  <span>{{ user.email }}
-                    <v-icon v-if="isConfirmed()" color="green" class="mb-1">mdi-account-check-outline </v-icon>
-                    <v-btn v-else @click="confirmEmail" :loading="isConfirmLoading()" class="ml-2" small outlined>Подтвердить</v-btn>
+                  <span v-if="!showUpdateEmailForm">Email: </span>
+                  <span v-else>Изменение</span>
+                </td>
+                <td>
+                  <span v-if="!showUpdateEmailForm">
+                    <span>{{ user.email }}
+                      <v-icon v-if="isConfirmed()" color="green" class="mb-1">mdi-account-check-outline </v-icon>
+                      <v-btn v-else @click="confirmEmail" :loading="isConfirmLoading()" class="ml-2" small outlined>Подтвердить</v-btn>
+                    </span>
+                    <span v-if="isSuccessConfirmed() || isErrorConfirmed()">Проверьте ваш почтовый ящик</span>
+                    <v-btn x-small depressed outlined fab class="ml-2" icon
+                      @click="showUpdateEmailForm = !showUpdateEmailForm"
+                    ><v-icon>mdi-pencil</v-icon></v-btn>
                   </span>
-                  <span v-if="isSuccessConfirmed() || isErrorConfirmed()">Проверьте ваш почтовый ящик</span>
-                  <v-btn @click="updateEmail" small depressed outlined class="ml-2">Изменить</v-btn>
+                  <email-change-form v-else
+                    @submit="updateEmail"
+                    :error="updateEmailError"
+                    @close="showUpdateEmailForm = !showUpdateEmailForm"
+                  />
                 </td>
               </tr>
               <tr>
                 <td>Пароль:</td>
-                <td>
+                <td class="d-flex">
                   <span> ******* </span>
-                  <v-btn @click="updatePassword" small depressed outlined class="ml-2" >Изменить</v-btn>
+                  <v-btn
+                      @click="updatePassword"
+                      small
+                      depressed
+                      outlined
+                      class="ml-2"
+                  >Изменить</v-btn>
                 </td>
               </tr>
               <tr>
@@ -50,9 +68,11 @@ import { Component, Vue } from 'vue-property-decorator';
 import User from "../Entity/User";
 import {UserModule} from "../UserModule";
 import Modal from "../../App/Components/Modal/Modal.vue";
-import {AxiosError} from "axios";
+import ControlPassword from "../../App/Components/FormElements/ControlPassword.vue";
+import ControlEmail from "../../App/Components/FormElements/ControlEmail.vue";
+import EmailChangeForm from "../Components/Forms/EmailChangeForm.vue";
 
-@Component({ components: {Modal} })
+@Component({ components: {EmailChangeForm, ControlEmail, ControlPassword, Modal} })
 export default class ProfilePage extends Vue{
     user: User = UserModule.user;
     confirmEmailModal: boolean = false;
@@ -61,19 +81,22 @@ export default class ProfilePage extends Vue{
     confirmLoading = false;
     confirmRequestStatus: string = 'NOT_REQUESTED';
 
+    showUpdateEmailForm: boolean = false;
+    updateEmailError: string = '';
+    newEmail: string = '';
+
     isConfirmed(): boolean { return UserModule.user.isConfirmed() }
     isConfirmLoading() { return this.confirmLoading }
     isSuccessConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_SUCCESS'}
     isErrorConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_ERROR'}
     getStatus() { return UserModule.user.getFormattedStatus()}
+    getUpdateEmailError(): string { return this.newEmail }
 
     updatePassword() {
       console.log('updatePassword');
     }
 
-    updateEmail() {
-      console.log('updateEmail');
-    }
+    updateEmail({email}) {}
 
     confirmEmail() {
       this.confirmLoading = true;

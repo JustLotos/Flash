@@ -31,5 +31,8 @@ export default {
     },
     async getCurrentUserInfo(): AxiosResponse<User> {
         return Axios.get( ApiRouter.getRouteByName('getCurrentUser').path);
+    },
+    async changeEmail(payloads): AxiosResponse<any> {
+        return Axios.post( ApiRouter.getRouteByName('changeEmail').path, payloads);
     }
 };

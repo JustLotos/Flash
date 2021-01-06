@@ -13,62 +13,65 @@ use App\Service\FlushService;
 use App\Service\MailService\BaseMessage;
 use App\Service\MailService\MailBuilderService;
 use App\Service\MailService\MailSenderService;
+use App\Service\RedisService;
 use App\Service\ValidateService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Handler
 {
     private $flusher;
-    private $repository;
     private $tokenizer;
     private $sender;
     private $validator;
     private $builder;
     private $generator;
+    /** @var User */
+    private $user;
+    private $redisService;
 
     public function __construct(
         ValidateService $validator,
         FlushService $flusher,
-        UserRepository $repository,
         TokenService $tokenizer,
         MailSenderService $sender,
         MailBuilderService $builder,
-        UrlGeneratorInterface $generator
+        UrlGeneratorInterface $generator,
+        RedisService $redisService
     ) {
         $this->flusher = $flusher;
-        $this->repository = $repository;
         $this->tokenizer = $tokenizer;
         $this->sender = $sender;
         $this->validator = $validator;
         $this->builder = $builder;
         $this->generator = $generator;
+        $this->redisService = $redisService;
     }
 
-    public function handle(Command $command): User
+    public function handle(Command $command, User $user): User
     {
-        $this->validator->validate($command);
-        /** @var User $user */
-        $user = $this->repository->getByEmail($command->oldEmail);
-        /** @var ConfirmToken $token */
-        $token = $this->tokenizer->generateTokenByClass(ConfirmToken::class);
-        $user->requestChangeEmail($token, new Email($command->newEmail));
-        $this->flusher->flush();
-        $this->sendConfirmMessage($user);
+        $token = $this->tokenizer->getToken();
+        $email = new Email($command->email);
+        $this->setToken($token, $email);
+        $this->sendConfirmMessage($token);
         return $user;
     }
 
-    public function sendConfirmMessage(User $user): void
+    public function setToken(string $token, Email $email) {
+        $key = $this->user->getEmail()->getValue().'_change_email';
+        $this->redisService->set($key, ['token' => $token, 'email' => $email->getValue()]);
+    }
+
+    public function sendConfirmMessage(string $token): void
     {
-        $token = $user->getConfirmToken()->getToken();
         $confirmLink = $this->generator->generate('changeEmailConfirm', ['token' => $token]);
         $subject = 'Запрос смены пароля в приложении Flash';
 
         $bodyMessage = $this->builder
             ->setParam('url', $confirmLink)
-            ->setParam('token', $user->getConfirmToken()->getToken())
+            ->setParam('token', $token)
             ->build('mail/user/change/email/request.html.twig');
 
-        $message = BaseMessage::getDefaultMessage($user->getEmail(), $subject, $bodyMessage);
+        $message = BaseMessage::getDefaultMessage($this->user->getEmail(), $subject, $bodyMessage);
         $this->sender->send($message);
     }
 }

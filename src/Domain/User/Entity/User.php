@@ -140,17 +140,6 @@ class User implements UserInterface
         $this->password = $password;
     }
 
-    public function requestChangeEmail(Email $email): void
-    {
-        if (!$this->status->isActive()) {
-            throw new DomainException(json_encode(['user' => 'User is not active.']));
-        }
-        if ($this->getEmail()->isEqual($email)) {
-            throw new DomainException('Email is same.');
-        }
-        $this->getStatus();
-    }
-
     public function confirmChangeEmail(): void
     {
         if ($this->status->isActive()) {
