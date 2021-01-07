@@ -25,11 +25,7 @@ Axios.interceptors.response.use(
             return Router.push({name: 'Login'});
         }
 
-        if (
-            error.response?.status === 401 &&
-            !originalRequest._retry &&
-            ApiRouter.isProtectedRoute({ path: <string>originalRequest.url})
-        ) {
+        if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             // noinspection TypeScriptValidateTypes
             UserModule.refreshToken().then(() => {

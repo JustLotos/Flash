@@ -30,7 +30,6 @@ class ResetByEmailController extends AbstractController
         return $this->response($this->getSimpleSuccessResponse());
     }
 
-
     /** @Route("/form/{token}", name="resetByEmailGetForm", methods={"GET"}, options={"no_auth": true}) */
     public function getForm(string $token): RedirectResponse
     {

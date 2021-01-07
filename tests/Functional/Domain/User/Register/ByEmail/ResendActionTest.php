@@ -29,8 +29,9 @@ class ResendActionTest extends AbstractTest
             'password' => '12345678Ab',
             'plainPassword' => '12345678Ab'
         ], '/user/register/email/request/');
-
+        (RedisService::getOriginalClient())->flushAll();
         $this->makeRequest(['email' => $email]);
+
         self::assertResponseOk($this->response);
         self::assertEmailCount(1);
         self::assertArrayHasKey('success', $this->content);
@@ -50,6 +51,7 @@ class ResendActionTest extends AbstractTest
     public function testNonExistingToken() : void
     {
         $email = 'registerResend@test.test';
+        $this->makeRequest(['email' => $email]);
         $this->makeRequest(['email' => $email]);
 
         self::assertArrayHasKey('errors', $this->content);

@@ -1,7 +1,7 @@
 <template>
   <v-form ref="changeEmailForm" @submit="submit">
     <v-row>
-      <control-email v-model="email" :error="emailError"/>
+      <control-email class="p0 m0" v-model="email" :error="emailError"/>
       <v-btn v-if="email" fab x-small icon outlined class="mt-5 ml-1" color="green" @click="submit()">
         <v-icon small color="green">mdi-check</v-icon>
       </v-btn>
@@ -19,7 +19,7 @@ import ControlEmail from "../../../App/Components/FormElements/ControlEmail.vue"
 
 @Component({components: { ControlEmail}})
 export default class EmailChangeForm extends Vue {
-  email: string = '';
+  email: string = 'test1023@test.test';
   @Prop() error: {email: string};
 
   get emailError() { return this.error.email }
@@ -29,8 +29,6 @@ export default class EmailChangeForm extends Vue {
   }
 
   submit() {
-    debugger
-
     if(this.$refs.changeEmailForm.validate()) {
       this.$emit('submit', { email: this.email });
     }

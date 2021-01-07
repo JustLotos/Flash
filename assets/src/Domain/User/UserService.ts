@@ -34,5 +34,11 @@ export default {
     },
     async changeEmail(payloads): AxiosResponse<any> {
         return Axios.post( ApiRouter.getRouteByName('changeEmail').path, payloads);
+    },
+    async changeEmailConfirm(payloads): AxiosResponse<any> {
+        let url = ApiRouter
+            .getRouteByName('changeEmailConfirm').path
+            .replace('{token}', payloads.token);
+        return Axios.get(url, payloads);
     }
 };

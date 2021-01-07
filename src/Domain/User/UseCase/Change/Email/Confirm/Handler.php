@@ -71,6 +71,8 @@ class Handler
             throw new BusinessException(['token' => 'token is not valid']);
         }
 
+        $this->redis->del($key);
+
         return new Email($redisData['email']);
     }
 

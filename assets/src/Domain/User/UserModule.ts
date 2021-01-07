@@ -106,10 +106,18 @@ class VuexUser extends VuexModule {
     }
 
     @Action({rawError: true})
-    public async changeEmail() {
+    public async changeEmail(payloads) {
         this.LOADING();
-        const response = await AuthService.changeEmail();
-        this.UPDATE_USER_INFO(response.data);
+        const response = await AuthService.changeEmail(payloads);
+        this.UNSET_LOADING();
+        return response.data;
+    }
+
+    @Action({rawError: true})
+    public async changeEmailConfirm(payloads) {
+        this.LOADING();
+        const response = await AuthService.changeEmailConfirm(payloads);
+        this.LOGIN(response.data);
         this.UNSET_LOADING();
         return response.data;
     }

@@ -22,7 +22,7 @@ class RequestActionTest extends AbstractTest
 
     public function testValid(): void
     {
-        $this->makeRequestWithAuth(['email' => getenv('TEST_USER_EMAIL')]);
+        $this->makeRequestWithAuth(['email' => 'new@mail.com']);
 
         self::assertResponseOk($this->response);
         self::assertEmailCount(1);

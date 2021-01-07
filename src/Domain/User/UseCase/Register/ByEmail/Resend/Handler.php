@@ -8,6 +8,7 @@ use App\Domain\Flusher;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Service\TokenService;
 use App\Domain\User\UserRepository;
+use App\Exception\BusinessException;
 use App\Exception\ValidationException;
 use App\Service\FlushService;
 use App\Service\MailService\MailSenderService;
@@ -58,10 +59,9 @@ class Handler
         $this->user = $this->repository->getByEmail($command->email);
 
         if(!$this->user->getStatus()->isWait()) {
-            throw new DomainException(
-                json_encode(['user' => 'user is already active']),
-                Response::HTTP_UNPROCESSABLE_ENTITY)
-            ;
+            throw new BusinessException([
+                'user' => 'user is already active'
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $token = $this->tokenizer->getToken();
@@ -75,10 +75,9 @@ class Handler
     {
         $key = $this->user->getEmail()->getValue().'_register';
         if($this->redis->get($key)) {
-            throw new DomainException(
-                json_encode(['token' => 'token is requested']),
-                Response::HTTP_NOT_FOUND
-            );
+            throw new BusinessException([
+                'token' => 'token is requested'
+            ], Response::HTTP_NOT_FOUND);
         }
 
         $this->redis->set($key, $token, (int)getenv('REDIS_DEFAULT_TTL'));

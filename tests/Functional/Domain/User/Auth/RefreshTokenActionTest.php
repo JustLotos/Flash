@@ -25,14 +25,9 @@ class RefreshTokenActionTest extends AbstractTest
         /** @var Response $response */
         $response = $clientAuth->getResponse();
         $content = json_decode($response->getContent(), true);
-
         $this->makeRequest([ 'refreshToken'=> $content['refreshToken']]);
 
-
-        var_dump($this->response);
-        $this->assertResponseOk($this->response);
-
-
+        self::assertResponseOk($this->response);
         static::assertArrayHasKey('token', $this->content);
         static::assertArrayHasKey('refreshToken', $this->content);
     }

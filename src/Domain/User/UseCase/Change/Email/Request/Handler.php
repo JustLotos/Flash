@@ -9,6 +9,7 @@ use App\Domain\User\Entity\Types\Email;
 use App\Domain\User\Entity\User;
 use App\Domain\User\UserRepository;
 use App\Domain\User\Service\TokenService;
+use App\Exception\BusinessException;
 use App\Exception\ValidationException;
 use App\Service\FlushService;
 use App\Service\MailService\BaseMessage;
@@ -70,7 +71,7 @@ class Handler
     public function setToken(string $token, Email $email) {
         $key = $this->user->getEmail()->getValue().'_change_email';
         if($this->redisService->get($key)) {
-            throw new DomainException(json_encode(['token' => 'token already send']));
+            throw new BusinessException(['token' => 'token already send']);
         }
 
         $this->redisService->set($key, serialize(['token' => $token, 'email' => $email->getValue()]));
@@ -78,8 +79,14 @@ class Handler
 
     public function sendConfirmMessage(string $token): void
     {
-        $confirmLink = $this->generator->generate('changeEmailConfirm', ['token' => $token]);
-        $subject = 'Запрос смены пароля в приложении Flash';
+//        $confirmLink = $this->generator->generate(
+//            'changeEmailConfirm',
+//            ['token' => $token],
+//            UrlGeneratorInterface::ABSOLUTE_URL
+//        );
+
+        $confirmLink = getenv('DEFAULT_HOST').'/lk/?token='.$token.'&changeEmail=Y';
+        $subject = 'Запрос смены электронного адреса в приложении Flash';
 
         $bodyMessage = $this->builder
             ->setParam('url', $confirmLink)

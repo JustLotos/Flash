@@ -28,16 +28,17 @@
                       @click="showUpdateEmailForm = !showUpdateEmailForm"
                     ><v-icon>mdi-pencil</v-icon></v-btn>
                   </span>
-                  <email-change-form v-else
+                  <email-change-form v-else-if="!changeEmailRequest"
                     @submit="updateEmail"
                     :error="updateEmailError"
                     @close="showUpdateEmailForm = !showUpdateEmailForm"
                   />
+                  <span v-else>Проверьте ваш почтовый ящик</span>
                 </td>
               </tr>
               <tr>
                 <td>Пароль:</td>
-                <td class="d-flex">
+                <td class="d-flex justify-space-between pt-3 ">
                   <span> ******* </span>
                   <v-btn
                       @click="updatePassword"
@@ -84,6 +85,7 @@ export default class ProfilePage extends Vue{
     showUpdateEmailForm: boolean = false;
     updateEmailError: string = '';
     newEmail: string = '';
+    changeEmailRequest: boolean = false;
 
     isConfirmed(): boolean { return UserModule.user.isConfirmed() }
     isConfirmLoading() { return this.confirmLoading }
@@ -96,7 +98,18 @@ export default class ProfilePage extends Vue{
       console.log('updatePassword');
     }
 
-    updateEmail({email}) {}
+    updateEmail(payloads) {
+      UserModule.changeEmail(payloads)
+          .then((data) => {
+              this.changeEmailRequest = data['success'];
+          })
+          .catch((errors) => {
+            debugger
+            if(errors.reponse?.errors?.email) {
+              this.updateEmailError = errors.reponse.errors.email;
+            }
+          });
+    }
 
     confirmEmail() {
       this.confirmLoading = true;
@@ -120,6 +133,16 @@ export default class ProfilePage extends Vue{
       if (registerByEmail === "alreadyConfirm" || registerByEmail === "confirm") {
         UserModule.updateCurrentUserInfo();
       }
+
+      debugger
+
+      const changeEmail = to.query?.changeEmail;
+      if(changeEmail && changeEmail === 'Y') {
+        UserModule.changeEmailConfirm({ token: to.query?.token }).then(()=> {
+          //to.query = '';
+        });
+      }
+
       next();
     }
 }
