@@ -36,7 +36,7 @@
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
             </span>
-            <password-change-form v-else @close="showPassU = !showPassU" />
+            <password-change-form v-else @close="showPassU = !showPassU" @changedPassword="updatePassword()" />
           </v-col>
           <v-col cols="10" sm="10" md="10" class="text-center">Статус: {{ getStatus() }}</v-col>
         </v-row>
@@ -69,7 +69,6 @@ export default class ProfilePage extends Vue{
     confirmRequestStatus: string = 'NOT_REQUESTED';
 
     showPassU: boolean = false;
-
     showEmailU: boolean = false;
     changeEmailR: boolean = false
     get changeEmail() { return this.changeEmailR; }
@@ -79,7 +78,7 @@ export default class ProfilePage extends Vue{
     get isSuccessConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_SUCCESS'}
     getStatus(): string { return UserModule.user.getFormattedStatus()}
 
-    updatePassword() { console.log('updatePassword') }
+    updatePassword() { this.showPassU = !this.showPassU; }
     updateEmail() { this.changeEmailR = true; }
 
     confirmEmail() {

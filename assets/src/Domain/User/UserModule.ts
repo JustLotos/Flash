@@ -121,6 +121,15 @@ class VuexUser extends VuexModule {
         this.UNSET_LOADING();
         return response.data;
     }
+
+    @Action({rawError: true})
+    public async changePassword(payloads) {
+        this.LOADING();
+        const response = await AuthService.changePassword(payloads);
+        // this.LOGIN(response.data);
+        this.UNSET_LOADING();
+        return response.data;
+    }
 }
 
 export const UserModule = getModule(VuexUser);

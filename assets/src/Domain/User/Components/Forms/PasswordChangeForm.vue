@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card v-if="!showNotification">
     <v-form ref="changePasswordForm" @submit="submit()">
       <v-row justify="center" align="center" style="position: relative">
         <v-btn fab x-small icon outlined color="red" @click="handleClose()" class="close-positioned"
@@ -14,8 +14,8 @@
         <v-col cols="10" sm="6" md="8" class="text-center pb-0 pt-0">
           <control-password
               class="p0 m0"
-              v-model="oldPassword"
-              :error="errors.password"
+              v-model="currentPassword"
+              :error="errors.currentPassword"
               @input="dataErrors.password = ''"
               :label="'Текущий пароль'"
           />
@@ -24,7 +24,7 @@
           <control-password
               class="p0 m0"
               v-model="newPassword"
-              :error="errors.password"
+              :error="errors.newPassword"
               @input="dataErrors.password = ''"
               :label="'Новый пароль'"
           />
@@ -47,6 +47,7 @@
       </v-row>
     </v-form>
   </v-card>
+  <v-alert v-else> Пароль изменен !</v-alert>
 </template>
 
 <script lang="ts">
@@ -59,10 +60,16 @@ import ControlConfirm from "../../../App/Components/FormElements/ControlConfirm.
 
 @Component({components: {ControlConfirm, ControlPassword, ControlEmail}})
 export default class EmailChangeForm extends Vue {
-  oldPassword: string = '';
+  currentPassword: string = '';
   newPassword: string = '';
   plainPassword: string = '';
-  dataErrors: {password: string } = { password: ''};
+
+  dataErrors: {currentPassword: string, newPassword: string, plainPassword: string  } = {
+    currentPassword: '',
+    newPassword: '',
+    plainPassword: ''
+  };
+
   notification: boolean = false;
 
   get errors() { return this.dataErrors }
@@ -74,26 +81,28 @@ export default class EmailChangeForm extends Vue {
 
   submit() {
     if(this.$refs.changePasswordForm.validate()) {
-
-      // UserModule.changeEmail(payloads)
-      //     .then((data) => {
-      //       this.$emit('changedPassword', data)
-      //       this.notification = true;
-      //     })
-      //     .catch((errors) => {
-      //       if(errors.response.data.errors) {
-      //         this.errors = errors.response.data.errors;
-      //         if(errors.response.data.errors.domain?.token) {
-      //           // this.errors = {email: errors.response.data.errors.domain?.token};
-      //         }
-      //       }
-      //     });
-
-      this.$emit('submit',  {
-        oldPassword: this.oldPassword,
+      let payloads = {
+        currentPassword: this.currentPassword,
         newPassword: this.newPassword,
         plainPassword: this.plainPassword
-      });
+      };
+
+      UserModule.changePassword(payloads)
+          .then((data) => {
+            this.$emit('changedPassword', data)
+          })
+          .catch((errors) => {
+            // #TODO error for form handler
+            if(errors.response?.data.errors) {
+              this.errors = errors.response?.data.errors;
+            }
+
+            if(errors.response?.data.errors.domain.currentPassword) {
+              this.errors = errors.response?.data.errors.domain;
+            }
+          });
+
+      this.$emit('submit', payloads);
     }
   }
 

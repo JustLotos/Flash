@@ -41,5 +41,8 @@ export default {
             .getRouteByName('changeEmailConfirm').path
             .replace('{token}', payloads.token);
         return Axios.get(url, payloads);
-    }
+    },
+    async changePassword(payloads): AxiosResponse<any> {
+        return Axios.post( ApiRouter.getRouteByName('changePassword').path, payloads);
+    },
 };
