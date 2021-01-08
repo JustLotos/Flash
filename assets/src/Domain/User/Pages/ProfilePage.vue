@@ -29,8 +29,8 @@
                     ><v-icon>mdi-pencil</v-icon></v-btn>
                   </span>
                   <email-change-form v-else-if="!changeEmailRequest"
-                    @submit="updateEmail"
-                    :error="updateEmailError"
+                    @changedEmail="updateEmail"
+                    :error="updateEmailErrors"
                     @close="showUpdateEmailForm = !showUpdateEmailForm"
                   />
                   <span v-else>Проверьте ваш почтовый ящик</span>
@@ -40,13 +40,7 @@
                 <td>Пароль:</td>
                 <td class="d-flex justify-space-between pt-3 ">
                   <span> ******* </span>
-                  <v-btn
-                      @click="updatePassword"
-                      small
-                      depressed
-                      outlined
-                      class="ml-2"
-                  >Изменить</v-btn>
+                  <v-btn @click="updatePassword" small depressed outlined class="ml-2">Изменить</v-btn>
                 </td>
               </tr>
               <tr>
@@ -83,32 +77,21 @@ export default class ProfilePage extends Vue{
     confirmRequestStatus: string = 'NOT_REQUESTED';
 
     showUpdateEmailForm: boolean = false;
-    updateEmailError: string = '';
+    updateEmailErrors: string = '';
     newEmail: string = '';
-    changeEmailRequest: boolean = false;
+    changeEmailRequest: boolean = !!localStorage.getItem('changeEmailRequest');
 
     isConfirmed(): boolean { return UserModule.user.isConfirmed() }
-    isConfirmLoading() { return this.confirmLoading }
+    isConfirmLoading(): boolean { return this.confirmLoading }
     isSuccessConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_SUCCESS'}
     isErrorConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_ERROR'}
-    getStatus() { return UserModule.user.getFormattedStatus()}
+    getStatus(): string { return UserModule.user.getFormattedStatus()}
     getUpdateEmailError(): string { return this.newEmail }
 
-    updatePassword() {
-      console.log('updatePassword');
-    }
-
-    updateEmail(payloads) {
-      UserModule.changeEmail(payloads)
-          .then((data) => {
-              this.changeEmailRequest = data['success'];
-          })
-          .catch((errors) => {
-            debugger
-            if(errors.reponse?.errors?.email) {
-              this.updateEmailError = errors.reponse.errors.email;
-            }
-          });
+    updatePassword() { console.log('updatePassword') }
+    updateEmail() {
+      localStorage.setItem('changeEmailRequest', 'Y');
+      this.changeEmailRequest = !!localStorage.getItem('changeEmailRequest');
     }
 
     confirmEmail() {
@@ -134,16 +117,18 @@ export default class ProfilePage extends Vue{
         UserModule.updateCurrentUserInfo();
       }
 
-      debugger
-
       const changeEmail = to.query?.changeEmail;
       if(changeEmail && changeEmail === 'Y') {
-        UserModule.changeEmailConfirm({ token: to.query?.token }).then(()=> {
-          //to.query = '';
-        });
+        UserModule
+            .changeEmailConfirm({ token: to.query?.token })
+            .then(()=> {
+              to.query = '';
+            });
       }
 
-      next();
+      next({ query: '' });
     }
+
+
 }
 </script>

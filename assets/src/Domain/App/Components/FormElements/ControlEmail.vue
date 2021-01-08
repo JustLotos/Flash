@@ -7,6 +7,7 @@
     v-model="value"
     :rules="rules"
     :error-messages="error"
+    @input="emitInput"
   ></v-text-field>
 </template>
 
@@ -29,6 +30,11 @@ export default {
                 v => /.+@.+\..+/.test(v) || this.$t('component.control.email.valid'),
             ],
         }
+    },
+    methods: {
+      emitInput: function () {
+         this.$emit('input');
+       }
     }
 }
 </script>
