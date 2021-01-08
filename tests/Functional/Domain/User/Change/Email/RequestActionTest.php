@@ -49,10 +49,7 @@ class RequestActionTest extends AbstractTest
         $this->makeRequestWithAuth(['email' => 'test@test.test']);
         $this->makeRequestWithAuth(['email' => 'test@test.test']);
 
-        self::assertResponseCode(JsonResponse::HTTP_UNPROCESSABLE_ENTITY, $this->response);
-        self::assertArrayHasKey('errors', $this->content);
-        self::assertArrayHasKey('domain', $this->content['errors']);
-        self::assertArrayHasKey('token',  $this->content['errors']['domain']);
-
+        self::assertResponseOk($this->response);
+        self::assertArrayHasKey('success', $this->content);
     }
 }

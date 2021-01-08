@@ -31,12 +31,11 @@ class ConfirmActionTest extends AbstractTest
         $code = $crawler->filter('a.confirm-link')->attr('data-token');
         $this->makeRequestWithAuth([], $this->uri.'/'.$code.'/');
 
-        self::assertTrue($this->response->isRedirect());
-
-        $content = new Crawler($this->response->getContent());
-        $link = $content->filter('a[href="/?changeEmail=confirm"]');
-
-        self::assertEquals('/?changeEmail=confirm', $link->text());
+        self::assertArrayHasKey('token', $this->content);
+        self::assertArrayHasKey('status', $this->content);
+        self::assertArrayHasKey('refreshToken', $this->content);
+        self::assertArrayHasKey('role', $this->content);
+        self::assertArrayHasKey('email', $this->content);
         self::assertEmailCount(1);
     }
 
