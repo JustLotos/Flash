@@ -9,6 +9,7 @@ import RefreshTokenRequest from "./Entity/API/RefreshToken/RefreshTokenRequest";
 import ResetByEmailRequest from "./Entity/API/Reset/ByEmail/ResetByEmailRequest";
 import ResetByEmailConfirm from "./Entity/API/Reset/ByEmail/ResetByEmailConfirm";
 import User from "./Entity/User";
+import {AxiosResponse} from "axios";
 
 export default {
     async login(payloads: LoginRequest): AxiosResponse<LoginResponse> {

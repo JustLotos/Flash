@@ -3,10 +3,7 @@
     <v-flex sm10 md8 lg6>
       <v-sheet elevation="10">
         <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>
-              <v-icon>mdi-face</v-icon>
-              Профиль пользователя
-            </v-toolbar-title>
+            <v-toolbar-title><v-icon>mdi-face</v-icon>Профиль пользователя</v-toolbar-title>
         </v-toolbar>
         <v-row justify="center" class="mt-5 pb-5">
           <v-simple-table>
@@ -14,26 +11,23 @@
               <tbody>
               <tr>
                 <td>
-                  <span v-if="!showUpdateEmailForm">Email: </span>
+                  <span v-if="!showEmailU">Email: </span>
                   <span v-else>Изменение</span>
                 </td>
                 <td>
-                  <span v-if="!showUpdateEmailForm">
-                    <span>{{ user.email }}
+                  <span v-if="!showEmailU && !changeEmail">
+                    <span>
+                      <span>{{ user.email }}</span>
                       <v-icon v-if="isConfirmed()" color="green" class="mb-1">mdi-account-check-outline </v-icon>
-                      <v-btn v-else @click="confirmEmail" :loading="isConfirmLoading()" class="ml-2" small outlined>Подтвердить</v-btn>
+                       <span v-else-if="isSuccessConfirmed">Проверьте ваш почтовый ящик</span>
+                      <v-btn v-else @click="confirmEmail" :loading="isConfirmLoading" class="ml-2" small outlined>Подтвердить</v-btn>
                     </span>
-                    <span v-if="isSuccessConfirmed() || isErrorConfirmed()">Проверьте ваш почтовый ящик</span>
-                    <v-btn x-small depressed outlined fab class="ml-2" icon
-                      @click="showUpdateEmailForm = !showUpdateEmailForm"
-                    ><v-icon>mdi-pencil</v-icon></v-btn>
+                    <v-btn x-small depressed outlined fab class="ml-2" icon @click="showEmailU = !showEmailU">
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
                   </span>
-                  <email-change-form v-else-if="!changeEmailRequest"
-                    @changedEmail="updateEmail"
-                    :error="updateEmailErrors"
-                    @close="showUpdateEmailForm = !showUpdateEmailForm"
-                  />
-                  <span v-else>Проверьте ваш почтовый ящик</span>
+
+                  <email-change-form v-else @close="showEmailU = !showEmailU" @changedEmail="updateEmail()"/>
                 </td>
               </tr>
               <tr>
@@ -43,10 +37,7 @@
                   <v-btn @click="updatePassword" small depressed outlined class="ml-2">Изменить</v-btn>
                 </td>
               </tr>
-              <tr>
-                <td>Статус: </td>
-                <td>{{ getStatus() }}</td>
-              </tr>
+              <tr><td>Статус: </td><td>{{ getStatus() }}</td></tr>
               </tbody>
             </template>
           </v-simple-table>
@@ -66,6 +57,8 @@ import Modal from "../../App/Components/Modal/Modal.vue";
 import ControlPassword from "../../App/Components/FormElements/ControlPassword.vue";
 import ControlEmail from "../../App/Components/FormElements/ControlEmail.vue";
 import EmailChangeForm from "../Components/Forms/EmailChangeForm.vue";
+import Router from "../../App/Router";
+import {RawLocation} from "vue-router/types/router";
 
 @Component({ components: {EmailChangeForm, ControlEmail, ControlPassword, Modal} })
 export default class ProfilePage extends Vue{
@@ -76,23 +69,17 @@ export default class ProfilePage extends Vue{
     confirmLoading = false;
     confirmRequestStatus: string = 'NOT_REQUESTED';
 
-    showUpdateEmailForm: boolean = false;
-    updateEmailErrors: string = '';
-    newEmail: string = '';
-    changeEmailRequest: boolean = !!localStorage.getItem('changeEmailRequest');
+    showEmailU: boolean = false;
+    changeEmailR: boolean = false
+    get changeEmail() { return this.changeEmailR; }
 
     isConfirmed(): boolean { return UserModule.user.isConfirmed() }
-    isConfirmLoading(): boolean { return this.confirmLoading }
-    isSuccessConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_SUCCESS'}
-    isErrorConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_ERROR'}
+    get isConfirmLoading(): boolean { return this.confirmLoading }
+    get isSuccessConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_SUCCESS'}
     getStatus(): string { return UserModule.user.getFormattedStatus()}
-    getUpdateEmailError(): string { return this.newEmail }
 
     updatePassword() { console.log('updatePassword') }
-    updateEmail() {
-      localStorage.setItem('changeEmailRequest', 'Y');
-      this.changeEmailRequest = !!localStorage.getItem('changeEmailRequest');
-    }
+    updateEmail() { this.changeEmailR = true; }
 
     confirmEmail() {
       this.confirmLoading = true;
@@ -116,17 +103,16 @@ export default class ProfilePage extends Vue{
       if (registerByEmail === "alreadyConfirm" || registerByEmail === "confirm") {
         UserModule.updateCurrentUserInfo();
       }
-
       const changeEmail = to.query?.changeEmail;
       if(changeEmail && changeEmail === 'Y') {
-        UserModule
-            .changeEmailConfirm({ token: to.query?.token })
-            .then(()=> {
-              to.query = '';
-            });
+        UserModule.changeEmailConfirm({ token: to.query?.token })
+        .then(() => {
+          setTimeout( () => Router.replace(<RawLocation>{'query': null}), 1000);
+        }).catch((e) => {
+          console.log(e);
+        })
       }
-
-      next({ query: '' });
+      next();
     }
 
 

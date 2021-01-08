@@ -70,9 +70,9 @@ class Handler
 
     public function setToken(string $token, Email $email) {
         $key = $this->user->getEmail()->getValue().'_change_email';
-        if($this->redisService->get($key)) {
-            throw new BusinessException(['token' => 'token already send']);
-        }
+//        if($this->redisService->get($key)) {
+//            throw new BusinessException(['token' => 'token already send']);
+//        }
 
         $this->redisService->set($key, serialize(['token' => $token, 'email' => $email->getValue()]));
     }
