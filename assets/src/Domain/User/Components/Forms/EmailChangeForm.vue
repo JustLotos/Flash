@@ -1,13 +1,15 @@
 <template>
   <v-form ref="changeEmailForm" @submit="submit()">
-    <v-row v-if="!showNotification">
-      <control-email class="p0 m0" v-model="email" :error="errors.email" @input="dataErrors.email = ''"/>
-      <v-btn v-if="email" fab x-small icon outlined class="mt-5 ml-1" color="green" @click="submit()">
-        <v-icon small color="green">mdi-check</v-icon>
-      </v-btn>
-      <v-btn fab x-small icon outlined class="mt-5 ml-1" color="red" @click="handleClose()">
-        <v-icon small color="red">mdi-close</v-icon>
-      </v-btn>
+    <v-row v-if="!showNotification" class="justify-center p-10">
+      <v-col cols="10" sm="6" md="8" class="text-center pb-0 pt-0 d-flex">
+        <control-email class="p0 m0" v-model="email" :error="errors.email" @input="dataErrors.email = ''"/>
+        <v-btn v-if="email" fab x-small icon outlined class="mt-5 ml-1" color="green" @click="submit()">
+          <v-icon small color="green">mdi-check</v-icon>
+        </v-btn>
+        <v-btn fab x-small icon outlined class="mt-5 ml-1" color="red" @click="handleClose()">
+          <v-icon small color="red">mdi-close</v-icon>
+        </v-btn>
+      </v-col>
     </v-row>
 
     <span v-else>

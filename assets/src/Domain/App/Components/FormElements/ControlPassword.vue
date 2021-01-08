@@ -6,6 +6,7 @@
             :type="show ? 'text' : 'password'"
             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
             :error-messages="error"
+            :placeholder="placeholder"
             @click:append="show = !show"
     ></v-text-field>
 </template>
@@ -15,7 +16,7 @@ const EVENT_NAME = 'passwordChange'.toLowerCase();
 const PASSWORD_LENGTH = 8;
 export default {
     name: "ControlPassword",
-    props: [ 'password', 'error' ],
+    props: [ 'password', 'error', 'placeholder', 'label' ],
     model: { prop: 'password', event: EVENT_NAME },
     computed: {
         value: {

@@ -3,47 +3,42 @@
     <v-flex sm10 md8 lg6>
       <v-sheet elevation="10">
         <v-toolbar color="primary" dark flat>
-            <v-toolbar-title><v-icon>mdi-face</v-icon>Профиль пользователя</v-toolbar-title>
+            <v-toolbar-title class="text-center"><v-icon>mdi-face</v-icon>Профиль пользователя</v-toolbar-title>
         </v-toolbar>
         <v-row justify="center" class="mt-5 pb-5">
-          <v-simple-table>
-            <template v-slot:default>
-              <tbody>
-              <tr>
-                <td>
-                  <span v-if="!showEmailU">
-                    <v-icon v-if="isConfirmed()" color="green" class="mb-1">mdi-account-check-outline </v-icon>
-                    <v-icon v-else color="red" class="mb-1">mdi-account-check-outline </v-icon>
-                    Email:
-                  </span>
-                  <span v-else>Изменение</span>
-                </td>
-                <td>
-                  <span v-if="!showEmailU && !changeEmail">
-                    <span>
-                      <span>{{ user.email }}</span>
-                      <v-btn v-if="!isConfirmed" @click="confirmEmail" :loading="isConfirmLoading" class="ml-2" small outlined>Подтвердить</v-btn>
-                       <span v-if="isSuccessConfirmed">Проверьте ваш почтовый ящик</span>
-                    </span>
-                    <v-btn x-small depressed outlined fab class="ml-2" icon @click="showEmailU = !showEmailU">
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                  </span>
+          <v-col cols="10" sm="10" md="10" class="text-center">
+            <span v-if="!showEmailU">
+              <v-icon v-if="isConfirmed()" color="green" class="mb-1">mdi-account-check-outline </v-icon>
+              <v-icon v-else color="red" class="mb-1">mdi-account-check-outline </v-icon>
+              Email:
+            </span>
+            <span v-else>Изменение</span>
 
-                  <email-change-form v-else @close="showEmailU = !showEmailU" @changedEmail="updateEmail()"/>
-                </td>
-              </tr>
-              <tr>
-                <td>Пароль:</td>
-                <td class="d-flex justify-space-between pt-3 ">
-                  <span> ******* </span>
-<!--                  <v-icon color="green" class="mb-1">mdi-account-check-outline </v-icon>-->
-                </td>
-              </tr>
-              <tr><td>Статус: </td><td>{{ getStatus() }}</td></tr>
-              </tbody>
-            </template>
-          </v-simple-table>
+            <span v-if="!showEmailU && !changeEmail">
+              <span>
+                <span>{{ user.email }}</span>
+                <v-btn v-if="!isConfirmed" @click="confirmEmail" :loading="isConfirmLoading" class="ml-2" small outlined>Подтвердить</v-btn>
+                 <span v-if="isSuccessConfirmed">Проверьте ваш почтовый ящик</span>
+              </span>
+              <v-btn x-small depressed outlined fab class="ml-2" icon @click="showEmailU = !showEmailU">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </span>
+
+            <email-change-form v-else @close="showEmailU = !showEmailU" @changedEmail="updateEmail()"/>
+
+          </v-col>
+          <v-col cols="10" sm="10" md="10" class="text-center">
+            <span v-if="!showPassU">
+              <span>Пароль:</span>
+              <span> ******* </span>
+              <v-btn x-small depressed outlined fab class="ml-2" icon @click="showPassU = !showPassU">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </span>
+            <password-change-form v-else @close="showPassU = !showPassU" />
+          </v-col>
+          <v-col cols="10" sm="10" md="10" class="text-center">Статус: {{ getStatus() }}</v-col>
         </v-row>
       </v-sheet>
     </v-flex>
@@ -62,8 +57,9 @@ import ControlEmail from "../../App/Components/FormElements/ControlEmail.vue";
 import EmailChangeForm from "../Components/Forms/EmailChangeForm.vue";
 import Router from "../../App/Router";
 import {RawLocation} from "vue-router/types/router";
+import PasswordChangeForm from "../Components/Forms/PasswordChangeForm.vue";
 
-@Component({ components: {EmailChangeForm, ControlEmail, ControlPassword, Modal} })
+@Component({ components: {PasswordChangeForm, EmailChangeForm, ControlEmail, ControlPassword, Modal} })
 export default class ProfilePage extends Vue{
     user: User = UserModule.user;
     confirmEmailModal: boolean = false;
@@ -71,6 +67,8 @@ export default class ProfilePage extends Vue{
     confirmModalErrorMessage: string = 'Ой что-то пошло не так';
     confirmLoading = false;
     confirmRequestStatus: string = 'NOT_REQUESTED';
+
+    showPassU: boolean = false;
 
     showEmailU: boolean = false;
     changeEmailR: boolean = false
