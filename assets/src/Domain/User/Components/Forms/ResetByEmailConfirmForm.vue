@@ -6,7 +6,7 @@
                     <v-sheet>Введите данные для восстановления</v-sheet>
                 </v-col>
                 <v-col cols="12" sm="9" class="pa1">
-                    <control-password v-model="payloads.password" :error="getErrors.password"></control-password>
+                    <control-password v-model="payloads.password" :error="getErrors.password"  />
                 </v-col>
                 <v-col cols="12" sm="9" class="pa1">
                     <control-confirm

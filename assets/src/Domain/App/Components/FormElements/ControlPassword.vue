@@ -1,6 +1,6 @@
 <template>
     <v-text-field validate-on-blur prepend-icon="mdi-lock"
-            :label="$t('component.control.password.label')"
+            :label="label || $t('component.control.password.label')"
             v-model="value"
             :rules="rules"
             :type="show ? 'text' : 'password'"

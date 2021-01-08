@@ -9,7 +9,7 @@
           <control-email v-model="data.email" :error="getErrors.email"/>
         </v-col>
         <v-col cols="10" sm="7" md="7" class="pt-0 mt-0">
-          <control-password v-model="data.password" :error="getErrors.password"/>
+          <control-password v-model="data.password" :error="getErrors.password" :label="'Пароль'"/>
         </v-col>
         <v-col cols="10" sm="7" md="7"  class="pa1">
           <control-confirm

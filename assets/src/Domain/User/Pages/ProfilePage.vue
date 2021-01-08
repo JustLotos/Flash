@@ -8,7 +8,7 @@
         <v-row justify="center" class="mt-5 pb-5">
           <v-col cols="10" sm="10" md="10" class="text-center">
             <span v-if="!showEmailU">
-              <v-icon v-if="isConfirmed()" color="green" class="mb-1">mdi-account-check-outline </v-icon>
+              <v-icon v-if="isConfirmed" color="green" class="mb-1">mdi-account-check-outline </v-icon>
               <v-icon v-else color="red" class="mb-1">mdi-account-check-outline </v-icon>
               Email:
             </span>
@@ -17,8 +17,13 @@
             <span v-if="!showEmailU && !changeEmail">
               <span>
                 <span>{{ user.email }}</span>
-                <v-btn v-if="!isConfirmed" @click="confirmEmail" :loading="isConfirmLoading" class="ml-2" small outlined>Подтвердить</v-btn>
-                 <span v-if="isSuccessConfirmed">Проверьте ваш почтовый ящик</span>
+                <v-btn
+                    v-if="!isConfirmed && !isSuccessConfirmed"
+                    @click="confirmEmail"
+                    :loading="isConfirmLoading"
+                    class="ml-2" small outlined
+                >Подтвердить</v-btn>
+<!--                 <span v-if="isSuccessConfirmed">Проверьте ваш почтовый ящик</span>-->
               </span>
               <v-btn x-small depressed outlined fab class="ml-2" icon @click="showEmailU = !showEmailU">
                 <v-icon>mdi-pencil</v-icon>
@@ -73,7 +78,7 @@ export default class ProfilePage extends Vue{
     changeEmailR: boolean = false
     get changeEmail() { return this.changeEmailR; }
 
-    isConfirmed(): boolean { return UserModule.user.isConfirmed() }
+    get isConfirmed(): boolean { return UserModule.user.isConfirmed() }
     get isConfirmLoading(): boolean { return this.confirmLoading }
     get isSuccessConfirmed(): boolean { return this.confirmRequestStatus === 'REQUESTED_SUCCESS'}
     getStatus(): string { return UserModule.user.getFormattedStatus()}

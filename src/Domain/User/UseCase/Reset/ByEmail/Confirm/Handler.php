@@ -63,15 +63,14 @@ class Handler
     {
         $redisToken = $this->redis->get($this->user->getEmail()->getValue().'_reset_password');
         if(!$redisToken) {
-            $this->redis->del($this->user->getEmail()->getValue().'_reset_password');
             throw new DomainException(json_encode(['reset'=> 'is not requested']), Response::HTTP_NOT_FOUND);
         }
 
         if($redisToken !== $token) {
-            $this->redis->del($this->user->getEmail()->getValue().'_reset_password');
             throw new ValidationException(json_encode(['token' => 'token is expired']), Response::HTTP_NOT_FOUND);
         }
 
+        $this->redis->del($this->user->getEmail()->getValue().'_reset_password');
     }
 
     public function sendSuccessMessage(): void

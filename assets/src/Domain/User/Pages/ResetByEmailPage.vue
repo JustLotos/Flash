@@ -52,6 +52,7 @@ export default class ResetByEmailPage extends Vue{
             console.log(response);
             this.modalMessage = 'Пароль успешно изменен';
             this.modal = !this.modal;
+            Router.push({name: 'Login'});
         }).catch((error: AxiosError) => {
             if(error.response?.data.errors) {
                 if(error.response?.data.errors.token) {
