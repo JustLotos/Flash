@@ -27,7 +27,7 @@ import {UserModule} from "../../UserModule";
 
 @Component({components: { ControlEmail}})
 export default class EmailChangeForm extends Vue {
-  email: string = 'test@test.test';
+  email: string = '';
   dataErrors: {email: string } = { email: ''};
   notification: boolean = false;
 

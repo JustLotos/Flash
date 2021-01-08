@@ -11,16 +11,19 @@
               <tbody>
               <tr>
                 <td>
-                  <span v-if="!showEmailU">Email: </span>
+                  <span v-if="!showEmailU">
+                    <v-icon v-if="isConfirmed()" color="green" class="mb-1">mdi-account-check-outline </v-icon>
+                    <v-icon v-else color="red" class="mb-1">mdi-account-check-outline </v-icon>
+                    Email:
+                  </span>
                   <span v-else>Изменение</span>
                 </td>
                 <td>
                   <span v-if="!showEmailU && !changeEmail">
                     <span>
                       <span>{{ user.email }}</span>
-                      <v-icon v-if="isConfirmed()" color="green" class="mb-1">mdi-account-check-outline </v-icon>
-                       <span v-else-if="isSuccessConfirmed">Проверьте ваш почтовый ящик</span>
-                      <v-btn v-else @click="confirmEmail" :loading="isConfirmLoading" class="ml-2" small outlined>Подтвердить</v-btn>
+                      <v-btn v-if="!isConfirmed" @click="confirmEmail" :loading="isConfirmLoading" class="ml-2" small outlined>Подтвердить</v-btn>
+                       <span v-if="isSuccessConfirmed">Проверьте ваш почтовый ящик</span>
                     </span>
                     <v-btn x-small depressed outlined fab class="ml-2" icon @click="showEmailU = !showEmailU">
                       <v-icon>mdi-pencil</v-icon>
@@ -34,7 +37,7 @@
                 <td>Пароль:</td>
                 <td class="d-flex justify-space-between pt-3 ">
                   <span> ******* </span>
-                  <v-btn @click="updatePassword" small depressed outlined class="ml-2">Изменить</v-btn>
+<!--                  <v-icon color="green" class="mb-1">mdi-account-check-outline </v-icon>-->
                 </td>
               </tr>
               <tr><td>Статус: </td><td>{{ getStatus() }}</td></tr>
