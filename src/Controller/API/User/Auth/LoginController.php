@@ -30,7 +30,7 @@ class LoginController extends AbstractController
      *          format="application/json",
      *          @SWG\Schema(
      *              type="object",
-     *              @SWG\Property(property="email", type="string", example="test@test.test"),
+     *              @SWG\Property(property="email", type="string", example="test2@test.test"),
      *              @SWG\Property(property="password", type="string", example="12345678Ab"),
      *          ),
      *     ),
@@ -44,8 +44,8 @@ class LoginController extends AbstractController
      *              )),
      *              @SWG\Schema(
      *                  type="object",
-     *                  @SWG\Property(type="string", example="hash", property="accessToken"),
-     *                  @SWG\Property(type="string", example="hash", property="token")
+     *                  @SWG\Property(type="string", example="hash", property="token"),
+     *                  @SWG\Property(type="string", example="hash", property="refreshToken")
      *              )
      *         })
      *     ),

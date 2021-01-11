@@ -55,8 +55,22 @@ class ChangeEmailController extends AbstractController
      *     summary="Подтверждение смены электронного адреса",
      *     tags={"User"},
      *     description="Метод позволяет подтвердить смену электронного адреса",
-     *     @SWG\Response(response=200, description="Успешное получение данных"),
      *     @SWG\Parameter(name="token", required=true, in="path", type="string"),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="Электронный адрес успешно изменен",
+     *          @SWG\Schema( allOf={
+     *              @SWG\Schema(ref=@Model(
+     *                  type="App\Domain\User\Entity\User",
+     *                  groups={App\Domain\User\Entity\User::GROUP_SIMPLE}
+     *              )),
+     *              @SWG\Schema(
+     *                  type="object",
+     *                  @SWG\Property(type="string", example="hash", property="token"),
+     *                  @SWG\Property(type="string", example="hash", property="refreshToken"),
+     *              )
+     *         })
+     *     ),
      * )
      * @Security(name="Bearer")
      */

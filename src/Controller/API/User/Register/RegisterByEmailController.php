@@ -56,8 +56,8 @@ class RegisterByEmailController extends AbstractController
      *              )),
      *              @SWG\Schema(
      *                  type="object",
-     *                  @SWG\Property(type="string", example="hash", property="accessToken"),
-     *                  @SWG\Property(type="string", example="hash", property="token")
+     *                  @SWG\Property(type="string", example="hash", property="token"),
+     *                  @SWG\Property(type="string", example="hash", property="refreshToken"),
      *              )
      *         })
      *     ),
