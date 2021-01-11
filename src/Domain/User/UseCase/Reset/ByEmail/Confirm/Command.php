@@ -6,8 +6,12 @@ namespace App\Domain\User\UseCase\Reset\ByEmail\Confirm;
 
 use App\Validator\ExistEntityConstraint\ExistEntity;
 use JMS\Serializer\Annotation as Serializer;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @SWG\Definition()
+ */
 class Command
 {
     /**

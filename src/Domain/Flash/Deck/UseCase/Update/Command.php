@@ -24,7 +24,7 @@ class Command
 
     /**
      * @Assert\Valid()
-     * @Serializer\Type(name="App\Domain\Flash\UseCase\Deck\Update\Settings")
+     * @Serializer\Type(name="App\Domain\Flash\UseCase\Components\Update\Settings")
      */
     public $settings;
 }

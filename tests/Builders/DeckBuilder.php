@@ -10,7 +10,7 @@ use DateTimeImmutable;
 
 class DeckBuilder
 {
-    public static function make(string $name = 'Deck', string $description = ''): Deck {
+    public static function make(string $name = 'Components', string $description = ''): Deck {
         $learner = Learner::create(Id::next());
         return new Deck($learner, $name, new DateTimeImmutable(), $description);
     }

@@ -9,7 +9,6 @@ use App\Domain\User\Entity\Types\Id;
 use App\Domain\User\Entity\Types\Password;
 use App\Domain\User\Entity\Types\Role;
 use App\Domain\User\Entity\Types\Status;
-use App\Exception\BusinessException;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -33,6 +32,7 @@ class User implements UserInterface
      * @ORM\Id
      * @Serializer\Type(name="string")
      * @Serializer\Groups({User::GROUP_DETAIL})
+     * @SWG\Property(example="64250869-cff4-481e-9457-ffd47d97bf44")
      */
     private $id;
 

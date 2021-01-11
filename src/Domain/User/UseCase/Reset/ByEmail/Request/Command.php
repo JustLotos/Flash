@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace App\Domain\User\UseCase\Reset\ByEmail\Request;
 
 use App\Validator\ExistEntityConstraint\ExistEntity;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 
+/**
+ * @SWG\Definition()
+ */
 class Command
 {
     /**

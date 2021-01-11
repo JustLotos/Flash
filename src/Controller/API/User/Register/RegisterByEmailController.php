@@ -31,7 +31,7 @@ class RegisterByEmailController extends AbstractController
      * @Route("/request/", name="registerByEmail", methods={"POST"}, options={"no_auth": true})
      *
      * @SWG\Post(
-     *     summary="Регистрация нового пользователя (email и пароль)",
+     *     summary="Регистрация нового пользователя по электронному адресу",
      *     tags={"User"},
      *     description="Регистрация нового пользователя по email адрессу и паролю. В ответе содержится jwt токен.",
      *     @SWG\Parameter(
@@ -74,7 +74,14 @@ class RegisterByEmailController extends AbstractController
     }
 
     /**
-     *  @Route("/resend/", name="resendCodeRegisterByEmail", methods={"POST"}, options={"no_auth": true})
+     * @Route("/resend/", name="resendCodeRegisterByEmail", methods={"POST"}, options={"no_auth": true})
+     * @SWG\Post (
+     *     summary="Повторная отправка электронного письма для активации пользователя",
+     *     tags={"User"},
+     *     description="Метод позволяет повторно отправть электронное письмо для активации пользователя",
+     *     @SWG\Response(response=200, description="Успешное получение данных"),
+     *     @SWG\Parameter(name="credentials", required=true, in="body", format="application/json", @Model(type=ResendCommand::class)),
+     * )
      */
     public function resend(Request $request, ResendHandler $handler): Response
     {
@@ -87,6 +94,14 @@ class RegisterByEmailController extends AbstractController
 
     /**
      * @Route("/confirm/{email}/{token}/", name="registerByEmailConfirm", methods={"GET"}, options={"no_auth": true})
+     * @SWG\Get (
+     *     summary="Подтверждение регистрации пользователя",
+     *     tags={"User"},
+     *     description="Метод позволяет подтвердить регистрацию пользователю",
+     *     @SWG\Response(response=200, description="Успешное получение данных"),
+     *     @SWG\Parameter(name="token", required=true, in="path", type="string"),
+     *     @SWG\Parameter(name="email", required=true, in="path", type="string"),
+     * )
      */
     public function confirm(ConfirmHandler $handler, string $email, string $token): RedirectResponse
     {

@@ -6,9 +6,13 @@ namespace App\Domain\User\UseCase\Change\Email\Request;
 
 use App\Validator\ExistEntityConstraint\ExistEntity;
 use App\Validator\UniqueEntityConstraint\UniqueEntity;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 
+/**
+ * @SWG\Definition()
+ */
 class Command
 {
     /**
@@ -21,6 +25,7 @@ class Command
      *     message="Пользователь с таким адресом уже существует"
      * )
      * @Serializer\Type(name="string")
+     * @SWG\Property(example="example@mail.com")
      */
     public $email;
 }

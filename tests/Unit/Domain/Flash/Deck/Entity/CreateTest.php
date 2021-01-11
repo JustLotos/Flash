@@ -15,7 +15,7 @@ class CreateTest extends TestCase
     public function testWithReqFields(): void
     {
         $learner = Learner::create(Id::next());
-        $name = 'Deck';
+        $name = 'Components';
         $date = new DateTimeImmutable();
         $deck = new Deck($learner, $name, $date);
 
@@ -27,7 +27,7 @@ class CreateTest extends TestCase
     public function testWithNonReqFields(): void
     {
         $learner = Learner::create(Id::next());
-        $name = 'Deck';
+        $name = 'Components';
         $date = new DateTimeImmutable();
         $description = 'Description';
         $deck = new Deck($learner, $name, $date, $description);

@@ -15,7 +15,7 @@ class DeckVoter extends Voter
 {
     public const VIEW = 'view';
     public const EDIT = 'edit';
-    public const NOT_FOUND_MESSAGE = 'Deck not found';
+    public const NOT_FOUND_MESSAGE = 'Components not found';
 
     private $security;
 

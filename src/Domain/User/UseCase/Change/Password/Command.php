@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Domain\User\UseCase\Change\Password;
 
 use JMS\Serializer\Annotation as Serializer;
+use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Assert\GroupSequence({"Command", "After"})
+ * @SWG\Definition()
  */
 class Command
 {
@@ -33,6 +35,7 @@ class Command
      *     message="Password must contain at least 1 number"
      * )
      * @Serializer\Type(name="string")
+     * @SWG\Property(example="12345678Ab")
      */
     public $currentPassword;
 
@@ -56,6 +59,7 @@ class Command
      *     message="Password must contain at least 1 number"
      * )
      * @Serializer\Type(name="string")
+     * @SWG\Property(example="12345678Abb")
      */
     public $newPassword;
 
@@ -63,6 +67,7 @@ class Command
      * @Assert\NotBlank()
      * @Assert\IdenticalTo(propertyPath="newPassword")
      * @Serializer\Type(name="string")
+     * @SWG\Property(example="12345678Abb")
      */
     public $plainPassword;
 }

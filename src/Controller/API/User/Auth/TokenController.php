@@ -6,6 +6,7 @@ namespace App\Controller\API\User\Auth;
 
 use App\Controller\API\BaseController;
 use Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,11 +20,11 @@ class TokenController extends AbstractController
      *
      *
      * @SWG\Post(
-     *     summary="Авториазция пользователя по jwt токену (авторизация по умолчанию)",
+     *     summary="Обновление токена jwt токена",
      *     tags={"Auth"},
      *     description="Метод для обновления времени жизни токена для бесшовной авторизации.
                         Используется библиотека gesdinet/jwt-refresh-token-bundle.",
-     *     @SWG\Parameter(
+     *     @SWG\Parameter (
      *          name="credentials",
      *          required=true,
      *          in="body",

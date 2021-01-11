@@ -14,35 +14,35 @@ class Settings
     /**
      * @var int
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({App\Domain\Flash\Entity\Deck\Deck::GROUP_DETAILS})
+     * @Serializer\Groups({App\Domain\Flash\Entity\Components\Components::GROUP_DETAILS})
      */
     private $limitRepeat;
 
     /**
      * @var int
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({App\Domain\Flash\Entity\Deck\Deck::GROUP_DETAILS})
+     * @Serializer\Groups({App\Domain\Flash\Entity\Components\Components::GROUP_DETAILS})
      */
     private $limitLearning;
 
     /**
      * @var float
      * @ORM\Column(type="float")
-     * @Serializer\Groups({App\Domain\Flash\Entity\Deck\Deck::GROUP_DETAILS})
+     * @Serializer\Groups({App\Domain\Flash\Entity\Components\Components::GROUP_DETAILS})
      */
     private $difficultyIndex;
 
     /**
      * @var DateInterval
      * @ORM\Column(type="dateinterval")
-     * @Serializer\Groups({App\Domain\Flash\Entity\Deck\Deck::GROUP_DETAILS})
+     * @Serializer\Groups({App\Domain\Flash\Entity\Components\Components::GROUP_DETAILS})
      */
     private $startTimeInterval;
 
     /**
      * @var DateInterval
      * @ORM\Column(type="dateinterval")
-     * @Serializer\Groups({App\Domain\Flash\Entity\Deck\Deck::GROUP_DETAILS})
+     * @Serializer\Groups({App\Domain\Flash\Entity\Components\Components::GROUP_DETAILS})
      */
     private $minTimeInterval;
 
