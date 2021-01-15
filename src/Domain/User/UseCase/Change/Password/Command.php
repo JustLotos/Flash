@@ -10,7 +10,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Assert\GroupSequence({"Command", "After"})
- * @SWG\Definition()
  */
 class Command
 {

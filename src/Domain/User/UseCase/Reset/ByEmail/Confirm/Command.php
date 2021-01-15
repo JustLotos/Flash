@@ -9,9 +9,6 @@ use JMS\Serializer\Annotation as Serializer;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @SWG\Definition()
- */
 class Command
 {
     /**

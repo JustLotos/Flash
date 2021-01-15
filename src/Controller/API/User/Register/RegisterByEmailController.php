@@ -39,12 +39,7 @@ class RegisterByEmailController extends AbstractController
      *          required=true,
      *          in="body",
      *          format="application/json",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(property="email", type="string", example="test@test.test"),
-     *              @SWG\Property(property="password", type="string", example="12345678Ab"),
-     *              @SWG\Property(property="plainPassword", type="string", example="12345678Ab"),
-     *          ),
+     *          @Model(type=RegisterPayloads::class)
      *     ),
      *     @SWG\Response(
      *          response=200,
