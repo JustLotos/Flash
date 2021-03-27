@@ -1,4 +1,6 @@
 {
+    "name": "Roman",
+    "description": "Test",
     "type": "project",
     "license": "proprietary",
     "require": {
