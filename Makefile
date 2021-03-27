@@ -9,12 +9,12 @@ up: docker-up v-dev
 down: docker-down
 
 update: docker-down docker-pull docker-build docker-up composer-update v-dev
-install: docker-pull docker-build docker-up composer-install lexik-jwt-install yarn-install full_reset_db
+install: docker-pull docker-build docker-up composer-install lexik-jwt-install yarn-install first_install
 
 reset_db: drop_db create_db migdiff migrate fixtload
 reset_db_test: drop_db_test create_db_test migrate_test fixtload_test
 full_reset_db: reset_db reset_db_test
-
+first_install: create_db migdiff migrate fixtload create_db_test migrate_test fixtload_test
 #DOCKER-COMPOSE
 docker-up:
 	@${COMPOSE} up -d
@@ -34,6 +34,7 @@ composer-update:
 	@${COMPOSER} update
 composer-install:
 	@${COMPOSER} install
+	docker-compose exec php sudo composer self-update --1
 #COMPOSER
 
 #DATABASE
@@ -69,6 +70,8 @@ fixtload_test:
 
 #FRONT
 yarn-install:
+	@${COMPOSE} run --user root node mkdir -p /yarn
+	@${COMPOSE} run --user root node chmod -R 777 /yarn
 	@${COMPOSE} run node yarn install
 	@${COMPOSE} run node yarn add @babel/compat-data
 	@${COMPOSE} run node yarn add @babel/preset-env
@@ -91,5 +94,5 @@ phpunit:
 
 lexik-jwt-install:
 	mkdir -p config/jwt
-	openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-	openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
+	openssl genpkey -out config/jwt/private.pem -aes256 -pass pass:root  -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+	openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout -passin pass:root
