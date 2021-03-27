@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller\API\User\Auth;
 
 use DomainException;
-use App\Controller\API\BaseController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;

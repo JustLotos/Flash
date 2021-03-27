@@ -2,36 +2,30 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Functional\Domain\Flash\DeckController;
+namespace App\Tests\Functional\Domain\Flash\Deck;
 
 use App\DataFixtures\Flash\DeckFixtures;
 use App\DataFixtures\User\UserFixtures;
+use App\Domain\Flash\Deck\Entity\Deck;
 use App\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 
 class CGetActionTest extends AbstractTest
 {
-    private $clientAuth;
+    protected $method = 'GET';
+    protected $uri = '/flash/deck/';
 
-    public function setUp() : void
+    public function testGetDecksValid() : void
     {
-        parent::setUp();
-        $this->clientAuth = $this->createAuthenticatedClient();
-        $this->url .= '/decks';
-    }
+        $this->makeRequestWithAuth();
 
-    public function testCGetDeckValid() : void
-    {
-        $this->clientAuth->request('GET', $this->url, [], [], [], '');
-
-        /** @var Response $response */
-        $response = $this->clientAuth->getResponse();
-        $content = json_decode($response->getContent(), true);
-
-        $this->assertResponseOk($response);
-        static::assertArrayHasKey('id', $content[0]);
-        static::assertArrayHasKey('name', $content[0]);
-        static::assertArrayHasKey('description', $content[0]);
+        self::assertResponseOk($this->response);
+        self::assertIsArray($this->content);
+        self::assertArrayHasKey('id', $this->content[0]);
+        self::assertArrayHasKey('name', $this->content[0]);
+        self::assertArrayHasKey('description', $this->content[0]);
+        self::assertArrayHasKey('createdAt', $this->content[0]);
+        self::assertArrayHasKey('updatedAt', $this->content[0]);
     }
 
     public function testStrangeCGetDeckValid() : void

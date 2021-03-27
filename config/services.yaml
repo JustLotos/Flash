@@ -74,6 +74,7 @@ services:
     App\Service\ValidateService: ~
     App\Domain\User\UserRepository: ~
     App\Domain\User\Service\TokenService: ~
+    App\Domain\Flash\LearnerService: ~
     App\Domain\User\Service\RedisService: ~
 
     #VALIDATORS

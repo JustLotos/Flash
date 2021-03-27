@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Flash\Repository;
+namespace App\Domain\Flash\Deck;
 
-use App\Domain\Flash\Entity\Deck\Deck;
-use App\Domain\Flash\Learner\Entity\Types\Id;
+use App\Domain\Flash\Deck\Entity\Deck;
+use App\Domain\Flash\LearnerService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
@@ -18,17 +18,19 @@ class DeckRepository extends ServiceEntityRepository
     private $manager;
     /** @var EntityRepository */
     private $repository;
+    private $learnerService;
 
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em, LearnerService $learnerService)
     {
         parent::__construct($registry, Deck::class);
         $this->manager = $em;
         $this->repository = $em->getRepository(Deck::class);
+        $this->learnerService = $learnerService;
     }
 
-    public function fetchAll(Id $id)
+    public function fetchAll()
     {
-        return $this->repository->findBy(['learner'=>$id]);
+        return $this->repository->findBy(['learner'=> $this->learnerService->getCurrentLearner()->getId()]);
     }
 
     public function add(Deck $deck)

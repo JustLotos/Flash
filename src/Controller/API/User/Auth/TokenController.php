@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\API\User\Auth;
 
-use App\Controller\API\BaseController;
 use Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken;
-use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

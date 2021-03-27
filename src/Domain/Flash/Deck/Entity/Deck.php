@@ -21,30 +21,35 @@ class Deck
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({Deck::GROUP_LIST})
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({Deck::GROUP_LIST})
      */
     private $name;
 
     /**
      * @var string | null
      * @ORM\Column(type="text", nullable=true)
+     * @Serializer\Groups({Deck::GROUP_LIST})
      */
     private $description;
 
     /**
      * @var DateTimeImmutable
      * @ORM\Column(type="datetime_immutable")
+     * @Serializer\Groups({Deck::GROUP_LIST})
      */
     private $createdAt;
 
     /**
      * @var DateTimeImmutable
      * @ORM\Column(type="datetime_immutable")
+     * @Serializer\Groups({Deck::GROUP_LIST})
      */
     private $updatedAt;
 
@@ -54,6 +59,8 @@ class Deck
      * @ORM\JoinColumn(name="learner_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $learner;
+
+    public const GROUP_LIST = 'GROUP_LIST';
 
     public function __construct(Learner $learner, string $name, DateTimeImmutable $date, string $description = '')
     {

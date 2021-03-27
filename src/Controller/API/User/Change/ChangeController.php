@@ -39,6 +39,9 @@ class ChangeController extends AbstractController
      * )
      *
      * @Security(name="Bearer")
+     * @param Request $request
+     * @param Handler $handler
+     * @return Response
      */
     public function reset(Request $request, Handler $handler): Response
     {
