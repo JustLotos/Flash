@@ -24,31 +24,30 @@ class DeckFixtures extends BaseFixture implements DependentFixtureInterface
     public function loadData(ObjectManager $manager) : void
     {
         $this->createMany(100, self::ADMINS_ID, function () {
-            $date = $this->faker->dateTimeBetween($startDate = '-3 years', $endDate = 'now', $timezone = null);
             /** @var Learner $learner */
             $learner = $this->getReferenceByNumber(LearnerFixtures::ADMINS, 0);
-            return new Deck(
-                $learner,
-                $this->faker->title,
-                DateTimeImmutable::createFromMutable($date),
-                $this->faker->sentence
-            );
+            return $this->makeDeck($learner);
         });
 
         $this->createMany(UserFixtures::USER_COUNT * 10, self::USERS_ID, function () {
-            $date = $this->faker->dateTimeBetween($startDate = '-3 years', $endDate = 'now', $timezone = null);
             /** @var Learner $learner */
             $learner = $this->getRandomReference(LearnerFixtures::USERS);
-            return new Deck(
-                $learner,
-                $this->faker->title,
-                DateTimeImmutable::createFromMutable($date),
-                $this->faker->sentence
-            );
+            return $this->makeDeck($learner);
         });
 
         $manager->flush();
     }
+
+    public function makeDeck(Learner $learner): Deck {
+        $date = $this->faker->dateTimeBetween($startDate = '-3 years', $endDate = 'now', $timezone = null);
+        return new Deck(
+            $learner,
+            $this->faker->company,
+            DateTimeImmutable::createFromMutable($date),
+            $this->faker->sentence
+        );
+    }
+
 
     public function getDependencies(): array
     {
