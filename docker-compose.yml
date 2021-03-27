@@ -10,7 +10,7 @@ services:
       - ${PWD}:/app
       - ${PWD}/docker/hosts/default.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "${NGINX_PORT}:80"
+      - "80:80"
     links:
       - php
   postgres:
