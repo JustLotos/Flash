@@ -7,14 +7,14 @@ import {FlashRoutes} from "../Flash/FlashRoutes";
 class VueRouterEx extends Router {
     matcher: any;
     public routes: RouteConfig[] = [];
-    constructor(options) {
+    constructor(options: any) {
         super(options);
         const { addRoutes } = this.matcher;
         const { routes } = options;
 
         this.routes = routes;
 
-        this.matcher.addRoutes = (newRoutes) => {
+        this.matcher.addRoutes = (newRoutes: any) => {
             this.routes.push(...newRoutes);
             addRoutes(newRoutes);
         };
@@ -26,6 +26,7 @@ Vue.use(VueRouterEx);
 export const routes: Array<RouteConfig> = [
     ...AppRoutes,
     ...UserRoutes,
+    ...FlashRoutes,
     {
         path: '*', redirect: '/',
         meta: { menu: false, auth: false }
