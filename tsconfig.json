@@ -6,7 +6,8 @@
     "strict": true,
     // при использовании webpack 2+ или rollup, добавить поддержку tree-shaking:
     "module": "es2015",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "experimentalDecorators": true
   },
   "typeRoots": [
     "./node_modules/@types",
