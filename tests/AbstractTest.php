@@ -258,7 +258,11 @@ abstract class AbstractTest extends WebTestCase
 
         $client->request($method, $url, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($data));
         $this->response = $client->getResponse();
-        $this->content = json_decode($this->response->getContent(), true);
+        if($tempContent = json_decode($this->response->getContent(), true)) {
+            $this->content = $tempContent;
+        } else {
+            $this->content = $this->response->getContent();
+        }
         return $client;
     }
 }

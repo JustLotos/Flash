@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security\Voters;
 
-use App\Domain\Flash\Entity\Deck\Deck;
+use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\User\Entity\User;
 use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
