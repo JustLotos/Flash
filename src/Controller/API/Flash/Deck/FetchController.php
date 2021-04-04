@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\API\Flash\Deck\Fetch;
+namespace App\Controller\API\Flash\Deck;
 
 use App\Controller\ControllerHelper;
 use App\Domain\Flash\Deck\Entity\Deck;
@@ -17,11 +17,11 @@ class FetchController extends AbstractController
     use ControllerHelper;
 
     /**
-     * @Route("/", name="getDecks", methods={"GET"})
+     * @Route("/", name="fetchDecks", methods={"GET"})
      * @param Handler $handler
      * @return Response
      */
-    public function getDecks(Handler $handler): Response{
+    public function fetchDecks(Handler $handler): Response{
         $decks = $handler->handle();
         return $this->response($this->serializer->serialize($decks, Deck::GROUP_LIST));
     }
