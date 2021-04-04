@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Functional\Domain\Flash\Learner\Get;
+namespace App\Tests\Functional\Domain\Flash\Learner;
 
 use App\DataFixtures\Flash\LearnerFixtures;
 use App\Tests\AbstractTest;
 
-class ActionTest extends AbstractTest
+class GetActionTest extends AbstractTest
 {
     protected $method = 'GET';
     protected $uri = '/flash/learner/current/';

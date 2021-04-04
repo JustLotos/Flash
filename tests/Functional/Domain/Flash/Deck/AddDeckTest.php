@@ -11,7 +11,7 @@ use App\DataFixtures\UserFixtures;
 use App\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 
-class PostActionTest extends AbstractTest
+class AddDeckTest extends AbstractTest
 {
     private $method = 'POST';
     private $uri = '/decks';
