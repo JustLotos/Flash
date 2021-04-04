@@ -18,7 +18,7 @@ class AddDeckTest extends AbstractTest
         return [DeckFixtures::class];
     }
 
-    public function testPostDeckValid() : void
+    public function testAddDeck() : void
     {
         $this->makeRequestWithAuth([
             'name' => 'deckName',

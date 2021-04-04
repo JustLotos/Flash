@@ -11,7 +11,7 @@ use App\Domain\User\Entity\User;
 use App\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 
-class GetActionTest extends AbstractTest
+class GetDeckTest extends AbstractTest
 {
     protected $method = 'GET';
     protected $uri = '/flash/deck/';

@@ -29,7 +29,7 @@ class UpdateDeckTest extends AbstractTest
         $this->uri .= $deck->getId().'/update/';
     }
 
-    public function testPutDeckValid() : void
+    public function testUpdateDeck() : void
     {
         $this->makeRequestWithAuth([
             'name' => 'deckName',

@@ -17,7 +17,7 @@ class FetchDecksTest extends AbstractTest
         return [ DeckFixtures::class ];
     }
 
-    public function testGetDecksValid() : void
+    public function testFetchDecks() : void
     {
         $this->makeRequestWithAuth();
 
