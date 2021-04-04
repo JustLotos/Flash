@@ -9,7 +9,8 @@ use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Handler as AddDeckHandler;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Command as AddDeckCommand;
 use App\Domain\Flash\Deck\UseCase\UpdateDeck\Command as UpdateDeckCommand;
-use App\Domain\Flash\Deck\UseCase\UpdateDeck\Handler;
+use App\Domain\Flash\Deck\UseCase\UpdateDeck\Handler as UpdateDeckHandler;
+use App\Domain\Flash\Deck\UseCase\DeleteDeck\Handler as DeleteDeckHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,11 +51,11 @@ class DeckController extends AbstractController
     /**
      * @Route("/{id}/update/", name="updateDeck", methods={"PUT"})
      * @param Request $request
-     * @param Handler $handler
+     * @param UpdateDeckHandler $handler
      * @param Deck $deck
      * @return Response
      */
-    public function updateDeck(Request $request, Handler $handler, Deck $deck): Response
+    public function updateDeck(Request $request, UpdateDeckHandler $handler, Deck $deck): Response
     {
         /** @var UpdateDeckCommand $command */
         $command = $this->extractData($request,UpdateDeckCommand::class);
@@ -63,11 +64,14 @@ class DeckController extends AbstractController
     }
 
     /**
-     * @Route("/delete/", name="deleteDeck", methods={"DELETE"})
+     * @Route("/{id}/delete/", name="deleteDeck", methods={"DELETE"})
+     * @param DeleteDeckHandler $handler
+     * @param Deck $deck
      * @return Response
      */
-    public function deleteDeck(): Response
+    public function deleteDeck(DeleteDeckHandler $handler, Deck $deck): Response
     {
+        $handler->handle($deck);
         return $this->response($this->getSimpleSuccessResponse());
     }
 }
