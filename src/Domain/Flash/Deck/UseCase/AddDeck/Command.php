@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Flash\UseCase\Deck\Create;
+namespace App\Domain\Flash\Deck\UseCase\AddDeck;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
@@ -21,12 +21,6 @@ class Command
      * @Serializer\Type(name="string")
      */
     public $description;
-
-    /**
-     * @Assert\Valid()
-     * @Serializer\Type(name="App\Domain\Flash\UseCase\Components\Create\Settings")
-     */
-    public $settings;
 }
 
 

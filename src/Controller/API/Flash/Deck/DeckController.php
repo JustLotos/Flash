@@ -6,8 +6,12 @@ namespace App\Controller\API\Flash\Deck;
 
 use App\Controller\ControllerHelper;
 use App\Domain\Flash\Deck\Entity\Deck;
-use App\Domain\Flash\Deck\UseCase\GetDecks\Handler;
+use App\Domain\Flash\Deck\UseCase\AddDeck\Handler as AddDeckHandler;
+use App\Domain\Flash\Deck\UseCase\AddDeck\Command as AddDeckCommand;
+use App\Domain\Flash\Learner\Entity\Types\Id;
+use App\Domain\User\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,11 +32,22 @@ class DeckController extends AbstractController
 
     /**
      * @Route("/add/", name="addDeck", methods={"POST"})
+     * @param AddDeckHandler $handler
+     * @param Request $request
      * @return Response
      */
-    public function addDeck(): Response
+    public function addDeck(AddDeckHandler $handler, Request $request): Response
     {
-        return $this->response($this->getSimpleSuccessResponse());
+        /** @var AddDeckCommand $command */
+        $command = $this->serializer->deserialize($request, AddDeckCommand::class);
+        $this->validator->validate($command);
+        /** @var User $user */
+        $user = $this->getUser();
+        $deck = $handler->handle($command, new Id($user->getId()->getValue()));
+        return $this->response(
+            $this->serializer->serialize($deck, Deck::GROUP_ONE),
+            Response::HTTP_CREATED
+        );
     }
 
     /**
