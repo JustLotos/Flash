@@ -7,6 +7,7 @@ namespace App\Tests\Functional\Domain\Flash\Deck;
 use App\DataFixtures\Flash\DeckFixtures;
 use App\DataFixtures\User\UserFixtures;
 use App\Domain\Flash\Deck\Entity\Deck;
+use App\Domain\User\Entity\User;
 use App\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 

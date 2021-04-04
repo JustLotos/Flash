@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Domain\Flash\Learner\Get;
 
-use App\DataFixtures\User\UserFixtures;
+use App\DataFixtures\Flash\LearnerFixtures;
 use App\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\Response;
 
 class ActionTest extends AbstractTest
 {
     protected $method = 'GET';
-    protected $uri = '/learner/current/';
+    protected $uri = '/flash/learner/current/';
 
     public function getFixtures() : array
     {
-        return [UserFixtures::class];
+        return [LearnerFixtures::class];
     }
 
     public function testValid() : void
@@ -24,10 +23,8 @@ class ActionTest extends AbstractTest
 
         self::assertResponseOk($this->response);
         self::assertArrayHasKey('id', $this->content);
-        self::assertArrayHasKey('email', $this->content);
-        self::assertArrayHasKey('role', $this->content);
-        self::assertArrayHasKey('status', $this->content);
-        self::assertArrayHasKey('createdAt', $this->content);
-        self::assertArrayHasKey('updatedAt', $this->content);
+        self::assertArrayHasKey('name', $this->content);
+        self::assertArrayHasKey('first', $this->content['name']);
+        self::assertArrayHasKey('last', $this->content['name']);
     }
 }
