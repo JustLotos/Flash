@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class GetActionTest extends AbstractTest
 {
     protected $method = 'GET';
-    protected $uri = '/flash/deck';
+    protected $uri = '/flash/deck/';
 
     protected function setUp(): void
     {
@@ -25,7 +25,7 @@ class GetActionTest extends AbstractTest
         $learner = self::getEntityManager()->getRepository(Learner::class)->findOneBy(['id' => $user->getId()->getValue()]);
         /** @var Deck $deck */
         $deck = self::getEntityManager()->getRepository(Deck::class)->findOneBy(['learner' => $learner]);
-        $this->uri .= '/'.$deck->getId();
+        $this->uri .= $deck->getId().'/';
     }
 
     protected function getFixtures() : array
