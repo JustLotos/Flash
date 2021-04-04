@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\API\Flash\Deck;
 
-use App\Controller\API\Flash\FlashControllerHelper;
 use App\Controller\ControllerHelper;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Handler as AddDeckHandler;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Command as AddDeckCommand;
 use App\Domain\Flash\Deck\UseCase\UpdateDeck\Command as UpdateDeckCommand;
 use App\Domain\Flash\Deck\UseCase\UpdateDeck\Handler;
-use App\Service\SerializeService;
-use App\Service\ValidateService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,11 +39,8 @@ class DeckController extends AbstractController
     public function addDeck(AddDeckHandler $handler, Request $request): Response
     {
         /** @var AddDeckCommand $command */
-        $command = $this->serializer->deserialize($request, AddDeckCommand::class);
-        $this->validator->validate($command);
-        /** @var User $user */
-        $user = $this->getUser();
-        $deck = $handler->handle($command, new Id($user->getId()->getValue()));
+        $command = $this->extractData($request, AddDeckCommand::class);
+        $deck = $handler->handle($command, $this->getLearner());
         return $this->response(
             $this->serializer->serialize($deck, Deck::GROUP_ONE),
             Response::HTTP_CREATED
