@@ -9,13 +9,18 @@ up: docker-up v-dev
 down: docker-down
 
 update: docker-down docker-pull docker-build docker-up composer-update v-dev
-install: docker-pull docker-build docker-up composer-install lexik-jwt-install yarn-install first_install
+install: docker-pull docker-build docker-up composer-install lexik-jwt-install yarn-install first_install_db
+first_install_db: create_db migdiff migrate fixtload create_db_test migrate_test fixtload_test
 
-reset_db: drop_db create_db migdiff migrate fixtload
+install_db: create_db migrate fixtload
+reset_db: drop_db create_db migrate migrate fixtload
+update_db: migdiff migrate fixtload
+
 reset_db_test: drop_db_test create_db_test migrate_test fixtload_test
-full_reset_db: reset_db reset_db_test
-first_install: create_db migdiff migrate fixtload create_db_test migrate_test fixtload_test
+idbt: create_db_test migrate_test fixtload_test
+udbt: migrate_test fixtload_test
 #DOCKER-COMPOSE
+
 docker-up:
 	@${COMPOSE} up -d
 
