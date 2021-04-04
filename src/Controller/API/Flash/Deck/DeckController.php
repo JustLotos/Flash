@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\API\Flash\Deck;
 
+use App\Controller\API\Flash\FlashControllerHelper;
 use App\Controller\ControllerHelper;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Handler as AddDeckHandler;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Command as AddDeckCommand;
-use App\Domain\Flash\Learner\Entity\Types\Id;
-use App\Domain\User\Entity\User;
+use App\Domain\Flash\Deck\UseCase\UpdateDeck\Command as UpdateDeckCommand;
+use App\Domain\Flash\Deck\UseCase\UpdateDeck\Handler;
+use App\Service\SerializeService;
+use App\Service\ValidateService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,12 +54,18 @@ class DeckController extends AbstractController
     }
 
     /**
-     * @Route("/update/", name="updateDeck", methods={"PUT"})
+     * @Route("/{id}/update/", name="updateDeck", methods={"PUT"})
+     * @param Request $request
+     * @param Handler $handler
+     * @param Deck $deck
      * @return Response
      */
-    public function updateDeck(): Response
+    public function updateDeck(Request $request, Handler $handler, Deck $deck): Response
     {
-        return $this->response($this->getSimpleSuccessResponse());
+        /** @var UpdateDeckCommand $command */
+        $command = $this->extractData($request,UpdateDeckCommand::class);
+        $deck = $handler->handle($command, $deck);
+        return $this->response($this->serializer->serialize($deck, Deck::GROUP_ONE));
     }
 
     /**
