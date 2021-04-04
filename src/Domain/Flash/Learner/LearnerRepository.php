@@ -26,11 +26,6 @@ class LearnerRepository extends ServiceEntityRepository
         $this->repository = $em->getRepository(Learner::class);
     }
 
-    public function getById(Id $id)
-    {
-        return $this->repository->findOneBy(['id' => $id]);
-    }
-
     public function add(Learner $learner)
     {
         $this->manager->persist($learner);

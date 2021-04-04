@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\API\Flash\Fetch;
+namespace App\Controller\API\Flash\Deck\Fetch;
 
 use App\Controller\ControllerHelper;
 use App\Domain\Flash\Deck\Entity\Deck;

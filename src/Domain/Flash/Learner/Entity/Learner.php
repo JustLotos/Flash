@@ -22,6 +22,7 @@ class Learner
      * @var Id
      * @ORM\Column(type="flash_learner_id")
      * @ORM\Id
+     * @Serializer\Groups({Learner::GROUP_SIMPLE})
      */
     private $id;
 

@@ -16,15 +16,15 @@ use App\DataFixtures\BaseFixture;
 
 class LearnerFixtures extends BaseFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    public const ADMINS = 'ADMIN_'.'LEARNERS';
-    public const USERS = 'USER_'.'LEARNERS';
+    public const ADMINS = 'ADMIN_'.self::class;
+    public const USERS = 'USER_'.self::class;
 
     public function loadData(ObjectManager $manager) : void
     {
         $this->createMany(1, self::ADMINS, function (int $i) {
             /** @var User $user */
-            $user = $this->getReferenceByNumber(UserFixtures::ADMINS, $i);
-            $name = new Name('Roman', 'Ignashov');
+            $user = $this->getRandomReference(UserFixtures::ADMINS);
+            $name = new Name('Roman', 'Ignashov1');
             $id = new Id($user->getId()->getValue());
             return Learner::create($id, $name);
         });

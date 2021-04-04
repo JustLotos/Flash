@@ -7,7 +7,6 @@ namespace App\Domain\Flash\Learner\UseCase\Create;
 use App\Domain\Flash\Learner\Entity\Learner;
 use App\Domain\Flash\Learner\Entity\Types\Id;
 use App\Domain\Flash\Learner\LearnerRepository;
-use App\Domain\Flusher;
 use App\Domain\User\Entity\User;
 use App\Service\FlushService;
 

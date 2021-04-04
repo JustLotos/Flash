@@ -6,6 +6,7 @@ namespace App\Domain\Flash\Learner\Entity\Types;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use App\Domain\Flash\Learner\Entity\Learner;
 
 /**
  * @ORM\Embeddable
@@ -15,11 +16,13 @@ class Name
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type(name="string")
+     * @Serializer\Groups({Learner::GROUP_SIMPLE})
      */
     private $first;
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type(name="string")
+     * @Serializer\Groups({Learner::GROUP_SIMPLE})
      */
     private $last;
 
