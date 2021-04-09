@@ -7,13 +7,9 @@ namespace App\DataFixtures\Flash;
 use App\DataFixtures\User\UserFixtures;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Learner\Entity\Learner;
-use App\Domain\Flash\Learner\Entity\Types\Id;
-use App\Domain\Flash\Learner\Entity\Types\Name;
-use App\Domain\User\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use App\DataFixtures\BaseFixture;
 
 class DeckFixtures extends BaseFixture implements DependentFixtureInterface

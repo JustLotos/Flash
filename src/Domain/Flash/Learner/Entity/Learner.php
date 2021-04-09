@@ -6,8 +6,7 @@ namespace App\Domain\Flash\Learner\Entity;
 
 use App\Domain\Flash\Learner\Entity\Types\Id;
 use App\Domain\Flash\Learner\Entity\Types\Name;
-use App\Domain\Flash\Learner\Entity\Types\Session;
-use App\Domain\Flash\Learner\Entity\Types\Settings;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -20,8 +19,8 @@ class Learner
 {
     /**
      * @var Id
-     * @ORM\Column(type="flash_learner_id")
      * @ORM\Id
+     * @ORM\Column(type="flash_learner_id")
      * @Serializer\Groups({Learner::GROUP_SIMPLE})
      */
     private $id;
@@ -35,6 +34,7 @@ class Learner
     private $name;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="App\Domain\Flash\Deck\Entity\Deck", mappedBy="learner", orphanRemoval=true, cascade={"persist"})
      */
     private $decks;
@@ -69,5 +69,10 @@ class Learner
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function getDecks(): ArrayCollection
+    {
+        return  $this->decks;
     }
 }

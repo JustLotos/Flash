@@ -59,6 +59,16 @@ class Deck
      */
     private $learner;
 
+    /**
+     * @ORM\OneToMany(
+     *     targetEntity="App\Domain\Flash\Card\Entity\Card",
+     *     mappedBy="deck",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
+     * )
+     */
+    private $cards;
+
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
@@ -98,5 +108,9 @@ class Deck
     public function getUpdatedAt(): DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 }
