@@ -31,9 +31,9 @@ class CardRepository extends ServiceEntityRepository
         return $this->repository->findBy(['deck' => $deck]);
     }
 
-    public function add(Card $deck)
+    public function add(Card $card)
     {
-        $this->manager->persist($deck);
+        $this->manager->persist($card);
     }
 
     public function remove(Card $deck)
