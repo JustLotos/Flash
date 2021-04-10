@@ -27,7 +27,7 @@ class Id
     /**
      * @Serializer\VirtualProperty()
      * @Serializer\SerializedName("id")
-     * @Serializer\Groups({Card::GROUP_DETAIL})
+     * @Serializer\Groups({Card::GROUP_ONE})
      */
     public function getValue(): string
     {

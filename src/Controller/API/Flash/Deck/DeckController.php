@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\API\Flash\Deck;
 
 use App\Controller\ControllerHelper;
+use App\Domain\Flash\Card\Entity\Card;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Handler as AddDeckHandler;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Command as AddDeckCommand;
@@ -28,7 +29,7 @@ class DeckController extends AbstractController
      */
     public function getDeck(Deck $deck): Response
     {
-        return $this->response($this->serializer->serialize($deck));
+        return $this->response($this->serializer->serialize($deck, [Deck::GROUP_ONE, Card::GROUP_ONE]));
     }
 
     /**

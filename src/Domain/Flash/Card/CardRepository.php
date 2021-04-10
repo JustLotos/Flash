@@ -25,6 +25,11 @@ class CardRepository extends ServiceEntityRepository
         $this->repository = $em->getRepository(Deck::class);
     }
 
+    public function findOneByDeck(Deck $deck)
+    {
+        return $this->repository->findBy(['deckId' => $deck->getId()]);
+    }
+
     public function add(Deck $deck)
     {
         $this->manager->persist($deck);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Domain\Flash\Deck;
 
-use App\DataFixtures\Flash\DeckFixtures;
+use App\DataFixtures\Flash\CardFixtures;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Learner\Entity\Learner;
 use App\Domain\User\Entity\User;
@@ -30,7 +30,7 @@ class GetDeckTest extends AbstractTest
 
     protected function getFixtures() : array
     {
-        return [DeckFixtures::class];
+        return [CardFixtures::class];
     }
 
     public function testGetDeck() : void
@@ -42,5 +42,7 @@ class GetDeckTest extends AbstractTest
         static::assertArrayHasKey('id', $this->content);
         static::assertArrayHasKey('name', $this->content);
         static::assertArrayHasKey('description', $this->content);
+        static::assertArrayHasKey('cards', $this->content);
+        static::assertArrayHasKey('id', $this->content['cards'][0]);
     }
 }

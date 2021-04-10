@@ -33,6 +33,7 @@ class Handler
         );
 
         $this->repository->add($deck);
+        $learner->addDeck($deck);
         $this->flusher->flush();
 
         return $deck;

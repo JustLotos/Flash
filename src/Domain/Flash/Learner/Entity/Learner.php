@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\Flash\Learner\Entity;
 
+use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Learner\Entity\Types\Id;
 use App\Domain\Flash\Learner\Entity\Types\Name;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -35,7 +37,12 @@ class Learner
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="App\Domain\Flash\Deck\Entity\Deck", mappedBy="learner", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(
+     *     targetEntity="App\Domain\Flash\Deck\Entity\Deck",
+     *     mappedBy="learner",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
+     * )
      */
     private $decks;
 
@@ -47,6 +54,7 @@ class Learner
     private function __construct(Id $id)
     {
         $this->id = $id;
+        $this->decks = new ArrayCollection();
     }
 
     public function getId(): Id
@@ -71,8 +79,24 @@ class Learner
         return $this;
     }
 
-    public function getDecks(): ArrayCollection
+    public function getDecks(): Collection
     {
         return  $this->decks;
+    }
+
+    public function addDeck(Deck $deck): self
+    {
+        if(!$this->decks->contains($deck)){
+            $this->decks->add($deck);
+        }
+        return $this;
+    }
+
+    public function removeChild(Deck $deck): self
+    {
+        if($this->decks->contains($deck)){
+            $this->decks->removeElement($deck);
+        }
+        return $this;
     }
 }

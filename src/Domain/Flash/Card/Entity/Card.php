@@ -6,6 +6,7 @@ namespace App\Domain\Flash\Card\Entity;
 
 use App\Domain\Flash\Card\Entity\Types\Id;
 use App\Domain\Flash\Deck\Entity\Deck;
+use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
 
@@ -19,6 +20,8 @@ class Card
      * @var Id
      * @ORM\Id()
      * @ORM\Column(type="flash_card_id")
+     * @Serializer\Type(name="string")
+     * @Serializer\Groups({Card::GROUP_LIST, Deck::GROUP_ONE})
      */
     private $id;
 

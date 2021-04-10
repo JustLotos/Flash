@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Domain\Flash\Deck\Entity;
 
+use App\Domain\Flash\Card\Entity\Card;
 use App\Domain\Flash\Learner\Entity\Learner;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use DateTimeImmutable;
-
+use Doctrine\ORM\PersistentCollection;
 /**
- * @ORM\Entity
  * @ORM\Table(name="flash_decks")
+ * @ORM\Entity
  */
 class Deck
 {
@@ -60,6 +62,8 @@ class Deck
     private $learner;
 
     /**
+     * @var PersistentCollection
+     * @Serializer\Groups({Deck::GROUP_ONE})
      * @ORM\OneToMany(
      *     targetEntity="App\Domain\Flash\Card\Entity\Card",
      *     mappedBy="deck",
@@ -112,5 +116,27 @@ class Deck
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
+    }
+    public function getCards(): Collection
+    {
+        return $this->cards;
+    }
+
+    public function addCard(Card $card): self
+    {
+        if(!$this->cards->contains($card)){
+            $this->cards->add($card);
+        }
+
+        return $this;
+    }
+
+    public function removeChild(Card $card): self
+    {
+        if($this->cards->contains($card)){
+            $this->cards->removeElement($card);
+        }
+
+        return $this;
     }
 }

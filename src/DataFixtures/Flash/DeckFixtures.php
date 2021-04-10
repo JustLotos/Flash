@@ -36,12 +36,15 @@ class DeckFixtures extends BaseFixture implements DependentFixtureInterface
 
     public function makeDeck(Learner $learner): Deck {
         $date = $this->faker->dateTimeBetween($startDate = '-3 years', $endDate = 'now', $timezone = null);
-        return new Deck(
+        $deck = new Deck(
             $learner,
             $this->faker->company,
             DateTimeImmutable::createFromMutable($date),
             $this->faker->sentence
         );
+
+        $learner->addDeck($deck);
+        return $deck;
     }
 
 
