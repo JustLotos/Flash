@@ -6,14 +6,15 @@ namespace App\Domain\Flash\Deck\Entity;
 
 use App\Domain\Flash\Card\Entity\Card;
 use App\Domain\Flash\Learner\Entity\Learner;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use DateTimeImmutable;
 use Doctrine\ORM\PersistentCollection;
 /**
- * @ORM\Table(name="flash_decks")
  * @ORM\Entity
+ * @ORM\Table(name="flash_decks")
  */
 class Deck
 {
@@ -83,6 +84,7 @@ class Deck
         $this->description = $description;
         $this->createdAt = $date;
         $this->updatedAt = $date;
+        $this->cards = new ArrayCollection();
     }
 
     public function update(string $name, DateTimeImmutable $updatedAt, string $description = ''): Deck

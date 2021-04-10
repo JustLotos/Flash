@@ -22,6 +22,7 @@ class Learner
     /**
      * @var Id
      * @ORM\Id
+     * @Serializer\Type(name="string")
      * @ORM\Column(type="flash_learner_id")
      * @Serializer\Groups({Learner::GROUP_SIMPLE})
      */
@@ -46,9 +47,7 @@ class Learner
      */
     private $decks;
 
-
     public const GROUP_SIMPLE   = 'GROUP_SIMPLE';
-    public const GROUP_SETTINGS = 'GROUP_SETTINGS';
     public const GROUP_DETAILS  = 'GROUP_DETAILS';
 
     private function __construct(Id $id)
