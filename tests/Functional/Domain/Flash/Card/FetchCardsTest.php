@@ -32,11 +32,7 @@ class FetchCardsTest extends AbstractTest
     public function testCGetDeckValid() : void
     {
         $this->makeRequestWithAuth();
-
-        var_dump($this->response);
-
         $this->assertResponseOk($this->response);
         $this->assertArrayHasKey('id', $this->content[0]);
-        $this->assertArrayHasKey('name', $this->content[0]);
     }
 }
