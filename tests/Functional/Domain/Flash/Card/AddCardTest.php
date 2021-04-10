@@ -9,30 +9,31 @@ use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Learner\Entity\Learner;
 use App\Domain\User\Entity\User;
 use App\Tests\AbstractTest;
+use Symfony\Component\HttpFoundation\Response;
 
-class FetchCardsTest extends AbstractTest
+class AddCardTest extends AbstractTest
 {
-    protected $method = 'GET';
+    protected $method = 'POST';
     protected $uri = '/flash/card/';
 
-    public function setUp() : void
+    protected function getFixtures() : array
+    {
+        return [CardFixtures::class];
+    }
+
+    protected function setUp() : void
     {
         parent::setUp();
         $user = self::getEntityManager()->getRepository(User::class)->findOneBy(['email' => self::USER_EMAIL]);
         $learner = self::getEntityManager()->getRepository(Learner::class)->findOneBy(['id' => $user->getId()->getValue()]);
         $deck = self::getEntityManager()->getRepository(Deck::class)->findOneBy(['learner' => $learner]);
-        $this->uri .= $deck->getId().'/';
+        $this->uri .= $deck->getId().'/add/';
     }
 
-    public function getFixtures() : array
-    {
-        return [CardFixtures::class];
-    }
-
-    public function testCGetDeckValid() : void
+    public function testAddCard() : void
     {
         $this->makeRequestWithAuth();
-        $this->assertResponseOk($this->response);
-        $this->assertArrayHasKey('id', $this->content[0]);
+        static::assertResponseCode(Response::HTTP_CREATED, $this->response);
+        static::assertArrayHasKey('id', $this->content);
     }
 }

@@ -221,7 +221,7 @@ abstract class AbstractTest extends WebTestCase
         $data = json_decode($client->getResponse()->getContent(), true);
 
         if(empty($data)) {
-            throw new \Exception('Auth client response empty!');
+            throw new \Exception('Auth client response empty!'."\n". $client->getResponse()->getContent());
         }
 
         $client = static::getClient();
