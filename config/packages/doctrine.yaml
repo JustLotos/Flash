@@ -43,3 +43,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Domain/Flash/Card/Entity'
                 prefix: 'App\Domain\Flash\Card\Entity'
                 alias: Card
+            Record:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Domain/Flash/Record/Entity'
+                prefix: 'App\Domain\Flash\Record\Entity'
+                alias: Record

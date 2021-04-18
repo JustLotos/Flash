@@ -6,6 +6,9 @@ namespace App\Domain\Flash\Card\Entity;
 
 use App\Domain\Flash\Card\Entity\Types\Id;
 use App\Domain\Flash\Deck\Entity\Deck;
+use App\Domain\Flash\Record\Entity\Record;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
@@ -44,6 +47,17 @@ class Card
      */
     private $deck;
 
+    /**
+     * @var PersistentCollection
+     * @ORM\OneToMany(
+     *     targetEntity="App\Domain\Flash\Record\Entity\Record",
+     *     mappedBy="card",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
+     * )
+     */
+    private $records;
+
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
@@ -76,5 +90,28 @@ class Card
     public function getUpdatedAt(): DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function getRecords(): Collection
+    {
+        return $this->records;
+    }
+
+    public function addRecord(Record $record): self
+    {
+        if(!$this->records->contains($record)){
+            $this->records->add($record);
+        }
+
+        return $this;
+    }
+
+    public function removeChild(Record $record): self
+    {
+        if($this->records->contains($record)){
+            $this->records->removeElement($record);
+        }
+
+        return $this;
     }
 }
