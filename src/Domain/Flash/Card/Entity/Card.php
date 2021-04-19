@@ -7,6 +7,7 @@ namespace App\Domain\Flash\Card\Entity;
 use App\Domain\Flash\Card\Entity\Types\Id;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Record\Entity\Record;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as Serializer;
@@ -31,12 +32,16 @@ class Card
     /**
      * @var DateTimeImmutable
      * @ORM\Column(type="datetime_immutable")
+     * @Serializer\Groups({Card::GROUP_ONE})
+     * @Serializer\Type(name="DateTimeImmutable")
      */
     private $createdAt;
 
     /**
      * @var DateTimeImmutable
      * @ORM\Column(type="datetime_immutable")
+     * @Serializer\Groups({Card::GROUP_ONE})
+     * @Serializer\Type(name="DateTimeImmutable")
      */
     private $updatedAt;
 
@@ -55,6 +60,8 @@ class Card
      *     orphanRemoval=true,
      *     cascade={"persist"}
      * )
+     * @Serializer\Groups({Card::GROUP_ONE})
+     * @Serializer\Type(name="App\Domain\Flash\Record\Entity\Record")
      */
     private $records;
 
@@ -70,6 +77,23 @@ class Card
         $this->id = $id;
         $this->createdAt = $date;
         $this->updatedAt = $date;
+        $this->records = new ArrayCollection();
+    }
+
+    public static function createWithRecords(
+        Deck $deck,
+        Id $id,
+        DateTimeImmutable $date,
+        array $records
+    ): self {
+        $card = new self($deck, $id, $date);
+        foreach ($records as $record) {
+            if ($record instanceof Record) {
+                $card->addRecord($record);
+                $record->setCard($card);
+            }
+        }
+        return  $card;
     }
 
     public function getId(): Id

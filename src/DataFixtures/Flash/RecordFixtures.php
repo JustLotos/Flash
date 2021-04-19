@@ -42,7 +42,7 @@ class RecordFixtures extends BaseFixture implements DependentFixtureInterface
     }
 
     public function makeRecord(Card $card): Record {
-        return new Record(
+        return Record::makeByCard(
             $card,
             $this->faker->text(300),
             new DateTimeImmutable()

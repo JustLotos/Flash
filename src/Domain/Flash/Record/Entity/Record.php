@@ -57,14 +57,26 @@ class Record
     public const GROUP_ONE = 'GROUP_ONE';
 
     public function __construct(
-        Card $card,
         string $value,
         DateTimeImmutable $date
     ) {
-        $this->card = $card;
         $this->value = $value;
         $this->createdAt = $date;
         $this->updatedAt = $date;
+    }
+
+    public static function makeByCard(
+        Card $card,
+        string $value,
+        DateTimeImmutable $date
+    ): Record {
+        $record = new self($value, $date);
+        $record->setCard($card);
+        return $record;
+    }
+
+    public function setCard(Card $card) {
+        $this->card = $card;
     }
 
     public function getId(): Id
