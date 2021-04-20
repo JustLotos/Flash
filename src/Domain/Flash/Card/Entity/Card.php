@@ -96,6 +96,14 @@ class Card
         return  $card;
     }
 
+    public function updateWithRecords(
+        DateTimeImmutable $date,
+        array $records
+    ): self {
+        $this->updatedAt = $date;
+        return $this;
+    }
+
     public function getId(): Id
     {
         return $this->id;

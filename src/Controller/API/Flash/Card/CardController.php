@@ -8,6 +8,8 @@ use App\Controller\ControllerHelper;
 use App\Domain\Flash\Card\Entity\Card;
 use App\Domain\Flash\Card\UseCase\AddCardWithRecords\Command as AddCardWithRecordsCommand;
 use App\Domain\Flash\Card\UseCase\AddCardWithRecords\Handler as AddCardWithRecordsHandler;
+use App\Domain\Flash\Card\UseCase\UpdateCardWithRecords\Command as UpdateCardWithRecordsCommand;
+use App\Domain\Flash\Card\UseCase\UpdateCardWithRecords\Handler as UpdateCardWithRecordsHandler;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Card\UseCase\AddCard\Handler as AddCardHandler;
 use App\Domain\Flash\Card\UseCase\DeleteCard\Handler as DeleteCardHandler;
@@ -62,6 +64,25 @@ class CardController extends AbstractController
         /** @var AddCardWithRecordsCommand $command */
         $command = $this->extractData($request, AddCardWithRecordsCommand::class);
         $card = $handler->handle($deck, $command);
+
+        return $this->response(
+            $this->serializer->serialize($card, [Card::GROUP_ONE, Record::GROUP_ONE]),
+            Response::HTTP_CREATED
+        );
+    }
+
+    /**
+     * @Route("/{id}/update/records/", name="updateCardWithRecords", methods={"PUT"})
+     * @param UpdateCardWithRecordsHandler $handler
+     * @param Card $card
+     * @param Request $request
+     * @return Response
+     */
+    public function updateCardWithRecords(UpdateCardWithRecordsHandler $handler, Card $card, Request $request): Response
+    {
+        /** @var UpdateCardWithRecordsCommand $command */
+        $command = $this->extractData($request, UpdateCardWithRecordsCommand::class);
+        $card = $handler->handle($card, $command);
         return $this->response(
             $this->serializer->serialize($card, [Card::GROUP_ONE, Record::GROUP_ONE]),
             Response::HTTP_CREATED
