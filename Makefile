@@ -9,7 +9,7 @@ up: docker-up v-dev
 down: docker-down
 
 update: docker-down docker-pull docker-build docker-up composer-update v-dev
-install: docker-pull docker-build docker-up composer-install lexik-jwt-install yarn-install first_install_db
+install: docker-pull docker-build docker-up composer-update-fix lexik-jwt-install yarn-install first_install_db
 first_install_db: create_db migdiff migrate fixtload create_db_test migrate_test fixtload_test
 
 install_db: create_db migrate fixtload
@@ -37,10 +37,13 @@ docker-build:
 #COMPOSER START
 composer-update:
 	@${COMPOSER} update
-composer-install:
+composer-update-fix:
 	@${PHP} sudo composer self-update --1
 	@${PHP} sudo php -d memory_limit=-1 /usr/local/bin/composer install
+	@${COMPOSER} update
+composer-install:
 	@${COMPOSER} install
+	
 #COMPOSER END
 
 #DATABASE
