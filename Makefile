@@ -39,7 +39,7 @@ composer-update:
 	@${COMPOSER} update
 composer-update-fix:
 	@${PHP} sudo composer self-update 1.10.12
-	@${PHP} sudo php -d memory_limit=-1 /usr/local/bin/composer install
+	@${PHP} sudo php -d memory_limit=-1 /usr/local/bin/composer install --no-scripts
 	@${COMPOSER} update --no-scripts
 composer-install:
 	@${COMPOSER} install
