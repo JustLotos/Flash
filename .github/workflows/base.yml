@@ -12,8 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Git clone files
+      uses: actions/checkout@v2
 
+    - name: Composer Install
+      run: composer install
+      
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
