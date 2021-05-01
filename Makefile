@@ -34,13 +34,14 @@ docker-build:
 	@${COMPOSE} build
 #DOCKER-COMPOSE
 
-#COMPOSER
+#COMPOSER START
 composer-update:
 	@${COMPOSER} update
 composer-install:
+	@${PHP} sudo composer self-update --1
+	@${PHP} sudo php -d memory_limit=-1 /usr/local/bin/composer install
 	@${COMPOSER} install
-	docker-compose exec php sudo composer self-update --1
-#COMPOSER
+#COMPOSER END
 
 #DATABASE
 	#DEV
