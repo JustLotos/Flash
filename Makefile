@@ -38,7 +38,7 @@ docker-build:
 composer-update:
 	@${COMPOSER} update
 composer-install:
-	@${PHP} sudo composer self-update --1
+	@${PHP} sudo composer self-update 1.10.12
 	@${PHP} sudo php -d memory_limit=-1 /usr/local/bin/composer install
 	@${COMPOSER} install
 #COMPOSER END
