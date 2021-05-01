@@ -81,6 +81,10 @@ fixtload_test:
 yarn-install:
 	@${COMPOSE} run --user root node mkdir -p /yarn
 	@${COMPOSE} run --user root node chmod -R 777 /yarn
+	@${COMPOSE} run --user root node mkdir -p /app/node_modules
+	@${COMPOSE} run --user root node chmod -R 777 /app/node_modules
+	@${COMPOSE} run --user root node touch yarn-error.log
+	@${COMPOSE} run --user root node chmod -R 777 /app/yarn-error.log
 	@${COMPOSE} run node yarn install
 	@${COMPOSE} run node yarn add @babel/compat-data
 	@${COMPOSE} run node yarn add @babel/preset-env
