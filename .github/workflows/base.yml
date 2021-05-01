@@ -15,8 +15,10 @@ jobs:
     - name: Git clone files
       uses: actions/checkout@v2
 
-    - name: Composer Install
-      run: composer install
+    - name: Run Makefile
+      env:
+          TOKEN: ${{ secrets.TOKEN }}
+      run: make all
       
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
