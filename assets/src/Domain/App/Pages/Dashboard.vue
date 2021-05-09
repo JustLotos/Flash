@@ -3,7 +3,7 @@
         <v-layout align-center justify-center>
           <div>
             <h1 class="text-center text--white">{{$t("welcome")}}</h1>
-            <p class="text-center text--white">Это главная вкладка приложения и скоро тут появятся виджеты</p>
+<!--            <p class="text-center text&#45;&#45;white">Это главная вкладка приложения и скоро тут появятся виджеты</p>-->
           </div>
         </v-layout>
     </v-container>

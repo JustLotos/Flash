@@ -1,5 +1,6 @@
 <template>
   <v-layout align-center justify-center>
+      <h1 class="text-center text--white">{{$t("welcome")}}</h1>
   </v-layout>
 </template>
 <script lang="ts">
@@ -9,6 +10,6 @@ import {UserModule} from "../../User/UserModule";
 
 @Component({})
 export default class MainPage extends Vue{
-    beforeRouteEnter (to, from, next) { UserModule.isAuthenticated ? next(AppModule.getRedirectToAuth) : next() }
+    beforeRouteEnter (to, from, next) {!UserModule.isAuthenticated ? next(AppModule.getRedirectToUnAuth) : next() }
 }
 </script>
