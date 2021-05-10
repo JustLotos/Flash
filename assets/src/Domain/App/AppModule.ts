@@ -1,11 +1,26 @@
-import { VuexModule, Module, Mutation, getModule } from 'vuex-module-decorators'
+import {VuexModule, Module, Mutation, getModule, Action} from 'vuex-module-decorators'
 import {Store} from "./Store";
 import {Application} from "./Entity/Application";
 import {RouteConfig} from "vue-router";
+import LoginRequest from "../User/Entity/API/Login/LoginRequest";
+import LoginResponse from "../User/Entity/API/Login/LoginResponse";
+import AuthService from "../User/UserService";
 
 @Module({dynamic: true, store: Store, name: 'AppModule' , namespaced: true})
 class VuexApplication extends VuexModule {
     private app: Application = new Application();
+    loadingFlag: boolean = false;
+
+    get isLoading(): boolean { return this.loadingFlag }
+
+    @Mutation
+    LOADING() { this.loadingFlag = true }
+    @Mutation
+    UNSET_LOADING() { this.loadingFlag = false }
+    @Action({ rawError: true })
+    public loading() { this.LOADING() }
+    @Action({ rawError: true })
+    public unsetLoading() { this.UNSET_LOADING() }
 
     get getApp(): Application {
         return this.app;

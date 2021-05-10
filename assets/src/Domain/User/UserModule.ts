@@ -106,7 +106,7 @@ class VuexUser extends VuexModule {
     }
 
     @Action({rawError: true})
-    public async changeEmail(payloads) {
+    public async changeEmail(payloads: any) {
         this.LOADING();
         const response = await AuthService.changeEmail(payloads);
         this.UNSET_LOADING();
@@ -114,7 +114,7 @@ class VuexUser extends VuexModule {
     }
 
     @Action({rawError: true})
-    public async changeEmailConfirm(payloads) {
+    public async changeEmailConfirm(payloads: any) {
         this.LOADING();
         const response = await AuthService.changeEmailConfirm(payloads);
         this.LOGIN(response.data);
@@ -123,7 +123,7 @@ class VuexUser extends VuexModule {
     }
 
     @Action({rawError: true})
-    public async changePassword(payloads) {
+    public async changePassword(payloads: any) {
         this.LOADING();
         const response = await AuthService.changePassword(payloads);
         // this.LOGIN(response.data);

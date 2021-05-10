@@ -7,9 +7,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import {AppModule} from "../../App/AppModule";
 import {UserModule} from "../../User/UserModule";
+import {DeckModule} from "../Deck/DeckModule";
 
 @Component({})
 export default class MainPage extends Vue{
-    beforeRouteEnter (to, from, next) {!UserModule.isAuthenticated ? next(AppModule.getRedirectToUnAuth) : next() }
+    beforeRouteEnter (to, from, next) {
+        !UserModule.isAuthenticated ? next(AppModule.getRedirectToUnAuth) : next()
+        DeckModule.fetchDecks();
+    }
 }
 </script>
