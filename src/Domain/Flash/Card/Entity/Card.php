@@ -7,6 +7,7 @@ namespace App\Domain\Flash\Card\Entity;
 use App\Domain\Flash\Card\Entity\Types\Id;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Record\Entity\Record;
+use App\Domain\Flash\Repeat\Entity\Repeat;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
@@ -65,6 +66,19 @@ class Card
      */
     private $records;
 
+    /**
+     * @var PersistentCollection
+     * @ORM\OneToMany(
+     *     targetEntity="App\Domain\Flash\Repeat\Entity\Repeat",
+     *     mappedBy="card",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
+     * )
+     * @Serializer\Groups({Card::GROUP_ONE})
+     * @Serializer\Type(name="App\Domain\Flash\Repeat\Entity\Repeat")
+     */
+    private $repeats;
+
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
@@ -78,6 +92,7 @@ class Card
         $this->createdAt = $date;
         $this->updatedAt = $date;
         $this->records = new ArrayCollection();
+        $this->repeats = new ArrayCollection();
     }
 
     public static function createWithRecords(
@@ -101,6 +116,18 @@ class Card
         array $records
     ): self {
         $this->updatedAt = $date;
+        return $this;
+    }
+
+    public function getRepeats(): Collection {
+        return $this->repeats;
+    }
+
+    public function addRepeat(Repeat $repeat) {
+        if(!$this->repeats->contains($repeat)){
+            $this->repeats->add($repeat);
+        }
+
         return $this;
     }
 
@@ -138,7 +165,7 @@ class Card
         return $this;
     }
 
-    public function removeChild(Record $record): self
+    public function removeRecord(Record $record): self
     {
         if($this->records->contains($record)){
             $this->records->removeElement($record);

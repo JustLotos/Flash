@@ -49,3 +49,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Domain/Flash/Record/Entity'
                 prefix: 'App\Domain\Flash\Record\Entity'
                 alias: Record
+            Repeat:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Domain/Flash/Repeat/Entity'
+                prefix: 'App\Domain\Flash\Repeat\Entity'
+                alias: Record

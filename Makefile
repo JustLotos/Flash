@@ -75,6 +75,8 @@ migrate_test:
 	@${CONSOLE} doctrine:migrations:migrate --env=test --no-interaction
 fixtload_test:
 	@${CONSOLE} doctrine:fixtures:load --env=test --no-interaction
+
+
 #DATABASE
 
 #FRONT
