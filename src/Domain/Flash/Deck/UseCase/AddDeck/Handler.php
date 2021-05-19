@@ -6,6 +6,7 @@ namespace App\Domain\Flash\Deck\UseCase\AddDeck;
 
 use App\Domain\Flash\Deck\DeckRepository;
 use App\Domain\Flash\Deck\Entity\Deck;
+use App\Domain\Flash\Deck\Entity\Types\Settings;
 use App\Domain\Flash\Learner\Entity\Learner;
 use App\Service\FlushService;
 use DateTimeImmutable;
@@ -29,6 +30,7 @@ class Handler
             $learner,
             $command->name,
             new DateTimeImmutable(),
+            new Settings(),
             $command->description
         );
 

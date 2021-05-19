@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Flash\Deck\Entity;
 
 use App\Domain\Flash\Card\Entity\Card;
+use App\Domain\Flash\Deck\Entity\Types\Settings;
 use App\Domain\Flash\Learner\Entity\Learner;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -49,6 +50,13 @@ class Deck
     private $createdAt;
 
     /**
+     * @var Settings
+     * @ORM\Embedded(class="App\Domain\Flash\Deck\Entity\Types\Settings", columnPrefix="settings_")
+     * @Serializer\Groups({Deck::GROUP_ONE})
+     */
+    private $settings;
+
+    /**
      * @var DateTimeImmutable
      * @ORM\Column(type="datetime_immutable")
      * @Serializer\Groups({Deck::GROUP_LIST, Deck::GROUP_ONE})
@@ -77,7 +85,7 @@ class Deck
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
-    public function __construct(Learner $learner, string $name, DateTimeImmutable $date, string $description = '')
+    public function __construct(Learner $learner, string $name, DateTimeImmutable $date, Settings $settings, string $description = '')
     {
         $this->learner = $learner;
         $this->name = $name;
@@ -85,6 +93,7 @@ class Deck
         $this->createdAt = $date;
         $this->updatedAt = $date;
         $this->cards = new ArrayCollection();
+        $this->settings = $settings;
     }
 
     public function update(string $name, DateTimeImmutable $updatedAt, string $description = ''): Deck
@@ -119,6 +128,12 @@ class Deck
     {
         return $this->createdAt;
     }
+
+    public function getSettings(): Settings
+    {
+        return $this->settings;
+    }
+
     public function getCards(): Collection
     {
         return $this->cards;

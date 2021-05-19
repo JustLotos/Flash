@@ -6,6 +6,7 @@ namespace App\DataFixtures\Flash;
 
 use App\DataFixtures\User\UserFixtures;
 use App\Domain\Flash\Deck\Entity\Deck;
+use App\Domain\Flash\Deck\Entity\Types\Settings;
 use App\Domain\Flash\Learner\Entity\Learner;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -36,10 +37,12 @@ class DeckFixtures extends BaseFixture implements DependentFixtureInterface
 
     public function makeDeck(Learner $learner): Deck {
         $date = $this->faker->dateTimeBetween($startDate = '-3 years', $endDate = 'now', $timezone = null);
+
         $deck = new Deck(
             $learner,
             $this->faker->company,
             DateTimeImmutable::createFromMutable($date),
+            new Settings(),
             $this->faker->sentence
         );
 
