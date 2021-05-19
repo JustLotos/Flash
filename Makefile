@@ -10,7 +10,7 @@ down: docker-down
 
 update: docker-down docker-pull docker-build docker-up composer-update v-dev
 install: docker-pull docker-build docker-up composer-update-fix lexik-jwt-install first_install_db
-first_install_db: create_db migdiff migrate fixtload create_db_test migrate_test fixtload_test
+first_install_db: create_db  migrate fixtload create_db_test migrate_test fixtload_test
 
 install_db: create_db migrate fixtload
 reset_db: drop_db create_db migrate migrate fixtload
