@@ -44,7 +44,15 @@ class Repeat
     /**
      * @var int
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({Repeat::GROUP_ONE})
      * @Serializer\Type(name="integer")
+     */
+    private $time;
+
+    /**
+     * @var float
+     * @ORM\Column(type="float")
+     * @Serializer\Type(name="float")
      * @Serializer\Groups({Repeat::GROUP_LIST, Repeat::GROUP_ONE})
      */
     private $ratingScore;
@@ -56,19 +64,14 @@ class Repeat
      */
     private $card;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $state;
-
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
-    public function __construct(Card $card, DateTimeImmutable $date, int $ratingScore) {
+    public function __construct(Card $card, DateTimeImmutable $date, float $ratingScore, int $time) {
         $this->card = $card;
         $this->createdAt = $date;
         $this->updatedAt = $date;
+        $this->time = $time;
         $this->ratingScore = $ratingScore;
     }
 
@@ -90,6 +93,11 @@ class Repeat
     public function getUpdatedAt(): DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function getRatingScore(): float
+    {
+        return $this->ratingScore;
     }
 
 }

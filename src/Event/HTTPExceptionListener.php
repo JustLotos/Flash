@@ -26,7 +26,8 @@ class HTTPExceptionListener
         $error = $event->getThrowable();
         $this->logger->critical($error->getMessage());
         $response = false;
-
+        var_dump($error->getMessage());
+        die();
         switch (get_class($error)) {
             case ApplicationException::class:
                 /** @var ApplicationException $error */

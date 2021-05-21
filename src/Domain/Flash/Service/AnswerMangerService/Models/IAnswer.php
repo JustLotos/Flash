@@ -10,7 +10,7 @@ use DateTimeImmutable;
 interface IAnswer
 {
     public function getEstimateAnswer(): float;
-    public function getTime(): DateInterval;
+    public function getTime(): int;
     public function getDate(): DateTimeImmutable;
     public function isSuccess(): bool;
     public function isFailure(): bool;

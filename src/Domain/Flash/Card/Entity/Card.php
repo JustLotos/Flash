@@ -79,6 +79,14 @@ class Card
      */
     private $repeats;
 
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     * @Serializer\Groups({Card::GROUP_ONE})
+     * @Serializer\Type(name="string")
+     */
+    private $state;
+
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
@@ -91,6 +99,7 @@ class Card
         $this->id = $id;
         $this->createdAt = $date;
         $this->updatedAt = $date;
+        $this->state = 'new';
         $this->records = new ArrayCollection();
         $this->repeats = new ArrayCollection();
     }
@@ -172,5 +181,10 @@ class Card
         }
 
         return $this;
+    }
+
+
+    public function isNew(): bool {
+        return (bool)$this->state;
     }
 }

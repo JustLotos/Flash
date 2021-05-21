@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Flash\Service\AnswerMangerService;
 
+use App\Domain\Flash\Card\Entity\Card;
 use App\Domain\Flash\Service\AnswerMangerService\Models\IAnswer;
 use App\Domain\Flash\Service\AnswerMangerService\Models\IRepeat;
 use App\Domain\Flash\Service\AnswerMangerService\Models\ISettings;
@@ -21,38 +22,40 @@ class AnswerManagerService
     }
 
     /**
+     * @param Card $card
      * @param IRepeat $repeat
      * @param ISettings $settings
      * @param IAnswer $answer
      * @return DateInterval
      * @throws Exception
      */
-    public function getRepeatInterval(IRepeat $repeat, ISettings $settings, IAnswer $answer): DateInterval
+    public function getCurrentInterval(Card $card, ISettings $settings, IAnswer $answer): DateInterval
     {
-        if ($repeat->isNew()) {
+        if ($card->isNew()) {
             return $settings->getBaseInterval();
-        } elseif ($repeat->isStudied()) {
-            $previewRepeatInterval = $this->converter->toSeconds($repeat->getRepeatInterval());
-            $averageTimeIndex = $this->getAverageIndex(
-                $repeat->getTotalTime(),
-                $repeat->getCount(),
-                $answer->getTime()
-            );
-            $simpleIndex = $previewRepeatInterval * $answer->getEstimateAnswer();
-            $complexIndex = $simpleIndex  * $averageTimeIndex;
-            return  $this->makeInterval($complexIndex, $settings);
-        } else {
-            $previewRepeatInterval = $this->converter->toSeconds($repeat->getRepeatInterval());
-            $simpleIndex = $previewRepeatInterval * $answer->getEstimateAnswer();
-            $countRepeatIndex = $repeat->getSuccessCount() / $repeat->getCount();
-            $averageTimeIndex = $this->getAverageIndex(
-                $repeat->getTotalTime(),
-                $repeat->getCount(),
-                $answer->getTime()
-            );
-            $complexIndex = $simpleIndex * $countRepeatIndex / $averageTimeIndex;
-            return  $this->makeInterval($complexIndex, $settings);
         }
+//        elseif ($repeat->isStudied()) {
+//            $previewRepeatInterval = $this->converter->toSeconds($repeat->getRepeatInterval());
+//            $averageTimeIndex = $this->getAverageIndex(
+//                $repeat->getTotalTime(),
+//                $repeat->getCount(),
+//                $answer->getTime()
+//            );
+//            $simpleIndex = $previewRepeatInterval * $answer->getEstimateAnswer();
+//            $complexIndex = $simpleIndex  * $averageTimeIndex;
+//            return  $this->makeInterval($complexIndex, $settings);
+//        } else {
+//            $previewRepeatInterval = $this->converter->toSeconds($repeat->getRepeatInterval());
+//            $simpleIndex = $previewRepeatInterval * $answer->getEstimateAnswer();
+//            $countRepeatIndex = $repeat->getSuccessCount() / $repeat->getCount();
+//            $averageTimeIndex = $this->getAverageIndex(
+//                $repeat->getTotalTime(),
+//                $repeat->getCount(),
+//                $answer->getTime()
+//            );
+//            $complexIndex = $simpleIndex * $countRepeatIndex / $averageTimeIndex;
+//            return  $this->makeInterval($complexIndex, $settings);
+//        }
     }
 
     /**

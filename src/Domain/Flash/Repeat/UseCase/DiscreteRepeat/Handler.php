@@ -6,9 +6,12 @@ namespace App\Domain\Flash\Repeat\UseCase\DiscreteRepeat;
 
 use App\Domain\Flash\Card\CardRepository;
 use App\Domain\Flash\Card\Entity\Card;
+use App\Domain\Flash\Deck\Entity\Types\Settings;
+use App\Domain\Flash\Repeat\Entity\Repeat;
 use App\Domain\Flash\Service\AnswerMangerService\AnswerManagerService;
 use App\Service\FlushService;
 use App\Service\ValidateService;
+use DateTimeImmutable;
 
 class Handler
 {
@@ -34,18 +37,13 @@ class Handler
         $this->validator->validate($command);
 
         $answer = new DiscreteAnswer(
-            $command->date,
+            new DateTimeImmutable($command->date),
             $command->time,
             $command->status
         );
+        $repeat = new Repeat($card, new DateTimeImmutable(), $answer->getEstimateAnswer(), $command->time);
 
-        $interval = $this->manger->getRepeatInterval(
-            $card->getRepeats()[0],
-            $card->getDeck()->getSettings(),
-            $answer
-        );
-
-        $card->getRepeats()[0]->update($answer, $interval);
+        $card->getRepeats()->add($repeat);
 
         $this->flusher->flush();
 

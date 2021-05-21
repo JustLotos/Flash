@@ -37,4 +37,14 @@ class GetCardTest extends AbstractTest
         self::assertResponseOk($this->response);
         self::assertArrayHasKey('id', $this->content);
     }
+
+    public function testGetCardRepeatInfoValid() : void
+    {
+        $this->uri .= 'repeatInfo/';
+        $this->makeRequestWithAuth();
+
+        self::assertResponseOk($this->response);
+        self::assertArrayHasKey('repeatCount', $this->content);
+        self::assertArrayHasKey('averageScore1', $this->content);
+    }
 }

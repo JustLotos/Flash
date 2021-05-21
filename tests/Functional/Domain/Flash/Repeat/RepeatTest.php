@@ -12,10 +12,10 @@ use App\Domain\User\Entity\User;
 use App\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 
-class UpdateCardWithRecordsTest extends AbstractTest
+class AddCardTest extends AbstractTest
 {
-    protected $method = 'PUT';
-    protected $uri = '/flash/card/';
+    protected $method = 'POST';
+    protected $uri = '/flash/repeat/';
 
     protected function getFixtures() : array
     {
@@ -29,19 +29,17 @@ class UpdateCardWithRecordsTest extends AbstractTest
         $learner = self::getEntityManager()->getRepository(Learner::class)->findOneBy(['id' => $user->getId()->getValue()]);
         $deck = self::getEntityManager()->getRepository(Deck::class)->findOneBy(['learner' => $learner]);
         $card = self::getEntityManager()->getRepository(Card::class)->findOneBy(['deck' => $deck]);
-        $this->uri .= $card->getId().'/update/records/';
+        $this->uri .= $card->getId().'/discrete/';
     }
 
-    public function testAddCard() : void
+    public function testRepeatCard() : void
     {
-        $this->makeRequestWithAuth(["records" => ["value1", "value2"]]);
+        $this->makeRequestWithAuth([
+            'date' => '2011-01-01',
+            'time' => 120,
+            'status' => 'KNOW'
+        ]);
 
-        static::assertResponseCode(Response::HTTP_CREATED, $this->response);
-        static::assertArrayHasKey('id', $this->content);
-        static::assertArrayHasKey('records', $this->content);
-        if(count($this->content['records'])>1) {
-            static::assertEquals('value1', $this->content['records'][0]['value']);
-            static::assertEquals('value2', $this->content['records'][1]['value']);
-        }
+        self::assertResponseOk($this->response);
     }
 }

@@ -12,16 +12,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Command
 {
     /**
-     * @var DateTimeImmutable
+     * @var string
      * @Assert\NotBlank()
-     * @Serializer\Type(name="DateTimeImmutable")
+     * @Serializer\Type(name="string")
      */
     public $date;
 
     /**
-     * @var DateInterval
+     * @var int
      * @Assert\NotBlank()
-     * @Serializer\Type(name="DateInterval")
+     * @Serializer\Type(name="int")
      */
     public $time;
 

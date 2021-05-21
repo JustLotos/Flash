@@ -23,9 +23,6 @@ class Handler
 
     public function handle(Card $card, Command $command): Card
     {
-        var_dump($card->getId());
-        var_dump($card->getRecords()->toArray()); die();
-
         $updatedCard = $card->updateWithRecords(new DateTimeImmutable(), $command->getRecords());
         $this->flusher->flush();
         return $updatedCard;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\API\Flash;
+namespace App\Controller\API\Flash\Repeat;
 
 use App\Controller\ControllerHelper;
 use App\Domain\Flash\Card\Entity\Card;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/** @Route(value="api/repeat", name="repeat_") */
+/** @Route(value="api/flash/repeat", name="repeat_") */
 class RepeatController extends AbstractController
 {
     use ControllerHelper;

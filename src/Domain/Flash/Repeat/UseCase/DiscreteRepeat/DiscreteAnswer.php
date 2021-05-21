@@ -33,7 +33,7 @@ class DiscreteAnswer implements IAnswer
     public const REMEMBER = 'REMEMBER';
     public const KNOW = 'KNOW';
 
-    public function __construct(DateTimeImmutable $date, DateInterval $time, string $status)
+    public function __construct(DateTimeImmutable $date, int $time, string $status)
     {
         if (!in_array($status, self::getStates())) {
             throw new DomainException('Invalid state value value this should be one of: '. implode(', ', static::getStates()));
@@ -80,7 +80,7 @@ class DiscreteAnswer implements IAnswer
         return [self::FORGOT, self::RECOGNIZE];
     }
 
-    public function getTime(): DateInterval
+    public function getTime(): int
     {
         return $this->time;
     }
