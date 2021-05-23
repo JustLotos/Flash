@@ -15,13 +15,6 @@ use Exception;
 
 class AnswerManagerService
 {
-    private $converter;
-
-    public function __construct(DateIntervalConverter $converter)
-    {
-        $this->converter = $converter;
-    }
-
     public function getCurrentInterval(Card $card, IAnswer $answer): int
     {
         $settings = $card->getDeck()->getSettings();
@@ -34,34 +27,20 @@ class AnswerManagerService
             $answer->getTime()
         );
         $complexIndex = $simpleIndex / $averageTimeIndex;
-        return  $this->makeInterval($complexIndex, $settings);
-
-
-//        if ($card->isNew()) {
-//            return $settings->getBaseInterval();
-//        }
-//        elseif ($card->isStudied()) {
-//            $previewRepeatInterval = $this->converter->toSeconds($card->getInterval());
-//            $totalTime = 0;
-//
-//            /** @var Repeat $repeat */
-//            foreach ($card->getRepeats() as $repeat) {
-//                $totalTime += $repeat->getTime();
-//            }
-//
-//
-//            $averageTimeIndex = $this->getAverageIndex(
-//                $totalTime,
-//                $repeat->getCount(),
-//                $answer->getTime()
-//            );
-//            $simpleIndex = $previewRepeatInterval * $answer->getEstimateAnswer();
-//            $complexIndex = $simpleIndex  * $averageTimeIndex;
-//            return  $this->makeInterval($complexIndex, $settings);
-//        } else {
-//
-//        }
+        return $this->makeInterval($complexIndex, $settings);
     }
+
+    public function getCurrentIntervalByRepeat(Card $card): int
+    {
+        $interval = $card->getInterval();
+        /** @var Repeat $repeat */
+        foreach ($card->getRepeats() as $repeat) {
+           $interval += $interval * $repeat->getRatingScore();
+        }
+
+        return (int)$interval;
+    }
+
 
     private function getTotalTime(array $repeats): int
     {
@@ -74,7 +53,6 @@ class AnswerManagerService
 
         return  $totalTime;
     }
-
 
     /**
      * @param int $totalTime

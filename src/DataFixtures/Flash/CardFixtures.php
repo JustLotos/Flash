@@ -10,6 +10,7 @@ use App\Domain\Flash\Card\Entity\Types\Id;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Repeat\Entity\Repeat;
 use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\DiscreteAnswer;
+use App\Domain\Flash\Service\AnswerMangerService\AnswerManagerService;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -27,7 +28,9 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
             $deck = $this->getRandomReference(DeckFixtures::ADMINS_ID);
             /** @var Card $card */
             $card = $this->addRepeats($this->makeCard($deck));
-            $card->setInterval($deck->getSettings()->getBaseInterval());
+            $manager = new AnswerManagerService();
+            $interval = $manager->getCurrentIntervalByRepeat($card);
+            $card->setInterval($interval);
             return $card;
         });
 
@@ -42,10 +45,13 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
 
     public function addRepeats(Card $card): Card {
         for($i = 0; $i <10; $i++) {
+
+            $state = DiscreteAnswer::getStates();
+
             $answer = new DiscreteAnswer(
                 new DateTimeImmutable(),
                 60,
-                DiscreteAnswer::KNOW
+                $state[$this->faker->randomNumber(1) % 4]
             );
             $repeat = new Repeat($card, new DateTimeImmutable(), $answer->getEstimateAnswer(), 60 );
             $card->addRepeat($repeat);
@@ -57,6 +63,7 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
         return new Card(
             $deck,
             Id::next(),
+            $deck->getSettings()->getBaseInterval(),
             new DateTimeImmutable()
         );
     }

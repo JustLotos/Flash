@@ -101,6 +101,7 @@ class Card
     public function __construct(
         Deck $deck,
         Id $id,
+        int $interval,
         DateTimeImmutable $date
     ) {
         $this->deck = $deck;
@@ -110,6 +111,7 @@ class Card
         $this->state = 'new';
         $this->records = new ArrayCollection();
         $this->repeats = new ArrayCollection();
+        $this->interval = $interval;
     }
 
     public static function createWithRecords(
@@ -118,7 +120,8 @@ class Card
         DateTimeImmutable $date,
         array $records
     ): self {
-        $card = new self($deck, $id, $date);
+        $interval = $deck->getSettings()->getBaseInterval();
+        $card = new self($deck, $id, $interval, $date);
         foreach ($records as $record) {
             if ($record instanceof Record) {
                 $card->addRecord($record);
