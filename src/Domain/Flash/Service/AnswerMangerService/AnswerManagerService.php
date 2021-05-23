@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Flash\Service\AnswerMangerService;
 
 use App\Domain\Flash\Card\Entity\Card;
+use App\Domain\Flash\Repeat\Entity\Repeat;
 use App\Domain\Flash\Service\AnswerMangerService\Models\IAnswer;
 use App\Domain\Flash\Service\AnswerMangerService\Models\IRepeat;
 use App\Domain\Flash\Service\AnswerMangerService\Models\ISettings;
@@ -21,23 +22,36 @@ class AnswerManagerService
         $this->converter = $converter;
     }
 
-    /**
-     * @param Card $card
-     * @param IRepeat $repeat
-     * @param ISettings $settings
-     * @param IAnswer $answer
-     * @return DateInterval
-     * @throws Exception
-     */
-    public function getCurrentInterval(Card $card, ISettings $settings, IAnswer $answer): DateInterval
+    public function getCurrentInterval(Card $card, IAnswer $answer): int
     {
-        if ($card->isNew()) {
-            return $settings->getBaseInterval();
-        }
-//        elseif ($repeat->isStudied()) {
-//            $previewRepeatInterval = $this->converter->toSeconds($repeat->getRepeatInterval());
+        $settings = $card->getDeck()->getSettings();
+
+        $previewRepeatInterval = $card->getInterval();
+        $simpleIndex = $previewRepeatInterval * $answer->getEstimateAnswer();
+        $averageTimeIndex = $this->getAverageIndex(
+            $this->getTotalTime($card->getRepeats()->toArray()),
+            $card->getRepeats()->count(),
+            $answer->getTime()
+        );
+        $complexIndex = $simpleIndex / $averageTimeIndex;
+        return  $this->makeInterval($complexIndex, $settings);
+
+
+//        if ($card->isNew()) {
+//            return $settings->getBaseInterval();
+//        }
+//        elseif ($card->isStudied()) {
+//            $previewRepeatInterval = $this->converter->toSeconds($card->getInterval());
+//            $totalTime = 0;
+//
+//            /** @var Repeat $repeat */
+//            foreach ($card->getRepeats() as $repeat) {
+//                $totalTime += $repeat->getTime();
+//            }
+//
+//
 //            $averageTimeIndex = $this->getAverageIndex(
-//                $repeat->getTotalTime(),
+//                $totalTime,
 //                $repeat->getCount(),
 //                $answer->getTime()
 //            );
@@ -45,46 +59,46 @@ class AnswerManagerService
 //            $complexIndex = $simpleIndex  * $averageTimeIndex;
 //            return  $this->makeInterval($complexIndex, $settings);
 //        } else {
-//            $previewRepeatInterval = $this->converter->toSeconds($repeat->getRepeatInterval());
-//            $simpleIndex = $previewRepeatInterval * $answer->getEstimateAnswer();
-//            $countRepeatIndex = $repeat->getSuccessCount() / $repeat->getCount();
-//            $averageTimeIndex = $this->getAverageIndex(
-//                $repeat->getTotalTime(),
-//                $repeat->getCount(),
-//                $answer->getTime()
-//            );
-//            $complexIndex = $simpleIndex * $countRepeatIndex / $averageTimeIndex;
-//            return  $this->makeInterval($complexIndex, $settings);
+//
 //        }
     }
 
-    /**
-     * @param DateInterval $totalTime
-     * @param int $countRepeat
-     * @param DateInterval $currentTime
-     * @return float|int
-     * @throws Exception
-     */
-    private function getAverageIndex(DateInterval $totalTime, int $countRepeat, DateInterval $currentTime)
+    private function getTotalTime(array $repeats): int
     {
-        $totalTimeSec = $this->converter->toSeconds($totalTime);
-        $currentTimeSec = $this->converter->toSeconds($currentTime);
-        $averageTimeSec = $totalTimeSec / $countRepeat;
-        return $currentTimeSec / $averageTimeSec;
+        $totalTime = 0;
+
+        /** @var Repeat $repeat */
+        foreach ($repeats as $repeat) {
+            $totalTime += $repeat->getTime();
+        }
+
+        return  $totalTime;
+    }
+
+
+    /**
+     * @param int $totalTime
+     * @param int $countRepeat
+     * @param int $currentTime
+     * @return float|int
+     */
+    private function getAverageIndex(int $totalTime, int $countRepeat, int $currentTime)
+    {
+        $averageTimeSec = $totalTime / $countRepeat;
+        return $currentTime / $averageTimeSec;
     }
 
     /**
      * @param float $complexIndex
      * @param ISettings $settings
-     * @return DateInterval
-     * @throws Exception
+     * @return int
      */
-    private function makeInterval(float $complexIndex, ISettings $settings): DateInterval
+    private function makeInterval(float $complexIndex, ISettings $settings): int
     {
-        $minTimeSec = $this->converter->toSeconds($settings->getMinTimeRepeat());
+        $minTimeSec = $settings->getMinTimeRepeat();
         if ($complexIndex < $minTimeSec) {
             $complexIndex = $minTimeSec;
         }
-        return DateInterval::createFromDateString(((int)$complexIndex).' seconds');
+        return $complexIndex;
     }
 }

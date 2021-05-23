@@ -36,18 +36,21 @@ class Handler
     {
         $this->validator->validate($command);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $date = new DateTimeImmutable($command->date);
         $answer = new DiscreteAnswer($date, $command->time, $command->status);
-        $repeat = new Repeat(
-            $card,
-            $answer->getDate(),
-            $answer->getEstimateAnswer(),
-            $command->time
-        );
 
+        $estimateAnswer = $answer->getEstimateAnswer();
+
+        $repeat = new Repeat($card, $answer->getDate(), $estimateAnswer, $command->time);
+
+        $interval = $this->manger->getCurrentInterval($card, $answer);
+
+        $card->setInterval($interval);
         $card->getRepeats()->add($repeat);
 
         $this->flusher->flush();
+
         return $card;
     }
 }

@@ -57,7 +57,7 @@ yarn-error.log
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
-phpunit-8.3-0
+/phpunit-8.3-0
 ###< phpunit/phpunit ###
 
-.idea
+/.idea

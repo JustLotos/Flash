@@ -8,7 +8,7 @@ use DateInterval;
 
 interface ISettings
 {
-    public function getBaseInterval() : DateInterval;
+    public function getBaseInterval() : int;
     public function getDifficultyIndex() : float;
-    public function getMinTimeRepeat() : DateInterval;
+    public function getMinTimeRepeat() : int;
 }

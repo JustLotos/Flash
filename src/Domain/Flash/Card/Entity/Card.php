@@ -8,6 +8,7 @@ use App\Domain\Flash\Card\Entity\Types\Id;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Record\Entity\Record;
 use App\Domain\Flash\Repeat\Entity\Repeat;
+use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
@@ -87,6 +88,13 @@ class Card
      */
     private $state;
 
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     * @Serializer\Groups({Card::GROUP_ONE})
+     */
+    private $interval;
+
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
@@ -120,10 +128,8 @@ class Card
         return  $card;
     }
 
-    public function updateWithRecords(
-        DateTimeImmutable $date,
-        array $records
-    ): self {
+    public function updateWithRecords(DateTimeImmutable $date, array $records): self
+    {
         $this->updatedAt = $date;
         return $this;
     }
@@ -138,6 +144,14 @@ class Card
         }
 
         return $this;
+    }
+
+    public function getInterval(): int {
+        return $this->interval;
+    }
+
+    public function setInterval(int $interval): void {
+        $this->interval = $interval;
     }
 
     public function getId(): Id
@@ -181,10 +195,5 @@ class Card
         }
 
         return $this;
-    }
-
-
-    public function isNew(): bool {
-        return (bool)$this->state;
     }
 }

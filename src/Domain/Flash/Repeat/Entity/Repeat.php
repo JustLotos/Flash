@@ -100,4 +100,8 @@ class Repeat
         return $this->ratingScore;
     }
 
+    public function getTime(): int
+    {
+        return  $this->time;
+    }
 }

@@ -6,7 +6,6 @@ namespace App\Domain\Flash\Deck\Entity\Types;
 
 use App\Domain\Flash\Service\AnswerMangerService\Models\ISettings;
 use Doctrine\ORM\Mapping as ORM;
-use DateInterval;
 use JMS\Serializer\Annotation as Serializer;
 
 /** @ORM\Embeddable */
@@ -34,15 +33,15 @@ class Settings implements ISettings
     private $difficultyIndex;
 
     /**
-     * @var DateInterval
-     * @ORM\Column(type="dateinterval")
+     * @var int
+     * @ORM\Column(type="integer")
      * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
      */
-    private $startTimeInterval;
+    private $baseTimeInterval;
 
     /**
-     * @var DateInterval
-     * @ORM\Column(type="dateinterval")
+     * @var int
+     * @ORM\Column(type="integer")
      * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
      */
     private $minTimeInterval;
@@ -53,27 +52,22 @@ class Settings implements ISettings
     public const DEFAULT_DIFFICULTY_INDEX = 1;
 
     public function __construct(
-        int $startTimeInterval = 3600,
+        int $baseTimeInterval = 3600,
         int $minTimeInterval = 60,
         int $limitRepeat = self::DEFAULT_LIMIT_REPEAT,
         int $limitLearning = self::DEFAULT_LIMIT_LEARNING,
         float $difficultyIndex = self::DEFAULT_DIFFICULTY_INDEX
     ) {
-        $this->startTimeInterval =  DateInterval::createFromDateString($startTimeInterval.' seconds');
-        $this->minTimeInterval = DateInterval::createFromDateString($minTimeInterval.' seconds');
+        $this->baseTimeInterval =  $baseTimeInterval;
+        $this->minTimeInterval = $minTimeInterval;
         $this->limitRepeat = $limitRepeat;
         $this->limitLearning = $limitLearning;
         $this->difficultyIndex = $difficultyIndex;
     }
 
-    public function getMinTimeRepeat(): DateInterval
+    public function getMinTimeRepeat(): int
     {
         return $this->minTimeInterval;
-    }
-
-    public function getStartTimeInterval() : DateInterval
-    {
-        return $this->startTimeInterval;
     }
 
     public function getLimitRepeat() : int
@@ -90,8 +84,8 @@ class Settings implements ISettings
         return $this->difficultyIndex;
     }
 
-    public function getBaseInterval(): DateInterval
+    public function getBaseInterval(): int
     {
-        return $this->minTimeInterval;
+        return $this->baseTimeInterval;
     }
 }
