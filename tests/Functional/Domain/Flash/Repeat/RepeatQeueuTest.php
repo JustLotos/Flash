@@ -12,10 +12,12 @@ use App\Domain\User\Entity\User;
 use App\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 
-class RepeatTest extends AbstractTest
+class RepeatQeueuTest extends AbstractTest
 {
-    protected $method = 'POST';
-    protected $uri = '/flash/repeat/';
+    protected $method = 'GET';
+    protected $uri = '/flash/repeat/queue/';
+    /** @var Card */
+    protected $card = '';
 
     protected function getFixtures() : array
     {
@@ -29,17 +31,17 @@ class RepeatTest extends AbstractTest
         $learner = self::getEntityManager()->getRepository(Learner::class)->findOneBy(['id' => $user->getId()->getValue()]);
         $deck = self::getEntityManager()->getRepository(Deck::class)->findOneBy(['learner' => $learner]);
         $card = self::getEntityManager()->getRepository(Card::class)->findOneBy(['deck' => $deck]);
-        $this->uri .= $card->getId().'/discrete/';
+//        $this->uri .= $card->getId().'/discrete/';
+        $this->card = $card;
     }
 
     public function testRepeatCard() : void
     {
         $this->makeRequestWithAuth([
-            'date' => '2011-01-01',
-            'time' => 120,
-            'status' => 'KNOW'
+            'cardId' => $this->card->getId()->getValue()
         ]);
 
+        var_dump($this->content);
         self::assertResponseOk($this->response);
     }
 }

@@ -9,6 +9,8 @@ use App\Domain\Flash\Card\Entity\Card;
 use App\Domain\Flash\Repeat\Entity\Repeat;
 use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Command;
 use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Handler;
+use App\Domain\Flash\Repeat\UseCase\GetReadyQueue\Handler as GetReadyQueueHandler;
+use App\Domain\Flash\Repeat\UseCase\GetReadyQueue\Command as GetReadyQueueCommand;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,29 +40,18 @@ class RepeatController extends AbstractController
     }
 
     /**
-     * @Route("queue/", name="readyQueueRepeat", methods={"GET"})
+     * @Route("/queue/", name="readyQueueRepeat", methods={"GET"})
      * @param Request $request
-     * @param Handler $handler
+     * @param GetReadyQueueHandler $handler
      * @return Response
      */
-    public function getReadyForRepeatAction(Request $request, Handler $handler): Response
+    public function getReadyForRepeatAction(Request $request, GetReadyQueueHandler $handler): Response
     {
-        $command = $this->serializer->deserialize($request, Command::class);
-    }
-
-
-    /**
-     * @Route("/{id}/delete", name="deleteRepeat", methods={"POST"})
-     * @param Request $request
-     * @param Repeat $card
-     * @param Handler $handler
-     * @return Response
-     */
-    public function deleteRepeatAction(Request $request, Repeat $card, Handler $handler): Response
-    {
-//        /** @var Command $command */
-//        $command = $this->serializer->deserialize($request, Command::class);
-//        $handler->handle($card, $command);
-        return $this->response($this->getSimpleSuccessResponse());
+        $command = $this->serializer->deserialize($request, GetReadyQueueCommand::class);
+        /** @var Card $card */
+        $card = $handler->handle($command);
+        return $this->response(
+            $this->serializer->serialize($card, Card::GROUP_ONE)
+        );
     }
 }

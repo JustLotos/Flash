@@ -34,5 +34,12 @@ class Handler
 
     public function handle(Command $command): Card
     {
+        /** @var Card $card */
+        $card = $this->repository->findOneBy(['id' => $command->getCardId()]);
+
+
+//        $card =
+
+        return $card;
     }
 }

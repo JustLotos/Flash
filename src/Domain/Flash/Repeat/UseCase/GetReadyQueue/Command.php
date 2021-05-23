@@ -23,4 +23,20 @@ class Command
      * @Serializer\Type(name="string")
      */
     private $deckId;
+
+    /**
+     * @var string
+     * @ExistEntity(
+     *     class="App\Domain\Flash\Card\Entity\Card",
+     *     attribute="id",
+     *     message="Карты с такми id не существует"
+     * )
+     * @Serializer\Type(name="string")
+     */
+    private $cardId;
+
+    public function getCardId():string
+    {
+        return $this->cardId;
+    }
 }
