@@ -45,15 +45,10 @@ class Handler
 
         $date = new DateTimeImmutable($command->date);
         $answer = new DiscreteAnswer($date, $command->time, $command->status);
-        $repeat = new Repeat(
-            $card,
-            $answer->getDate(),
-            $answer->getEstimateAnswer(),
-            $command->time
-        );
-
+        $repeat = new Repeat($card, $answer->getDate(), $answer->getEstimateAnswer(), $command->time);
+        $newInterval = $this->manger->getNewInterval($card, $answer);
+        $card->setCurrentRepeatInterval($newInterval);
         $card->getRepeats()->add($repeat);
-
         $this->flusher->flush();
         return $card;
     }

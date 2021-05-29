@@ -8,7 +8,17 @@ use DateInterval;
 
 interface ISettings
 {
+    /**
+     * Начальное занчение интервала повторения
+     * @return int
+     */
     public function getBaseInterval() : int;
+
+    /**
+     *  Минимальное знанчение интервала повторения
+     * @return int
+     */
+    public function getMinTimeInterval() : int;
+
     public function getDifficultyIndex() : float;
-    public function getMinTimeRepeat() : int;
 }

@@ -9,7 +9,6 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="flash_repeats")
@@ -67,7 +66,8 @@ class Repeat
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
-    public function __construct(Card $card, DateTimeImmutable $date, float $ratingScore, int $time) {
+    public function __construct(Card $card, DateTimeImmutable $date, float $ratingScore, int $time)
+    {
         $this->card = $card;
         $this->createdAt = $date;
         $this->updatedAt = $date;
@@ -100,4 +100,8 @@ class Repeat
         return $this->ratingScore;
     }
 
+    public function getTime(): int
+    {
+        return $this->time;
+    }
 }

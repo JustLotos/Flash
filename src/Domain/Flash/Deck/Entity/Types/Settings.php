@@ -66,7 +66,7 @@ class Settings implements ISettings
         $this->difficultyIndex = $difficultyIndex;
     }
 
-    public function getMinTimeRepeat(): int
+    public function getMinTimeInterval(): int
     {
         return $this->minTimeInterval;
     }

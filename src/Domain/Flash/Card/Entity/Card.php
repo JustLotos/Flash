@@ -128,6 +128,11 @@ class Card
         return  $card;
     }
 
+    public function setCurrentRepeatInterval(int $currentRepeatInterval)
+    {
+        $this->currentRepeatInterval = $currentRepeatInterval;
+    }
+
     public function updateWithRecords(
         DateTimeImmutable $date,
         array $records
@@ -193,9 +198,8 @@ class Card
         return $this;
     }
 
-
-    public function isNew(): bool
+    public function getCurrentRepeatInterval(): int
     {
-        return (bool)$this->state;
+        return $this->currentRepeatInterval;
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Flash\Service\AnswerMangerService;
 
 use App\Domain\Flash\Card\Entity\Card;
+use App\Domain\Flash\Repeat\Entity\Repeat;
 use App\Domain\Flash\Service\AnswerMangerService\Models\IAnswer;
 use App\Domain\Flash\Service\AnswerMangerService\Models\IRepeat;
 use App\Domain\Flash\Service\AnswerMangerService\Models\ISettings;
@@ -23,68 +24,33 @@ class AnswerManagerService
 
     /**
      * @param Card $card
-     * @param IRepeat $repeat
-     * @param ISettings $settings
      * @param IAnswer $answer
-     * @return DateInterval
-     * @throws Exception
+     * @return int
      */
-    public function getCurrentInterval(Card $card, ISettings $settings, IAnswer $answer): DateInterval
+    public function getNewInterval(Card $card, IAnswer $answer): int
     {
-        if ($card->isNew()) {
-            return $settings->getBaseInterval();
-        }
-//        elseif ($repeat->isStudied()) {
-//            $previewRepeatInterval = $this->converter->toSeconds($repeat->getRepeatInterval());
-//            $averageTimeIndex = $this->getAverageIndex(
-//                $repeat->getTotalTime(),
-//                $repeat->getCount(),
-//                $answer->getTime()
-//            );
-//            $simpleIndex = $previewRepeatInterval * $answer->getEstimateAnswer();
-//            $complexIndex = $simpleIndex  * $averageTimeIndex;
-//            return  $this->makeInterval($complexIndex, $settings);
-//        } else {
-//            $previewRepeatInterval = $this->converter->toSeconds($repeat->getRepeatInterval());
-//            $simpleIndex = $previewRepeatInterval * $answer->getEstimateAnswer();
-//            $countRepeatIndex = $repeat->getSuccessCount() / $repeat->getCount();
-//            $averageTimeIndex = $this->getAverageIndex(
-//                $repeat->getTotalTime(),
-//                $repeat->getCount(),
-//                $answer->getTime()
-//            );
-//            $complexIndex = $simpleIndex * $countRepeatIndex / $averageTimeIndex;
-//            return  $this->makeInterval($complexIndex, $settings);
-//        }
-    }
+        $deck = $card->getDeck();
 
-    /**
-     * @param DateInterval $totalTime
-     * @param int $countRepeat
-     * @param DateInterval $currentTime
-     * @return float|int
-     * @throws Exception
-     */
-    private function getAverageIndex(DateInterval $totalTime, int $countRepeat, DateInterval $currentTime)
-    {
-        $totalTimeSec = $this->converter->toSeconds($totalTime);
-        $currentTimeSec = $this->converter->toSeconds($currentTime);
-        $averageTimeSec = $totalTimeSec / $countRepeat;
-        return $currentTimeSec / $averageTimeSec;
-    }
-
-    /**
-     * @param float $complexIndex
-     * @param ISettings $settings
-     * @return DateInterval
-     * @throws Exception
-     */
-    private function makeInterval(float $complexIndex, ISettings $settings): DateInterval
-    {
-        $minTimeSec = $this->converter->toSeconds($settings->getMinTimeRepeat());
-        if ($complexIndex < $minTimeSec) {
-            $complexIndex = $minTimeSec;
+        $simpleIndex = $card->getCurrentRepeatInterval() * $answer->getEstimateAnswer();
+        $totalTime = 0;
+        $successCount = 0;
+        /** @var Repeat $repeat */
+        foreach ($card->getRepeats() as $repeat) {
+            $totalTime += $repeat->getTime();
+            if ($repeat->getRatingScore() > 1) {
+                $successCount +=1;
+            }
         }
-        return DateInterval::createFromDateString(((int)$complexIndex).' seconds');
+
+        $averageTime = $totalTime / $card->getRepeats()->count();
+        $averageTimeIndex = $answer->getTime() / $averageTime;
+        $countRepeatIndex = $successCount / $card->getRepeats()->count();
+        $newInterval = $simpleIndex * $countRepeatIndex / $averageTimeIndex;
+
+        if ($newInterval < $deck->getSettings()->getMinTimeInterval()) {
+            $newInterval = $deck->getSettings()->getMinTimeInterval();
+        }
+
+        return  $newInterval;
     }
 }
