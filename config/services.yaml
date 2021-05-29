@@ -78,7 +78,8 @@ services:
     App\Domain\User\UserRepository: ~
     App\Domain\User\Service\TokenService: ~
     # DOMAIN FLASH SERVICE
-    App\Domain\Flash\LearnerService: ~
+    App\Domain\Flash\Service\LearnerService: ~
+    App\Domain\Flash\Service\AnswerMangerService\AnswerManagerService:
 #    App\Domain\Flash\Service\EstimateService: ~
 
     #VALIDATORS

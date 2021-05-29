@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Flash\Deck;
 
 use App\Domain\Flash\Deck\Entity\Deck;
-use App\Domain\Flash\LearnerService;
+use App\Domain\Flash\Service\LearnerService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;

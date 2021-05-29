@@ -35,14 +35,14 @@ class Settings implements ISettings
 
     /**
      * @var int
-     * @ORM\Column(type="int")
+     * @ORM\Column(type="integer")
      * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
      */
-    private $startTimeInterval;
+    private $baseInterval;
 
     /**
      * @var int
-     * @ORM\Column(type="int")
+     * @ORM\Column(type="integer")
      * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
      */
     private $minTimeInterval;
@@ -53,13 +53,13 @@ class Settings implements ISettings
     public const DEFAULT_DIFFICULTY_INDEX = 1;
 
     public function __construct(
-        int $startTimeInterval = 3600,
+        int $aseInterval = 3600,
         int $minTimeInterval = 60,
         int $limitRepeat = self::DEFAULT_LIMIT_REPEAT,
         int $limitLearning = self::DEFAULT_LIMIT_LEARNING,
         float $difficultyIndex = self::DEFAULT_DIFFICULTY_INDEX
     ) {
-        $this->startTimeInterval =  $startTimeInterval;
+        $this->baseInterval = $aseInterval;
         $this->minTimeInterval = $minTimeInterval;
         $this->limitRepeat = $limitRepeat;
         $this->limitLearning = $limitLearning;
@@ -69,11 +69,6 @@ class Settings implements ISettings
     public function getMinTimeInterval(): int
     {
         return $this->minTimeInterval;
-    }
-
-    public function getStartTimeInterval() : int
-    {
-        return $this->startTimeInterval;
     }
 
     public function getLimitRepeat() : int
@@ -92,6 +87,6 @@ class Settings implements ISettings
 
     public function getBaseInterval(): int
     {
-        return $this->minTimeInterval;
+        return $this->baseInterval;
     }
 }

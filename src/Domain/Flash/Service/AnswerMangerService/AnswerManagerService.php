@@ -15,13 +15,6 @@ use Exception;
 
 class AnswerManagerService
 {
-    private $converter;
-
-    public function __construct(DateIntervalConverter $converter)
-    {
-        $this->converter = $converter;
-    }
-
     /**
      * @param Card $card
      * @param IAnswer $answer

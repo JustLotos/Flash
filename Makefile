@@ -17,7 +17,7 @@ install: docker-pull docker-build docker-up composer-update-fix lexik-jwt-instal
 first_install_db: create_db  migrate fixtload create_db_test migrate_test fixtload_test
 
 install_db: create_db migrate fixtload
-reset_db: drop_db create_db migdiff migrate fixtload
+reset_db: rm_mig_dir drop_db create_db migdiff migrate fixtload
 update_db: migdiff migrate fixtload
 
 reset_db_test: drop_db_test create_db_test migrate_test fixtload_test
@@ -80,7 +80,8 @@ migrate_test:
 fixtload_test:
 	@${CONSOLE} doctrine:fixtures:load --env=test --no-interaction
 
-
+rm_mig_dir:
+	rm -rf ./migrations
 #DATABASE
 
 #FRONT

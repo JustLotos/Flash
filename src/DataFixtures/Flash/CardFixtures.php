@@ -37,20 +37,22 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function addRepeats(Card $card): Card {
-        for($i = 0; $i <10; $i++) {
+    public function addRepeats(Card $card): Card
+    {
+        for ($i = 0; $i <10; $i++) {
             $answer = new DiscreteAnswer(
                 new DateTimeImmutable(),
                 60,
                 DiscreteAnswer::KNOW
             );
-            $repeat = new Repeat($card, new DateTimeImmutable(), $answer->getEstimateAnswer(), 60 );
+            $repeat = new Repeat($card, new DateTimeImmutable(), $answer->getEstimateAnswer(), 60);
             $card->addRepeat($repeat);
         }
         return $card;
     }
 
-    public function makeCard(Deck $deck): Card {
+    public function makeCard(Deck $deck): Card
+    {
         return new Card(
             $deck,
             Id::next(),
