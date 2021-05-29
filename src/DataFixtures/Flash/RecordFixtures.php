@@ -32,16 +32,17 @@ class RecordFixtures extends BaseFixture implements DependentFixtureInterface
             return $this->makeRecord($card);
         });
 
-        $this->createMany(UserFixtures::USER_COUNT * 100, self::USERS_ID, function () {
-            /** @var Card $card */
-            $card = $this->getRandomReference(CardFixtures::USERS_ID);
-            return $this->makeRecord($card);
-        });
+//        $this->createMany(UserFixtures::USER_COUNT * 100, self::USERS_ID, function () {
+//            /** @var Card $card */
+//            $card = $this->getRandomReference(CardFixtures::USERS_ID);
+//            return $this->makeRecord($card);
+//        });
 
         $manager->flush();
     }
 
-    public function makeRecord(Card $card): Record {
+    public function makeRecord(Card $card): Record
+    {
         return Record::makeByCard(
             $card,
             $this->faker->text(300),

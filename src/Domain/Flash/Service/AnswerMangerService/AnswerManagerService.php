@@ -44,6 +44,6 @@ class AnswerManagerService
             $newInterval = $deck->getSettings()->getMinTimeInterval();
         }
 
-        return  $newInterval;
+        return (int)$newInterval;
     }
 }
