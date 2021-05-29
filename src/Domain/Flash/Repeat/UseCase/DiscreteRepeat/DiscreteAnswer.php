@@ -36,7 +36,8 @@ class DiscreteAnswer implements IAnswer
     public function __construct(DateTimeImmutable $date, int $time, string $status)
     {
         if (!in_array($status, self::getStates())) {
-            throw new DomainException('Invalid state value value this should be one of: '. implode(', ', static::getStates()));
+            $message = 'Invalid state value value this should be one of: '. implode(', ', static::getStates());
+            throw new DomainException($message);
         }
         $this->status= $status;
         $this->date = $date;

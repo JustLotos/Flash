@@ -34,15 +34,15 @@ class Settings implements ISettings
     private $difficultyIndex;
 
     /**
-     * @var DateInterval
-     * @ORM\Column(type="dateinterval")
+     * @var int
+     * @ORM\Column(type="int")
      * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
      */
     private $startTimeInterval;
 
     /**
-     * @var DateInterval
-     * @ORM\Column(type="dateinterval")
+     * @var int
+     * @ORM\Column(type="int")
      * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
      */
     private $minTimeInterval;
@@ -59,19 +59,19 @@ class Settings implements ISettings
         int $limitLearning = self::DEFAULT_LIMIT_LEARNING,
         float $difficultyIndex = self::DEFAULT_DIFFICULTY_INDEX
     ) {
-        $this->startTimeInterval =  DateInterval::createFromDateString($startTimeInterval.' seconds');
-        $this->minTimeInterval = DateInterval::createFromDateString($minTimeInterval.' seconds');
+        $this->startTimeInterval =  $startTimeInterval;
+        $this->minTimeInterval = $minTimeInterval;
         $this->limitRepeat = $limitRepeat;
         $this->limitLearning = $limitLearning;
         $this->difficultyIndex = $difficultyIndex;
     }
 
-    public function getMinTimeRepeat(): DateInterval
+    public function getMinTimeRepeat(): int
     {
         return $this->minTimeInterval;
     }
 
-    public function getStartTimeInterval() : DateInterval
+    public function getStartTimeInterval() : int
     {
         return $this->startTimeInterval;
     }
@@ -90,7 +90,7 @@ class Settings implements ISettings
         return $this->difficultyIndex;
     }
 
-    public function getBaseInterval(): DateInterval
+    public function getBaseInterval(): int
     {
         return $this->minTimeInterval;
     }

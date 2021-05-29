@@ -12,6 +12,7 @@ use App\Domain\Flash\Service\AnswerMangerService\AnswerManagerService;
 use App\Service\FlushService;
 use App\Service\ValidateService;
 use DateTimeImmutable;
+use Exception;
 
 class Handler
 {
@@ -32,6 +33,12 @@ class Handler
         $this->manger = $manger;
     }
 
+    /**
+     * @param Card $card
+     * @param Command $command
+     * @return Card
+     * @throws Exception
+     */
     public function handle(Card $card, Command $command): Card
     {
         $this->validator->validate($command);

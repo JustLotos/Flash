@@ -11,6 +11,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\ORMException;
 
 class CardRepository extends ServiceEntityRepository
 {
@@ -31,11 +32,19 @@ class CardRepository extends ServiceEntityRepository
         return $this->repository->findBy(['deck' => $deck]);
     }
 
+    /**
+     * @param Card $card
+     * @throws ORMException
+     */
     public function add(Card $card)
     {
         $this->manager->persist($card);
     }
 
+    /**
+     * @param Card $deck
+     * @throws ORMException
+     */
     public function remove(Card $deck)
     {
         $this->manager->remove($deck);

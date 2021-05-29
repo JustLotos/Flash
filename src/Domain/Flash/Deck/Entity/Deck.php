@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use DateTimeImmutable;
 use Doctrine\ORM\PersistentCollection;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="flash_decks")
@@ -85,8 +86,13 @@ class Deck
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
-    public function __construct(Learner $learner, string $name, DateTimeImmutable $date, Settings $settings, string $description = '')
-    {
+    public function __construct(
+        Learner $learner,
+        string $name,
+        DateTimeImmutable $date,
+        Settings $settings,
+        string $description = ''
+    ) {
         $this->learner = $learner;
         $this->name = $name;
         $this->description = $description;
@@ -141,7 +147,7 @@ class Deck
 
     public function addCard(Card $card): self
     {
-        if(!$this->cards->contains($card)){
+        if (!$this->cards->contains($card)) {
             $this->cards->add($card);
         }
 
@@ -150,7 +156,7 @@ class Deck
 
     public function removeChild(Card $card): self
     {
-        if($this->cards->contains($card)){
+        if ($this->cards->contains($card)) {
             $this->cards->removeElement($card);
         }
 

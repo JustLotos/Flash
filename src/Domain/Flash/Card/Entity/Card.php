@@ -87,6 +87,13 @@ class Card
      */
     private $state;
 
+    /** @var int
+     *  @ORM\Column(type="integer")
+     *  @Serializer\Groups({Card::GROUP_ONE})
+     * @Serializer\Type(name="integer")
+     */
+    private $currentRepeatInterval;
+
     public const GROUP_LIST = 'GROUP_LIST';
     public const GROUP_ONE = 'GROUP_ONE';
 
@@ -102,6 +109,7 @@ class Card
         $this->state = 'new';
         $this->records = new ArrayCollection();
         $this->repeats = new ArrayCollection();
+        $this->currentRepeatInterval = $deck->getSettings()->getBaseInterval();
     }
 
     public static function createWithRecords(
