@@ -1,0 +1,21 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Git clone files
+      uses: actions/checkout@v2
+
+    - name: Run Makefile
+      env:
+          TOKEN: ${{ secrets.TOKEN }}
+      run: make install
