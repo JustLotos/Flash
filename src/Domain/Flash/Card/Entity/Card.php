@@ -128,12 +128,14 @@ class Card
         return $this;
     }
 
-    public function getRepeats(): Collection {
+    public function getRepeats(): Collection
+    {
         return $this->repeats;
     }
 
-    public function addRepeat(Repeat $repeat) {
-        if(!$this->repeats->contains($repeat)){
+    public function addRepeat(Repeat $repeat)
+    {
+        if (!$this->repeats->contains($repeat)) {
             $this->repeats->add($repeat);
         }
 
@@ -167,7 +169,7 @@ class Card
 
     public function addRecord(Record $record): self
     {
-        if(!$this->records->contains($record)){
+        if (!$this->records->contains($record)) {
             $this->records->add($record);
         }
 
@@ -176,7 +178,7 @@ class Card
 
     public function removeRecord(Record $record): self
     {
-        if($this->records->contains($record)){
+        if ($this->records->contains($record)) {
             $this->records->removeElement($record);
         }
 
@@ -184,7 +186,8 @@ class Card
     }
 
 
-    public function isNew(): bool {
+    public function isNew(): bool
+    {
         return (bool)$this->state;
     }
 }

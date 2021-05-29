@@ -17,7 +17,8 @@ class Command
      */
     public $records;
 
-    public function getRecords(): array {
+    public function getRecords(): array
+    {
         $records = [];
         foreach ($this->records as $record) {
             $records[] = new Record($record, new DateTimeImmutable());

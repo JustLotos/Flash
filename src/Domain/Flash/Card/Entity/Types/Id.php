@@ -11,6 +11,7 @@ use App\Domain\Flash\Card\Entity\Card;
 
 class Id
 {
+    /** @var string */
     private $value;
 
     public function __construct(string $value)
