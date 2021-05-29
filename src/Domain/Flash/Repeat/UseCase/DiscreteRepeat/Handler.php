@@ -36,17 +36,18 @@ class Handler
     {
         $this->validator->validate($command);
 
-        $answer = new DiscreteAnswer(
-            new DateTimeImmutable($command->date),
-            $command->time,
-            $command->status
+        $date = new DateTimeImmutable($command->date);
+        $answer = new DiscreteAnswer($date, $command->time, $command->status);
+        $repeat = new Repeat(
+            $card,
+            $answer->getDate(),
+            $answer->getEstimateAnswer(),
+            $command->time
         );
-        $repeat = new Repeat($card, new DateTimeImmutable(), $answer->getEstimateAnswer(), $command->time);
 
         $card->getRepeats()->add($repeat);
 
         $this->flusher->flush();
-
         return $card;
     }
 }

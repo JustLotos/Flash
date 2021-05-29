@@ -47,7 +47,9 @@ trait ControllerHelper
 
     public function response(string $content, int $statusCode = Response::HTTP_OK): Response
     {
-        return new Response($content, $statusCode);
+        $response = new Response($content, $statusCode);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     public function getSimpleSuccessResponse()

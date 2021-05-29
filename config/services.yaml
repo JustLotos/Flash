@@ -67,15 +67,19 @@ services:
             - { name: kernel.event_listener, event: kernel.exception }
 
     #CUSTOM SERVICE
+    # COMMON SERVICE
     App\Service\TwigService: ~
     App\Service\MailService\MailSenderService: ~
     App\Service\MailService\MailBuilderService: ~
     App\Service\SerializeService: ~
     App\Service\ValidateService: ~
+    App\Service\RedisService: ~
+    # DOMAIN USER SERVICE
     App\Domain\User\UserRepository: ~
     App\Domain\User\Service\TokenService: ~
+    # DOMAIN FLASH SERVICE
     App\Domain\Flash\LearnerService: ~
-    App\Domain\User\Service\RedisService: ~
+#    App\Domain\Flash\Service\EstimateService: ~
 
     #VALIDATORS
     validator.unique.uniqueuser:
@@ -86,13 +90,4 @@ services:
         class: App\Validator\ExistEntityConstraint\ExistEntityValidator
         tags:
             - { name: validator.constraint_validator, alias: ExistEntity }
-    # ADMIN
-    App\Admin\UserAdmin:
-        arguments: [ ~, App\Domain\User\Entity\User, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: User }
-    App\Admin\LearnerAdmin:
-        arguments: [ ~, App\Domain\Flash\Learner\Entity\Learner, ~ ]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Learner }
 

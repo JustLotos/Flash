@@ -3,6 +3,7 @@
   <component name="PhpCodeSniffer">
     <phpcs_settings>
       <phpcs_by_interpreter interpreter_id="9a524a51-d6a7-4c0c-aae0-ca28b3708cb2" beautifier_path="$PROJECT_DIR$/vendor/bin/phpcbf" tool_path="/home/user/PhpstormProjects/flash/vendor/bin/phpcs" />
+      <PhpCSConfiguration beautifier_path="$PROJECT_DIR$/vendor/bin/phpcbf" tool_path="$PROJECT_DIR$/vendor/bin/phpcs" />
     </phpcs_settings>
   </component>
   <component name="PhpIncludePathManager">
@@ -250,6 +251,7 @@
   <component name="PhpUnit">
     <phpunit_settings>
       <phpunit_by_interpreter interpreter_id="9a524a51-d6a7-4c0c-aae0-ca28b3708cb2" load_method="PHPUNIT_PHAR" bootstrap_file_path="/home/user/PhpstormProjects/flash/bin/phpunit" configuration_file_path="phpunit.xml.dist" custom_loader_path="vendor/autoload.php" phpunit_phar_path="vendor/bin/phpunit" use_configuration_file="true" />
+      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" use_configuration_file="true" />
     </phpunit_settings>
   </component>
 </project>

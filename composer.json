@@ -9,8 +9,10 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
+        "ext-redis": "*",
         "dama/doctrine-test-bundle": "^6.3",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "easycorp/easyadmin-bundle": "^3.3",
         "gesdinet/jwt-refresh-token-bundle": "^0.9.1",
         "jms/serializer": "^3.4",
         "jms/serializer-bundle": "^3.5",
@@ -19,9 +21,6 @@
         "nelmio/api-doc-bundle": "^3.5",
         "ramsey/uuid": "^3.8",
         "sensio/framework-extra-bundle": "^5.5",
-        "sonata-project/admin-bundle": "^3.79",
-        "sonata-project/doctrine-orm-admin-bundle": "^3.24",
-        "squizlabs/php_codesniffer": "^3.5",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "4.4.*",
         "symfony/console": "4.4.*",
@@ -38,8 +37,7 @@
         "symfony/validator": "4.*",
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "4.4.*",
-        "twig/twig": "^3.0",
-        "ext-redis": "*"
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^7.0",
@@ -50,7 +48,8 @@
         "symfony/maker-bundle": "^1.14",
         "symfony/monolog-bundle": "^3.5",
         "symfony/phpunit-bridge": "^5.2",
-        "symfony/profiler-pack": "^1.0"
+        "symfony/profiler-pack": "^1.0",
+        "squizlabs/php_codesniffer": "*"
     },
     "config": {
         "preferred-install": {

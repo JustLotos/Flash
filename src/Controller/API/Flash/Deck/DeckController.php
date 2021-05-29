@@ -13,12 +13,13 @@ use App\Domain\Flash\Deck\UseCase\UpdateDeck\Command as UpdateDeckCommand;
 use App\Domain\Flash\Deck\UseCase\UpdateDeck\Handler as UpdateDeckHandler;
 use App\Domain\Flash\Deck\UseCase\DeleteDeck\Handler as DeleteDeckHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController as AdminController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /** @Route(value="api/flash/deck") */
-class DeckController extends AbstractController
+class DeckController extends AdminController
 {
     use ControllerHelper;
 
@@ -74,5 +75,10 @@ class DeckController extends AbstractController
     {
         $handler->handle($deck);
         return $this->response($this->getSimpleSuccessResponse());
+    }
+
+    public static function getEntityFqcn(): string
+    {
+        return Deck::class;
     }
 }

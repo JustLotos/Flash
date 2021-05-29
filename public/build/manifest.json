@@ -1,0 +1,9 @@
+{
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/vendors~app.css": "/build/vendors~app.css",
+  "build/vendors~app.js": "/build/vendors~app.js",
+  "build/emailImage.png": "/build/emailImage.png",
+  "build/flash.svg": "/build/flash.svg",
+  "build/vbanner.jpg": "/build/vbanner.jpg"
+}

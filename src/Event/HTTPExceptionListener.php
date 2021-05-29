@@ -8,6 +8,7 @@ use App\Exception\ApplicationException;
 use App\Exception\BusinessException;
 use App\Exception\ValidationException;
 use DomainException;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -23,29 +24,31 @@ class HTTPExceptionListener
 
     public function onKernelException(ExceptionEvent $event) : void
     {
+        /** @var Exception $error */
         $error = $event->getThrowable();
         $this->logger->critical($error->getMessage());
-        $response = false;
-        var_dump($error->getMessage());
-        die();
-        switch (get_class($error)) {
-            case ApplicationException::class:
-                /** @var ApplicationException $error */
-                $response = $this->responseApplicationException($error);
-                break;
-            case DomainException::class:
-            case BusinessException::class:
-                /** @var DomainException $error */
-                $response = $this->responseDomainException($error);
-                break;
-            case ValidationException::class:
-                /** @var ValidationException $error */
-                $response = $this->responseValidationException($error);
-                break;
-            default:
+//        var_dump($error->getMessage());
+        $response = $this->responseDomainException($error);
 
-                break;
-        }
+//        die();
+//        switch (get_class($error)) {
+//            case ApplicationException::class:
+//                /** @var ApplicationException $error */
+//                $response = $this->responseApplicationException($error);
+//                break;
+//            case DomainException::class:
+//            case BusinessException::class:
+//                /** @var DomainException $error */
+//                $response = $this->responseDomainException($error);
+//                break;
+//            case ValidationException::class:
+//                /** @var ValidationException $error */
+//                $response = $this->responseValidationException($error);
+//                break;
+//            default:
+//
+//                break;
+//        }
 
         if($response) {
             $response->headers->set('Content-Type', 'application/json');
@@ -63,9 +66,14 @@ class HTTPExceptionListener
         return new Response($exception->handle(), $exception->getCode());
     }
 
-    private function responseDomainException(DomainException $exception): Response
+    private function responseDomainException(Exception $exception): Response
     {
-        $message = ['errors'=> ['domain'=> json_decode($exception->getMessage())]];
+        if($message = json_decode($exception->getMessage())) {}
+        else { $message = $exception->getMessage(); }
+        $message = ['errors'=> [
+            'domain'=> $message,
+//            'stackTrace' => $exception->getTrace()
+        ]];
         return new Response(json_encode($message), Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

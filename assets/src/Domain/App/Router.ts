@@ -11,7 +11,7 @@ class VueRouterEx extends Router {
         super(options);
         const { addRoutes } = this.matcher;
         const { routes } = options;
-
+        debugger
         this.routes = routes;
 
         this.matcher.addRoutes = (newRoutes: any) => {
@@ -27,10 +27,10 @@ export const routes: Array<RouteConfig> = [
     ...AppRoutes,
     ...UserRoutes,
     ...FlashRoutes,
-    {
-        path: '*', redirect: '/',
-        meta: { menu: false, auth: false }
-    }
+    // {
+    //     path: '*', redirect: '/',
+    //     meta: { menu: false, auth: false }
+    // }
 ];
 
 

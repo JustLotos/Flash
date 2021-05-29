@@ -5,6 +5,10 @@ CONSOLE=$(PHP) bin/console
 COMPOSER=$(PHP) composer
 # BASE
 
+docker-clear:
+	docker rm -f $(docker ps -a -q)
+
+
 up: docker-up v-dev
 down: docker-down
 
@@ -40,7 +44,7 @@ composer-update:
 composer-update-fix:
 	@${PHP} sudo composer self-update 1.10.12
 	@${PHP} sudo php -d memory_limit=-1 /usr/local/bin/composer install --no-scripts
-#	@${COMPOSER} update
+	@${COMPOSER} update
 composer-install:
 	@${COMPOSER} install
 

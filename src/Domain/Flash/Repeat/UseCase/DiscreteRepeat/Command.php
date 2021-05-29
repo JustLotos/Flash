@@ -14,6 +14,7 @@ class Command
     /**
      * @var string
      * @Assert\NotBlank()
+     * @Assert\DateTime()
      * @Serializer\Type(name="string")
      */
     public $date;
