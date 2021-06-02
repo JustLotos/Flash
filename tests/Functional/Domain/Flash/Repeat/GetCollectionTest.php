@@ -12,10 +12,10 @@ use App\Domain\User\Entity\User;
 use App\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 
-class RepeatTest extends AbstractTest
+class GetCollectionTest extends AbstractTest
 {
-    protected $method = 'POST';
-    protected $uri = '/flash/repeat/';
+    protected $method = 'GET';
+    protected $uri = '/flash/repeat/queue/';
 
     protected function getFixtures() : array
     {
@@ -26,22 +26,14 @@ class RepeatTest extends AbstractTest
     {
         parent::setUp();
         $user = self::getEntityManager()->getRepository(User::class)->findOneBy(['email' => self::USER_EMAIL]);
-        $learner = self::getEntityManager()->getRepository(Learner::class)->findOneBy(['id' => $user->getId()->getValue()]);
+        $learner = self::getEntityManager()
+            ->getRepository(Learner::class)->findOneBy(['id' => $user->getId()->getValue()]);
         $deck = self::getEntityManager()->getRepository(Deck::class)->findOneBy(['learner' => $learner]);
-        $card = self::getEntityManager()->getRepository(Card::class)->findOneBy(['deck' => $deck]);
-        $this->uri .= $card->getId().'/discrete/';
     }
 
-    public function testRepeatCard() : void
+    public function testGetCollection() : void
     {
-        $this->makeRequestWithAuth([
-            'date' => (new \DateTime())->format(DATE_ATOM),
-            'time' => 120,
-            'status' => 'KNOW'
-        ]);
-
-        var_dump($this->content);
-
+        $this->makeRequestWithAuth();
         self::assertResponseOk($this->response);
     }
 }

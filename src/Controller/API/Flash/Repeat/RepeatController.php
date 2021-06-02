@@ -7,8 +7,11 @@ namespace App\Controller\API\Flash\Repeat;
 use App\Controller\ControllerHelper;
 use App\Domain\Flash\Card\Entity\Card;
 use App\Domain\Flash\Repeat\Entity\Repeat;
-use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Command;
-use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Handler;
+use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Command as DiscreteRepeatCommand;
+use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Handler as DiscreteRepeatHandler;
+use App\Domain\Flash\Repeat\UseCase\GetReadyQueue\Command as GetReadyQueueCommand;
+use App\Domain\Flash\Repeat\UseCase\GetReadyQueue\Handler as GetReadyQueueHandler;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,14 +28,15 @@ class RepeatController extends AbstractController
      * @ParamConverter("card", options={"mapping": {"cardId" : "id"}})
      * @param Request $request
      * @param Card $card
-     * @param Handler $handler
+     * @param DiscreteRepeatHandler $handler
      * @return Response
+     * @throws Exception
      */
-    public function getAction(Request $request, Card $card, Handler $handler): Response
+    public function getAction(Request $request, Card $card, DiscreteRepeatHandler $handler): Response
     {
 //        $this->denyAccessUnlessGranted(CardVoter::VIEW, $card, CardVoter::NOT_FOUND_MESSAGE);
-        /** @var Command $command */
-        $command = $this->serializer->deserialize($request, Command::class);
+        /** @var DiscreteRepeatCommand $command */
+        $command = $this->serializer->deserialize($request, DiscreteRepeatCommand::class);
         $handler->handle($card, $command);
         return $this->response($this->serializer->serialize($card, Card::GROUP_ONE));
     }
@@ -40,12 +44,15 @@ class RepeatController extends AbstractController
     /**
      * @Route("queue/", name="readyQueueRepeat", methods={"GET"})
      * @param Request $request
-     * @param Handler $handler
+     * @param GetReadyQueueHandler $handler
      * @return Response
      */
-    public function getReadyForRepeatAction(Request $request, Handler $handler): Response
+    public function getReadyForRepeatAction(Request $request, GetReadyQueueHandler $handler): Response
     {
-        $command = $this->serializer->deserialize($request, Command::class);
+        /** @var GetReadyQueueCommand $command */
+        $command = $this->extractData($request, GetReadyQueueCommand::class);
+
+        var_dump($command);
     }
 
 
