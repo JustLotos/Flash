@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Domain\Flash\Card;
 
 use App\DataFixtures\Flash\CardFixtures;
-use App\Domain\Flash\Card\Entity\Card;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Learner\Entity\Learner;
 use App\Domain\User\Entity\User;
 use App\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\Response;
 
 class GetCollectionTest extends AbstractTest
 {
@@ -34,6 +32,7 @@ class GetCollectionTest extends AbstractTest
     public function testGetCollection() : void
     {
         $this->makeRequestWithAuth();
+        var_dump($this->content);
         self::assertResponseOk($this->response);
     }
 }

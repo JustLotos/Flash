@@ -42,7 +42,7 @@ class RepeatController extends AbstractController
     }
 
     /**
-     * @Route("queue/", name="readyQueueRepeat", methods={"GET"})
+     * @Route("/queue/", name="readyQueueRepeat", methods={"GET"})
      * @param Request $request
      * @param GetReadyQueueHandler $handler
      * @return Response
@@ -51,23 +51,23 @@ class RepeatController extends AbstractController
     {
         /** @var GetReadyQueueCommand $command */
         $command = $this->extractData($request, GetReadyQueueCommand::class);
-
-        var_dump($command);
+        $collection = $handler->handle($command);
+        return $this->response($this->serializer->serialize($collection));
     }
 
 
-    /**
-     * @Route("/{id}/delete", name="deleteRepeat", methods={"POST"})
-     * @param Request $request
-     * @param Repeat $card
-     * @param Handler $handler
-     * @return Response
-     */
-    public function deleteRepeatAction(Request $request, Repeat $card, Handler $handler): Response
-    {
-//        /** @var Command $command */
-//        $command = $this->serializer->deserialize($request, Command::class);
-//        $handler->handle($card, $command);
-        return $this->response($this->getSimpleSuccessResponse());
-    }
+//    /**
+//     * @Route("/{id}/delete", name="deleteRepeat", methods={"POST"})
+//     * @param Request $request
+//     * @param Repeat $card
+//     * @param Handler $handler
+//     * @return Response
+//     */
+//    public function deleteRepeatAction(Request $request, Repeat $card, Handler $handler): Response
+//    {
+////        /** @var Command $command */
+////        $command = $this->serializer->deserialize($request, Command::class);
+////        $handler->handle($card, $command);
+//        return $this->response($this->getSimpleSuccessResponse());
+//    }
 }
