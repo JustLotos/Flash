@@ -21,6 +21,8 @@ class ExistEntity extends Constraint
 
     public $class = null;
 
+    public $allowNull = false;
+
     public function validatedBy()
     {
         return 'ExistEntity';

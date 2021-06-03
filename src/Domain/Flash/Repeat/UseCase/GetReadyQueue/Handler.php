@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace App\Domain\Flash\Repeat\UseCase\GetReadyQueue;
 
 use App\Domain\Flash\Card\CardRepository;
-use App\Domain\Flash\Card\Entity\Card;
-use App\Domain\Flash\Deck\Entity\Types\Settings;
-use App\Domain\Flash\Repeat\Entity\Repeat;
 use App\Domain\Flash\Service\AnswerMangerService\AnswerManagerService;
 use App\Service\FlushService;
 use App\Service\ValidateService;
-use DateTimeImmutable;
+use Doctrine\ORM\PersistentCollection;
 
 class Handler
 {
@@ -32,7 +29,9 @@ class Handler
         $this->manger = $manger;
     }
 
-    public function handle(Command $command): Card
+    public function handle(Command $command): array
     {
+        var_dump($command->getDeckId());
+        return $this->repository->findBy(['deck' => $command->getDeckId()]);
     }
 }

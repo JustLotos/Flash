@@ -52,7 +52,7 @@ class Handler
     public function handle(Command $command, User $user): void
     {
         $this->user = $user;
-        $email = $this->getEmailFromRedis($command->token);
+        $email = $this->getEmailFromRedis((string)$command->token);
         $this->user->confirmChangeEmail(new DateTimeImmutable(), $email);
         $this->flusher->flush();
         $this->sendConfirmMessage();

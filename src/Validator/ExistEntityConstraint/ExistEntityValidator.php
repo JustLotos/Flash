@@ -34,9 +34,15 @@ class ExistEntityValidator extends ConstraintValidator
             );
         }
 
-        $existingEntity = $this->entityManager->getRepository($constraint->class)->findOneBy([$constraint->attribute => $value]);
+        $existingEntity = $this->entityManager
+            ->getRepository($constraint->class)
+            ->findOneBy([$constraint->attribute => $value]);
 
         if ($existingEntity) {
+            return;
+        }
+
+        if ($constraint->allowNull) {
             return;
         }
 
