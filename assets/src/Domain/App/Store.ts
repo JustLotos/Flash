@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import {AppModule} from "./AppModule";
 import {UserModule} from "../User/UserModule";
-import {DeckModule} from "../Flash/Deck/DeckModule";
+import {DeckModule} from "../Flash/Modules/Deck/DeckModule";
 
 Vue.use(Vuex);
 
