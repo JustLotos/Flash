@@ -26,9 +26,9 @@ class Command
     private $deckId;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDeckId(): string
+    public function getDeckId(): ?string
     {
         return $this->deckId;
     }

@@ -6,6 +6,7 @@ namespace App\Controller\API\Flash\Repeat;
 
 use App\Controller\ControllerHelper;
 use App\Domain\Flash\Card\Entity\Card;
+use App\Domain\Flash\Record\Entity\Record;
 use App\Domain\Flash\Repeat\Entity\Repeat;
 use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Command as DiscreteRepeatCommand;
 use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Handler as DiscreteRepeatHandler;
@@ -52,7 +53,8 @@ class RepeatController extends AbstractController
         /** @var GetReadyQueueCommand $command */
         $command = $this->extractData($request, GetReadyQueueCommand::class);
         $collection = $handler->handle($command);
-        return $this->response($this->serializer->serialize($collection));
+
+        return $this->response($this->serializer->serialize($collection, [ Card::GROUP_LIST ]));
     }
 
 

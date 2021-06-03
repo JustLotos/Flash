@@ -61,7 +61,7 @@ class Card
      *     orphanRemoval=true,
      *     cascade={"persist"}
      * )
-     * @Serializer\Groups({Card::GROUP_ONE})
+     * @Serializer\Groups({Card::GROUP_LIST, Card::GROUP_ONE})
      * @Serializer\Type(name="App\Domain\Flash\Record\Entity\Record")
      */
     private $records;
