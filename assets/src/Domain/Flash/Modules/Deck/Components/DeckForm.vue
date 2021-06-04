@@ -118,6 +118,9 @@
             },
             commonError: {
                 default: false
+            },
+            isLoading: {
+                default: false
             }
         },
         data: function () {
@@ -141,18 +144,7 @@
 
             onSubmitForm() {
                 if (this.$refs.form.validate()) {
-                    // let tempDeck = cloneObject(deckDefault(
-                    //     this.deck.limit_repeat,
-                    //     this.deck.limit_repeat,
-                    //     this.deck.difficulty_index,
-                    //     this.deck.base_index,
-                    //     this.deck.modifier_index,
-                    //     this.deck.name,
-                    //     this.deck.description
-                    // ));
-
-                    this.$emit( this.eventName, {});
-
+                    this.$emit( this.eventName, this.$refs.form);
                 }
             }
         }

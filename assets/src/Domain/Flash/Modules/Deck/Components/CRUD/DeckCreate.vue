@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title class="justify-center">Добавление колоды</v-card-title>
-        <deck-form :deck="deck" :event-name="'create'"  @create="create" :errors="createErrors">
+        <deck-form :deck="deck" :event-name="'create'"  @create="create" :errors="createErrors" :is-loading="false">
             <template v-slot:submit>Добавить</template>
         </deck-form>
     </v-card>
@@ -16,7 +16,7 @@
         data: function () {
             return {
                 deck: {},
-                createErrors: {}
+                errors: {}
             }
         },
         computed: {
@@ -30,6 +30,8 @@
         methods: {
             async create(createDeckPayload) {
 
+                console.log(createDeckPayload)
+                debugger
                 // await this.$store.dispatch("DeckStore/create", createDeckPayload).then(()=>{
                 //     this.deck = {};
                 //     this.$emit('deck-created', 'Колода успешно создаана!');
