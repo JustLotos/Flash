@@ -66,10 +66,10 @@
         methods: {
             async onDeckDelete() {
                 if(this.$refs.deckDeleteForm.validate()) {
-                    await this.$store.dispatch("DeckStore/delete", this.deck)
-                        .then(()=>{
-                            this.$emit('deck-deleted', 'Колода успешно удалена!');
-                        }).catch((error)=>{console.log(error);});
+                    // await this.$store.dispatch("DeckStore/delete", this.deck)
+                    //     .then(()=>{
+                    //         this.$emit('deck-deleted', 'Колода успешно удалена!');
+                    //     }).catch((error)=>{console.log(error);});
                 }
             }
         }

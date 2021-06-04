@@ -1,6 +1,6 @@
 <template>
   <v-layout align-center justify-center>
-    <deck-list></deck-list>
+    <deck-list :decks="decks" :decks-by-id="decksById"/>
   </v-layout>
 </template>
 <script lang="ts">
@@ -14,9 +14,16 @@ import DeckList from "../Modules/Deck/Components/DeckList.vue";
   components: {DeckList}
 })
 export default class MainPage extends Vue{
+    get decks() { return DeckModule.decks || [] }
+    get decksById() { return DeckModule.decksById || {} }
+
     beforeRouteEnter (to, from, next) {
         !UserModule.isAuthenticated ? next(AppModule.getRedirectToUnAuth) : next()
-        DeckModule.fetchDecks();
+        DeckModule.fetchDecks().then(function (data) {
+
+        }).catch(function (data) {
+          debugger
+        });
     }
 }
 </script>

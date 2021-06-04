@@ -146,15 +146,15 @@
         },
         beforeRouteEnter: async function (to , from , next) {
             if (validate(to)) {
-                await store.dispatch('DeckStore/getOne', {id: to.params.id})
-                    .then(()=>{
-                        let deck = store.getters['DeckStore/decks'][to.params.id];
-                        next(vm => vm.setDeck(deck));
-                    })
-                    .catch((errors)=>{
-                        router.push({name: '404'});
-                        console.log(errors);
-                    });
+                // await store.dispatch('DeckStore/getOne', {id: to.params.id})
+                //     .then(()=>{
+                //         let deck = store.getters['DeckStore/decks'][to.params.id];
+                //         next(vm => vm.setDeck(deck));
+                //     })
+                //     .catch((errors)=>{
+                //         router.push({name: '404'});
+                //         console.log(errors);
+                //     });
             } else {
                 router.push({name: '404'});
             }

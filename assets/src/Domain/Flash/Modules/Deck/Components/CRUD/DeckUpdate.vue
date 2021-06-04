@@ -19,26 +19,29 @@
                 required: true
             },
         },
+        data: function() {
+            return {
+                errors: {}
+            }
+        },
         computed: {
             deck: function () {
-                return this.$store.getters['DeckStore/decks'][this.id];
+                return {};
+                // return this.$store.getters['DeckStore/decks'][this.id];
             },
             updateErrors: function () {
                 if (this.errors) {
                     return this.errors;
                 }
                 return {};
-            },
-            ...mapGetters('DeckStore',{
-                errors: 'errorsUpdate',
-            })
+            }
         },
         methods: {
             async update (deck) {
-                deck.id = this.deck.id;
-                await this.$store.dispatch("DeckStore/update", deck).then(()=>{
-                    this.$emit('deck-updated', 'Колода успешно сохранена!');
-                }).catch((errors)=>{console.log(errors);})
+                // deck.id = this.deck.id;
+                // await this.$store.dispatch("DeckStore/update", deck).then(()=>{
+                //     this.$emit('deck-updated', 'Колода успешно сохранена!');
+                // }).catch((errors)=>{console.log(errors);})
             }
         },
     }

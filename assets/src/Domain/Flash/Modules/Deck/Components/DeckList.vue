@@ -3,7 +3,7 @@
         <v-card>
             <v-row justify="center">
                 <v-col cols="9">
-                    <list-objects :items="decks" :items-id="decksId" :pagination="{perPage: 10, buttonsCount: 7}">
+                    <list-objects :items="decks" :items-id="decksById" :pagination="{perPage: 10, buttonsCount: 7}">
                         <template v-slot:item="deck">
                             <deck-list-item :deck="deck.item"></deck-list-item>
                         </template>
@@ -54,6 +54,7 @@
     import ListObjects from "../../../../App/Components/List/ListObjects.vue";
     import DeckCreate from "./CRUD/DeckCreate.vue";
     import SuccessModal from "../../../../App/Components/Modal/SuccessModal.vue";
+    import {DeckModule} from "../DeckModule";
 
     export default {
         name: 'DeckList',
@@ -65,13 +66,13 @@
                 successMessage: '',
             }
         },
+        props: {
+            decks: [],
+            decksById: {}
+        },
         computed: {
-            ...mapGetters('DeckModule', [
-                'decks',
-                'decksId'
-            ]),
             createModalBtnPlacement: function() {
-                let empty = !!this.decksId && !!this.decksId.length;
+                let empty = !!this.decksById && !!this.decksById.length;
                 return {
                     'on-side': empty,
                     'on-card': !empty
@@ -87,11 +88,16 @@
                 this.successModal = !this.successModal;
             },
         },
-        beforeRouteEnter: async function (to , from , next) {
-            await store.dispatch('DeckStore/getAll')
-                .then(()=>{next()})
-                .catch((error)=>{console.log("Ошибка извелчения колоды" + JSON.parse(error));});
-        }
+        // beforeRouteEnter: async function (to , from , next) {
+        //     await DeckModule.fetchDecks().then(function (data) {
+        //         console.log(DeckModule.decks);
+        //         console.log(DeckModule.decksById);
+        //         debugger
+        //     });
+        //     // await store.dispatch('DeckStore/getAll')
+        //     //     .then(()=>{next()})
+        //     //     .catch((error)=>{console.log("Ошибка извелчения колоды" + JSON.parse(error));});
+        // }
     }
 </script>
 

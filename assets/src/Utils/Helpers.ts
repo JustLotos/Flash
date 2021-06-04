@@ -6,6 +6,7 @@ export function setDeckStoreState(state, deck)
     if (newDeck.cards) {
         newDeck.cards = newDeck.cards.map(card => card.id);
     }
+    debugger
     Vue.set(state.byId, newDeck.id, newDeck);
     if (!state.allIds.includes(newDeck.id)) {
         state.allIds.push(newDeck.id);

@@ -15,7 +15,8 @@
         components: {DeckForm},
         data: function () {
             return {
-                deck: {}
+                deck: {},
+                createErrors: {}
             }
         },
         computed: {
@@ -24,20 +25,18 @@
                     return this.errors;
                 }
                 return {};
-            },
-            ...mapGetters('DeckStore',{
-                errors: 'errorsCreate',
-            })
+            }
         },
         methods: {
             async create(createDeckPayload) {
-                await this.$store.dispatch("DeckStore/create", createDeckPayload).then(()=>{
-                    this.deck = {};
-                    this.$emit('deck-created', 'Колода успешно создаана!');
-                }).catch((errors)=>{
-                    console.log(errors);
-                    // console.log("Ошибка создание колоды: " + JSON.parse(errors));
-                })
+
+                // await this.$store.dispatch("DeckStore/create", createDeckPayload).then(()=>{
+                //     this.deck = {};
+                //     this.$emit('deck-created', 'Колода успешно создаана!');
+                // }).catch((errors)=>{
+                //     console.log(errors);
+                //     // console.log("Ошибка создание колоды: " + JSON.parse(errors));
+                // })
 
             }
         }
