@@ -102,7 +102,7 @@ class Deck
         $this->settings = $settings;
     }
 
-    public function update(string $name, DateTimeImmutable $updatedAt, string $description = ''): Deck
+    public function update(string $name, DateTimeImmutable $updatedAt, ?string $description = ''): Deck
     {
         $this->name = $name;
         $this->description = $description;

@@ -15,8 +15,10 @@ class VuexDeck extends VuexModule {
     byId = {};
 
     public get decks() { return this.byId; }
-
     public get decksById() { return this.allIds }
+    // @ts-ignore
+    public get deckById() {return  id => this.byId[id] }
+
 
     @Action({ rawError: true })
     public async fetchDecks(): Promise<any> {
@@ -25,6 +27,22 @@ class VuexDeck extends VuexModule {
         this.FETCH_DECKS(response.data);
         AppModule.unsetLoading();
         return response.data;
+    }
+
+    @Mutation
+    private FETCH_DECKS(data: any) {
+        data.forEach((deck: Deck)=>{
+            let newDeck = cloneObject(deck);
+            if (newDeck.cards) {
+                newDeck.cards = newDeck.cards.map((card: { id: any; }) => card.id);
+            }
+            Vue.set(this.byId, newDeck.id, newDeck);
+            // @ts-ignore
+            if (!this.allIds.includes(newDeck.id)) {
+                // @ts-ignore
+                this.allIds.push(newDeck.id);
+            }
+        });
     }
 
     @Action({ rawError: true })
@@ -51,20 +69,13 @@ class VuexDeck extends VuexModule {
     }
 
 
-    @Mutation
-    private FETCH_DECKS(data: any) {
-        data.forEach((deck: Deck)=>{
-            let newDeck = cloneObject(deck);
-            if (newDeck.cards) {
-                newDeck.cards = newDeck.cards.map((card: { id: any; }) => card.id);
-            }
-            Vue.set(this.byId, newDeck.id, newDeck);
-            // @ts-ignore
-            if (!this.allIds.includes(newDeck.id)) {
-                // @ts-ignore
-                this.allIds.push(newDeck.id);
-            }
-        });
+    @Action({ rawError: true })
+    public async update(data: Deck): Promise<any> {
+        AppModule.loading();
+        const response  = await DeckService.update(data);
+        this.ADD(response.data);
+        AppModule.unsetLoading();
+        return response.data;
     }
 }
 

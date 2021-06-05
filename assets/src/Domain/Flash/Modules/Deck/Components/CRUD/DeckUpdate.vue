@@ -10,6 +10,7 @@
 <script>
     import DeckForm from "../DeckForm";
     import {mapGetters} from 'vuex';
+    import {DeckModule} from "../../DeckModule";
 
     export default {
         name: "DeckUpdate",
@@ -26,8 +27,7 @@
         },
         computed: {
             deck: function () {
-                return {};
-                // return this.$store.getters['DeckStore/decks'][this.id];
+                return DeckModule.deckById(this.id);
             },
             updateErrors: function () {
                 if (this.errors) {
@@ -38,10 +38,9 @@
         },
         methods: {
             async update (deck) {
-                // deck.id = this.deck.id;
-                // await this.$store.dispatch("DeckStore/update", deck).then(()=>{
-                //     this.$emit('deck-updated', 'Колода успешно сохранена!');
-                // }).catch((errors)=>{console.log(errors);})
+                await DeckModule.update(deck).then(()=>{
+                    this.$emit('deck-updated', 'Колода успешно сохранена!');
+                }).catch((errors)=>{console.log(errors);})
             }
         },
     }
