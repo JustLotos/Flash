@@ -91,7 +91,7 @@ class Deck
         string $name,
         DateTimeImmutable $date,
         Settings $settings,
-        string $description = ''
+        ?string $description = ''
     ) {
         $this->learner = $learner;
         $this->name = $name;

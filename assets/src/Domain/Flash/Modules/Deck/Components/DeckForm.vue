@@ -103,6 +103,7 @@
     import ControlText from "../../../../App/Components/FormElements/ControlText.vue";
     import ControlSlider from "../../../../App/Components/FormElements/ControlSlider.vue";
     import {cloneObject} from "../../../../../Utils/Helpers";
+    import {Deck} from "../Deck";
     export default {
         name: "DeckForm",
         components: {ControlSlider, ControlText, ControlText, ControlName},
@@ -111,7 +112,7 @@
                 type: String,
                 required: true
             },
-            deck: {},
+            deck: new Deck,
             errors: {
                 type: Object,
                 default: {}
@@ -144,7 +145,7 @@
 
             onSubmitForm() {
                 if (this.$refs.form.validate()) {
-                    this.$emit( this.eventName, this.$refs.form);
+                    this.$emit( this.eventName, this.deck);
                 }
             }
         }

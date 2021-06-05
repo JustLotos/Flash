@@ -66,7 +66,7 @@ class HTTPExceptionListener
         return new Response($exception->handle(), $exception->getCode());
     }
 
-    private function responseDomainException(Exception $exception): Response
+    private function responseDomainException($exception): Response
     {
         if($message = json_decode($exception->getMessage())) {}
         else { $message = $exception->getMessage(); }

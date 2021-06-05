@@ -10,6 +10,10 @@
 <script>
     import DeckForm from "../DeckForm";
     import {mapGetters} from "vuex";
+    import {DeckModule} from "../../DeckModule";
+    import {AppModule} from "../../../../../App/AppModule";
+    import {Deck} from "../../Deck";
+
     export default {
         name: "DeckCreate",
         components: {DeckForm},
@@ -25,22 +29,22 @@
                     return this.errors;
                 }
                 return {};
+            },
+            isLoading: function () {
+                return AppModule.isLoading() || false;
             }
         },
         methods: {
-            async create(createDeckPayload) {
-
-                console.log(createDeckPayload)
-                debugger
-                // await this.$store.dispatch("DeckStore/create", createDeckPayload).then(()=>{
-                //     this.deck = {};
-                //     this.$emit('deck-created', 'Колода успешно создаана!');
-                // }).catch((errors)=>{
-                //     console.log(errors);
-                //     // console.log("Ошибка создание колоды: " + JSON.parse(errors));
-                // })
-
-            }
+            async create(deck) {
+                console.log(deck);
+                await DeckModule.add(deck).then((data) => {
+                    this.deck = {};
+                    this.$emit('deck-created', 'Колода успешно создаана!');
+                }).catch((errors) => {
+                    console.log(errors);
+                    // console.log("Ошибка создание колоды: " + JSON.parse(errors));
+                });
+            },
         }
     }
 </script>

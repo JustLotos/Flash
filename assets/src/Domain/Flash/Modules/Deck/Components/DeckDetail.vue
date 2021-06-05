@@ -4,7 +4,7 @@
             <v-card :elevation="18" class="pa-12">
                 <v-row justify="center">
                     <v-col cols="12" sm="8">
-                        <v-img v-if="deck.avatar" class="white--text align-end justify-center" height="200px" :src="deck.avatar">
+                        <v-img v-if="deck.avatar" class="white--text align-end justify-center" height="200px">
                             <v-card-title class="justify-center">{{ deck.name }}</v-card-title>
                         </v-img>
                         <v-toolbar dense short flat>
@@ -72,7 +72,7 @@
         </v-col>
 
         <modal v-model="createCardModal" type="wide">
-            <card-create @card-created="handleSuccessCreate" :deck="deck"></card-create>
+<!--            <card-create @card-created="handleSuccessCreate" :deck="deck"></card-create>-->
         </modal>
         <modal v-model="editDeckModal" type="short">
             <deck-update @deck-updated="handleSuccessEditDeck" :id="deck.id"></deck-update>
@@ -87,11 +87,8 @@
 </template>
 
 <script>
-    import store from "../../store/store";
     import CardList from "../../components/daemons/Card/CardList";
     import {validate} from "../../plugins/helpers";
-    import router from "../../router/routes";
-    import CardCreate from "../../components/daemons/Card/CardCreate";
     import SuccessModal from "../../components/common/Modals/SuccessModal";
     import Modal from "../../components/common/Modals/Modal";
     import DeckUpdate from "../../components/daemons/Deck/DeckUpdate";
@@ -99,11 +96,9 @@
 
     export default {
         name: "DeckDetail",
-        components: {DeckDelete, DeckUpdate, Modal, CardCreate, CardList},
+        components: {DeckDelete, DeckUpdate, Modal, CardList},
         props: {
-            id: {
-                required: true
-            }
+            id: { required: true }
         },
         data: function () {
             return {

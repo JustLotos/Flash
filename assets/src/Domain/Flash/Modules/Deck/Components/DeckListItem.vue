@@ -130,10 +130,8 @@
             },
             getDeckLink: function (id) {
                 return {
-                    name: 'deck-get',
-                    params: {
-                        id: id
-                    }
+                    name: 'DeckDetail',
+                    params: { id: id }
                 }
             }
         }
