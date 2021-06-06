@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="modal" max-width="700px">
-        <v-container>
+        <v-main>
             <v-layout xs6 justify-center align-center style="position: relative">
                 <v-flex xs6 class="justify-center align-center">
                     <v-alert type="success"><slot>Операция выполнена успешно!</slot></v-alert>
@@ -9,7 +9,7 @@
                     </v-btn>
                 </v-flex>
             </v-layout>
-        </v-container>
+        </v-main>
     </v-dialog>
 </template>
 

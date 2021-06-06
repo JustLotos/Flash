@@ -10,9 +10,11 @@ export default {
         return Axios.post(ApiRouter.getRouteByName('addDeck').path, deck);
     },
     async update(deck: Deck) {
+        // @ts-ignore
         return Axios.put(ApiRouter.getRouteByName('updateDeck', { id: deck.id }).path, deck);
     },
     async delete(deck: Deck) {
-        return Axios.post(ApiRouter.getRouteByName('updateDeck').path, deck);
-    },
+        // @ts-ignore
+        return Axios.delete(ApiRouter.getRouteByName('deleteDeck', { id: deck.id }).path);
+    }
 };

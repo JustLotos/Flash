@@ -11,7 +11,6 @@
     import DeckForm from "../DeckForm";
     import {mapGetters} from 'vuex';
     import {DeckModule} from "../../DeckModule";
-
     export default {
         name: "DeckUpdate",
         components: {DeckForm},
@@ -26,15 +25,8 @@
             }
         },
         computed: {
-            deck: function () {
-                return DeckModule.deckById(this.id);
-            },
-            updateErrors: function () {
-                if (this.errors) {
-                    return this.errors;
-                }
-                return {};
-            }
+            deck: () => DeckModule.deckById(this.id),
+            updateErrors: () => this.errors ? this.errors : {},
         },
         methods: {
             async update (deck) {
@@ -45,9 +37,3 @@
         },
     }
 </script>
-
-<style scoped>
-    .centered-input >>> input {
-        text-align: center
-    }
-</style>

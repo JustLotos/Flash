@@ -1,13 +1,13 @@
 <template>
     <v-dialog v-model="modal" :max-width="950" @click:outside="modalToggle" @keydown="handleKeyDown">
-        <v-container>
+        <v-main>
             <v-layout justify-center align-center style="position: relative">
                 <slot></slot>
                 <v-btn absolute top right icon dark @click="modalToggle">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
             </v-layout>
-        </v-container>
+        </v-main>
     </v-dialog>
 </template>
 

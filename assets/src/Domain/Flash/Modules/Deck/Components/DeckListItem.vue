@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+    <v-main fluid>
         <v-layout justify-center align-center>
             <v-flex>
                 <v-card color="primary" class="white--text pa-2">
@@ -71,7 +71,7 @@
                 <v-alert type="success"><slot>Операция выполнена успешно!</slot></v-alert>
             </modal>
         </v-layout>
-    </v-container>
+    </v-main>
 </template>
 
 <script>

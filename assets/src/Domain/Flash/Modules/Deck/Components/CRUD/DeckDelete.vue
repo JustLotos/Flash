@@ -34,13 +34,15 @@
 
 <script>
     import DeckForm from "../DeckForm";
+    import {DeckModule} from "../../DeckModule";
+    import {Deck} from "../../Deck";
     export default {
         name: "DeckDelete",
         components: {DeckForm},
         props: {
             deck: {
-                id: '',
-                name: ''
+                required: true,
+                default: new Deck()
             },
         },
         computed: {
@@ -66,18 +68,11 @@
         methods: {
             async onDeckDelete() {
                 if(this.$refs.deckDeleteForm.validate()) {
-                    // await this.$store.dispatch("DeckStore/delete", this.deck)
-                    //     .then(()=>{
-                    //         this.$emit('deck-deleted', 'Колода успешно удалена!');
-                    //     }).catch((error)=>{console.log(error);});
+                    await DeckModule.delete(this.deck).then(()=>{
+                            this.$emit('deck-deleted', 'Колода успешно удалена!');
+                        }).catch((error)=>{console.log(error);});
                 }
             }
         }
     }
 </script>
-
-<style scoped>
-    .centered-input >>> input {
-        text-align: center
-    }
-</style>

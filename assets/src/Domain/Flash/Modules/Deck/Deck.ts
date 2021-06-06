@@ -7,7 +7,7 @@ export class Deck {
         this.name = name;
     }
 
-    get getId() {
+    getId(): Number {
         return this.id;
     }
 }

@@ -3,9 +3,9 @@
         <base-header/>
         <transition name="fade" duration="2000">
             <v-content class="bg">
-                <v-container fill-height>
+                <v-main fill-height>
                     <slot/>
-                </v-container>
+                </v-main>
             </v-content>
         </transition>
         <base-footer/>

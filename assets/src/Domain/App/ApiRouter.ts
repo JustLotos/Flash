@@ -18,7 +18,10 @@ class APIRouter {
         if (!result) throw `Url with name ${name} not found`;
 
         Object.entries(params).forEach(([key, value]) => {
-            if(result) result.path = result.path.replace('{' + key + '}', value);
+            if(result) {
+                // @ts-ignore
+                result.path = result.path.replace('{' + key + '}', value);
+            }
         });
 
         return result;

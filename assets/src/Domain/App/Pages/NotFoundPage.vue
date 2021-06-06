@@ -1,5 +1,5 @@
 <template>
-    <v-container class="text-center" fill-height style="height: calc(100vh - 58px);">
+    <v-main class="text-center" fill-height style="height: calc(100vh - 58px);">
         <v-row align="center">
             <v-col>
                 <h1 class="display-2 primary--text">Whoops, 404</h1>
@@ -7,7 +7,7 @@
                 <v-btn color="primary" outlined :to="{name: 'Home'}">Get me out of here!</v-btn>
             </v-col>
         </v-row>
-    </v-container>
+    </v-main>
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";

@@ -2,8 +2,6 @@ import { Action, getModule, Module, Mutation, VuexModule } from "vuex-module-dec
 import {Store} from "../../../App/Store";
 import {AppModule} from "../../../App/AppModule";
 import DeckService from "./DeckService";
-import LoginResponse from "../../../User/Entity/API/Login/LoginResponse";
-import RegisterResponse from "../../../User/Entity/API/Register/ByEmail/RegisterByEmailResponse";
 import {Deck} from "./Deck";
 import {cloneObject} from "../../../../Utils/Helpers";
 import Vue from "vue";
@@ -76,6 +74,23 @@ class VuexDeck extends VuexModule {
         this.ADD(response.data);
         AppModule.unsetLoading();
         return response.data;
+    }
+
+    @Action({ rawError: true })
+    public async delete(deck: Deck): Promise<any> {
+        AppModule.loading();
+        const response  = await DeckService.delete(deck);
+        this.DELETE(response.data);
+        AppModule.unsetLoading();
+        return response.data;
+    }
+
+    @Mutation
+    private DELETE(deck: Deck) {
+        // @ts-ignore
+        Vue.delete(this.byId, deck.getId());
+        // @ts-ignore
+        this.allIds.splice(this.allIds.indexOf(deck.getId()), 1)
     }
 }
 
