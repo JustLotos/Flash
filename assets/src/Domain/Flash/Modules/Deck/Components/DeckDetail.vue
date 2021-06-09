@@ -4,15 +4,15 @@
             <v-card :elevation="18" class="pa-12">
                 <v-row justify="center">
                     <v-col cols="12" sm="8">
-                        <v-img v-if="deck.avatar" class="white--text align-end justify-center" height="200px">
-                            <v-card-title class="justify-center">{{ deck.name }}</v-card-title>
+                        <v-img v-if="getDeck.avatar" class="white--text align-end justify-center" height="200px">
+                            <v-card-title class="justify-center">{{ getDeck.name }}</v-card-title>
                         </v-img>
                         <v-toolbar dense short flat>
                             <v-row justify="center">
                                 <v-speed-dial v-model="fab" direction="right">
                                     <template v-slot:activator>
                                         <v-btn v-model="fab" elevation="0">
-                                            <v-toolbar-title class="text-center">{{ deck.name }}
+                                            <v-toolbar-title class="text-center">{{ getDeck.name }}
                                                 <v-icon v-if="fab">mdi-close</v-icon>
                                             </v-toolbar-title>
                                         </v-btn>
@@ -25,9 +25,8 @@
                                     </v-btn>
                                 </v-speed-dial>
                             </v-row>
-
                         </v-toolbar>
-                        <v-card-subtitle class="text-center">{{deck.description}}</v-card-subtitle>
+                        <v-card-subtitle class="text-center">{{getDeck.description}}</v-card-subtitle>
                         <v-divider></v-divider>
                         <v-card-actions>
                             <v-flex>
@@ -37,7 +36,7 @@
                                             <v-btn block depressed x-large color="primary" class="mb-2"
                                                 :elevation="hover ? 24 : 0"
                                                 :class="{'on-hover':hover}"
-                                                :to="{name: 'train', params: {id: deck.id}}"
+                                                :to="{name: 'train', params: {id: getDeck.id}}"
                                             >Учить</v-btn>
                                         </v-hover>
                                     </v-col>
@@ -53,12 +52,9 @@
                                     <v-col cols="12" sm8>
                                         <v-expansion-panels flat hover class="mt-2">
                                             <v-expansion-panel>
-                                                <v-expansion-panel-header
-                                                    expand-icon="mdi-menu-down"
-                                                    color="light"
-                                                >Карточки</v-expansion-panel-header>
+                                                <v-expansion-panel-header expand-icon="mdi-menu-down" color="light">Карточки</v-expansion-panel-header>
                                                 <v-expansion-panel-content eager>
-                                                    <card-list :cards-id="deck.cards"/>
+<!--                                                    <card-list :cards-id="deck.cards"/>-->
                                                 </v-expansion-panel-content>
                                             </v-expansion-panel>
                                         </v-expansion-panels>
@@ -75,10 +71,10 @@
 <!--            <card-create @card-created="handleSuccessCreate" :deck="deck"></card-create>-->
         </modal>
         <modal v-model="editDeckModal" type="short">
-            <deck-update @deck-updated="handleSuccessEditDeck" :id="deck.id"></deck-update>
+            <deck-update @deck-updated="handleSuccessEditDeck" :id="getDeck.id"></deck-update>
         </modal>
         <modal v-model="deleteDeckModal" type="short">
-            <deck-delete @deck-deleted="handleSuccessDeleteDeck" :deck="deck"></deck-delete>
+            <deck-delete @deck-deleted="handleSuccessDeleteDeck" :deck="getDeck"></deck-delete>
         </modal>
         <modal v-model="successModal" type="short">
             <v-alert type="success">{{successMessage}}</v-alert>
@@ -87,22 +83,25 @@
 </template>
 
 <script>
-    import CardList from "../../components/daemons/Card/CardList";
-    import {validate} from "../../plugins/helpers";
-    import SuccessModal from "../../components/common/Modals/SuccessModal";
-    import Modal from "../../components/common/Modals/Modal";
-    import DeckUpdate from "../../components/daemons/Deck/DeckUpdate";
-    import DeckDelete from "../../components/daemons/Deck/DeckDelete";
+    import SuccessModal from "../../../../App/Components/Modal/SuccessModal.vue";
+    import Modal from "../../../../App/Components/Modal/Modal.vue";
+    import DeckUpdate from "./CRUD/DeckUpdate";
+    import DeckDelete from "./CRUD/DeckDelete";
+    import {Deck} from "../Deck";
+    import Router from "../../../../App/Router";
+    // import CardList from "../../components/daemons/Card/CardList";
 
     export default {
         name: "DeckDetail",
-        components: {DeckDelete, DeckUpdate, Modal, CardList},
+        components: {DeckDelete, DeckUpdate, Modal},
         props: {
-            id: { required: true }
+            deck: {
+                required: true,
+                default: new Deck()
+            }
         },
         data: function () {
             return {
-                deck: {},
                 editDeckModal: false,
                 deleteDeckModal: false,
                 createCardModal: false,
@@ -110,6 +109,9 @@
                 successMessage: '',
                 fab: false,
             }
+        },
+        computed: {
+            getDeck: function() { return this.deck || {}},
         },
         methods: {
             setDeck(deck) {
@@ -127,9 +129,12 @@
                 this.deleteDeckModal = !this.deleteDeckModal;
             },
             handleSuccessDeleteDeck: function(value) {
+                debugger
                 this.deleteDeckModal = !this.deleteDeckModal;
                 this.successMessage = value;
                 this.successModal = !this.successModal;
+
+                Router.push({name: 'Collection'});
             },
             createModalToggle: function() {
                 this.createModal = !this.createModal;

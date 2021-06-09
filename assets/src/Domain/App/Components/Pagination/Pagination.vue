@@ -1,12 +1,14 @@
 <template>
-    <v-pagination
-        v-model="currentPage"
-        :length="countPages"
-        :total-visible="countButtonsPagination"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-    ></v-pagination>
-    <slot v-bind:page="page"></slot>
+    <div>
+        <v-pagination
+                v-model="currentPage"
+                :length="countPages"
+                :total-visible="countButtonsPagination"
+                prev-icon="mdi-menu-left"
+                next-icon="mdi-menu-right"
+        ></v-pagination>
+        <slot v-bind:page="page"></slot>
+    </div>
 </template>
 
 <script lang="ts">

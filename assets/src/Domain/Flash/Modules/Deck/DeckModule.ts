@@ -29,6 +29,7 @@ class VuexDeck extends VuexModule {
 
     @Mutation
     private FETCH_DECKS(data: any) {
+
         data.forEach((deck: Deck)=>{
             let newDeck = cloneObject(deck);
             if (newDeck.cards) {
@@ -80,7 +81,7 @@ class VuexDeck extends VuexModule {
     public async delete(deck: Deck): Promise<any> {
         AppModule.loading();
         const response  = await DeckService.delete(deck);
-        this.DELETE(response.data);
+        this.DELETE(deck);
         AppModule.unsetLoading();
         return response.data;
     }
@@ -88,9 +89,18 @@ class VuexDeck extends VuexModule {
     @Mutation
     private DELETE(deck: Deck) {
         // @ts-ignore
-        Vue.delete(this.byId, deck.getId());
+        Vue.delete(this.byId, deck.id);
         // @ts-ignore
-        this.allIds.splice(this.allIds.indexOf(deck.getId()), 1)
+        this.allIds.splice(this.allIds.indexOf(deck.id), 1)
+    }
+
+    @Action({ rawError: true })
+    public async get(deck: Deck): Promise<any> {
+        AppModule.loading();
+        const response  = await DeckService.get(deck);
+        this.FETCH_DECKS([response.data]);
+        AppModule.unsetLoading();
+        return response.data;
     }
 }
 

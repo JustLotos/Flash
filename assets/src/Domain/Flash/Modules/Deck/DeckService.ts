@@ -16,5 +16,9 @@ export default {
     async delete(deck: Deck) {
         // @ts-ignore
         return Axios.delete(ApiRouter.getRouteByName('deleteDeck', { id: deck.id }).path);
+    },
+    async get(deck: Deck) {
+        // @ts-ignore
+        return Axios.get(ApiRouter.getRouteByName('getDeck', { id: deck.id }).path);
     }
 };

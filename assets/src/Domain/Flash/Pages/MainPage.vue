@@ -19,11 +19,7 @@ export default class MainPage extends Vue{
 
     beforeRouteEnter (to, from, next) {
         !UserModule.isAuthenticated ? next(AppModule.getRedirectToUnAuth) : next()
-        DeckModule.fetchDecks().then(function (data) {
-
-        }).catch(function (data) {
-          debugger
-        });
+        DeckModule.fetchDecks().then(function (data) {}).catch(function (data) {});
     }
 }
 </script>
