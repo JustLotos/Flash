@@ -13,6 +13,7 @@
                 :total-visible="countButtonsPagination"
                 prev-icon="mdi-menu-left"
                 next-icon="mdi-menu-right"
+                style="padding-top: 15px"
             ></v-pagination>
         </slot>
     </v-flex>

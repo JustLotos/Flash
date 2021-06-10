@@ -1,14 +1,18 @@
 <template>
-    <v-main>
-        <v-card>
+    <v-main style="padding-top: 0">
+        <v-card max-width="900px" style="margin: auto">
             <v-row justify="center">
                 <v-col cols="9">
-                    <list-objects :items="getDecks" :items-id="getDecksById" :pagination="{perPage: 10, buttonsCount: 7}">
+                    <list-objects
+                            :items="getDecks"
+                            :items-id="getDecksById"
+                            :pagination="{perPage: 10, buttonsCount: 7}"
+                    >
                         <template v-slot:item="deck">
-                            <deck-list-item :deck="deck.item"></deck-list-item>
+                            <deck-list-item :deck="deck.item" />
                         </template>
                         <template v-slot:empty>
-                            <v-row v-if="isLoading" justify="center">
+                            <v-row v-if="isLoading" justify="center" style="padding: 15px">
                                 <v-progress-circular :size="70" :width="7" color="primary" indeterminate />
                             </v-row>
                             <v-row v-else justify="center">
@@ -31,6 +35,7 @@
                 </v-fab-transition>
             </v-card-text>
         </v-card>
+
         <v-dialog v-model="createModal" max-width="700px">
             <v-main>
                 <v-layout justify-center align-center class="position-relative">

@@ -49,11 +49,14 @@
                                             >Добавить новые карточки</v-btn>
                                         </v-hover>
                                     </v-col>
-                                    <v-col cols="12" sm8>
+                                    <v-col cols="12" sm8 v-if="false">
                                         <v-expansion-panels flat hover class="mt-2">
                                             <v-expansion-panel>
                                                 <v-expansion-panel-header expand-icon="mdi-menu-down" color="light">Карточки</v-expansion-panel-header>
                                                 <v-expansion-panel-content eager>
+<!--                                                    <list-objects :items="cards" :items-id="cardsId" pagination="true">-->
+<!--                                                        <template v-slot:item="{item}"></template>-->
+<!--                                                    </list-objects>-->
 <!--                                                    <card-list :cards-id="deck.cards"/>-->
                                                 </v-expansion-panel-content>
                                             </v-expansion-panel>
@@ -67,14 +70,11 @@
             </v-card>
         </v-col>
 
-        <modal v-model="createCardModal" type="wide">
-<!--            <card-create @card-created="handleSuccessCreate" :deck="deck"></card-create>-->
-        </modal>
         <modal v-model="editDeckModal" type="short">
-            <deck-update @deck-updated="handleSuccessEditDeck" :id="getDeck.id"></deck-update>
+            <deck-update @deck-updated="onUpdateDeck" :id="getDeck.id"/>
         </modal>
         <modal v-model="deleteDeckModal" type="short">
-            <deck-delete @deck-deleted="handleSuccessDeleteDeck" :deck="getDeck"></deck-delete>
+            <deck-delete @deleted="onDeleteDeck" :deck="getDeck" />
         </modal>
         <modal v-model="successModal" type="short">
             <v-alert type="success">{{successMessage}}</v-alert>
@@ -85,15 +85,14 @@
 <script>
     import SuccessModal from "../../../../App/Components/Modal/SuccessModal.vue";
     import Modal from "../../../../App/Components/Modal/Modal.vue";
-    import DeckUpdate from "./CRUD/DeckUpdate";
-    import DeckDelete from "./CRUD/DeckDelete";
+    import DeckUpdate from "./CRUD/DeckUpdate.vue";
+    import DeckDelete from "./CRUD/DeckDelete.vue";
     import {Deck} from "../Deck";
     import Router from "../../../../App/Router";
-    // import CardList from "../../components/daemons/Card/CardList";
-
+    import ListObjects from "../../../../App/Components/List/ListObjects";
     export default {
         name: "DeckDetail",
-        components: {DeckDelete, DeckUpdate, Modal},
+        components: {ListObjects, DeckDelete, DeckUpdate, Modal},
         props: {
             deck: {
                 required: true,
@@ -111,55 +110,31 @@
             }
         },
         computed: {
-            getDeck: function() { return this.deck || {}},
+            getDeck() { return this.deck || {}}
         },
         methods: {
-            setDeck(deck) {
-                this.deck = deck;
-            },
-            editDeckModalToggle: function () {
-                this.editDeckModal = !this.editDeckModal;
-            },
-            handleSuccessEditDeck: function(value) {
+            editDeckModalToggle() { this.editDeckModal = !this.editDeckModal;},
+            deleteDeckModalToggle() { this.deleteDeckModal = !this.deleteDeckModal},
+            createModalToggle() { this.createModal = !this.createModal },
+            onUpdateDeck(value) {
                 this.editDeckModal = !this.editDeckModal;
                 this.successMessage = value;
                 this.successModal = !this.successModal;
             },
-            deleteDeckModalToggle: function () {
-                this.deleteDeckModal = !this.deleteDeckModal;
-            },
-            handleSuccessDeleteDeck: function(value) {
+            onDeleteDeck(value) {
                 debugger
                 this.deleteDeckModal = !this.deleteDeckModal;
                 this.successMessage = value;
                 this.successModal = !this.successModal;
-
-                Router.push({name: 'Collection'});
+                // Router.push({name: 'Collection'});
             },
-            createModalToggle: function() {
-                this.createModal = !this.createModal;
-            },
-            handleSuccessCreate: function(value) {
+            handleSuccessCreate(value) {
                 this.successMessage = value;
                 this.successModal = !this.successModal;
             },
-        },
-        beforeRouteEnter: async function (to , from , next) {
-            if (validate(to)) {
-                // await store.dispatch('DeckStore/getOne', {id: to.params.id})
-                //     .then(()=>{
-                //         let deck = store.getters['DeckStore/decks'][to.params.id];
-                //         next(vm => vm.setDeck(deck));
-                //     })
-                //     .catch((errors)=>{
-                //         router.push({name: '404'});
-                //         console.log(errors);
-                //     });
-            } else {
-                router.push({name: '404'});
+            test: function () {
+                debugger
             }
         }
     }
 </script>
-
-<style scoped></style>
