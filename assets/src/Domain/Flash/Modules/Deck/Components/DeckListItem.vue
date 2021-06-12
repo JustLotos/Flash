@@ -6,7 +6,7 @@
                     <v-row justify="center">
                         <v-col v-if="getDeck.avatar" cols="4" class="justify-center text-center">
                             <v-hover v-slot:default="{ hover }">
-                                <router-link :to="getDeckLink(getDeck.id)">
+                                <router-link :to="getLink(getDeck)">
                                     <v-avatar class="profile" color="grey" size="200" tile>
                                         <v-img class="white--text align-end" height="200px"
                                             src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"/>
@@ -18,7 +18,7 @@
                             <v-hover open-delay="0.3s" v-slot:default="{hover}">
                                 <v-toolbar color="primary" dense short :elevation="hover ? 12 : 0">
                                     <v-toolbar-title>
-                                        <v-btn :to="getDeckLink(getDeck.id)" :color="hover ?  'primary' : 'light'">{{ getDeck.name }}</v-btn>
+                                        <v-btn :to="getLink(getDeck)" :color="hover ?  'primary' : 'light'">{{ getDeck.getName() }}</v-btn>
                                     </v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     <v-speed-dial v-model="fab" direction="left">
@@ -43,11 +43,12 @@
                                 </v-toolbar>
                             </v-hover>
                             <v-card-subtitle dark class="card-description white--text" style="margin: 0; ">
-                                {{ deck.description }}
+                                {{ getDeck.getDescription() }}
                             </v-card-subtitle>
                             <v-card-actions>
-                                <v-row justify="end" no-gutters>
-                                    <v-btn :to="getDeckLink(getDeck.id)">
+                                <v-row justify="space-between" no-gutters>
+                                    <div style="padding: 8px">{{ getFormattedDate }}</div>
+                                    <v-btn :to="getLink(getDeck)">
                                         Перейти
                                         <v-icon>{{ 'mdi-chevron-right' }}</v-icon>
                                     </v-btn>
@@ -68,7 +69,7 @@
                 <v-alert type="success"><slot>Операция выполнена успешно!</slot></v-alert>
             </modal>
         </v-layout>
-    </v-main fluid>
+    </v-main>
 </template>
 
 <script>
@@ -88,7 +89,7 @@
         props: {
             deck: {
                 required: true,
-                default: new Deck()
+                default: {}
             },
         },
         data: function () {
@@ -101,7 +102,8 @@
             };
         },
         computed: {
-            getDeck() { return this.deck || {};}
+            getDeck() {return new Deck(this.deck) || {} },
+            getFormattedDate() { return this.getDeck.getFormattedDate() || '' }
         },
         methods: {
             editModalToggle() { this.editModal = !this.editModal },
@@ -116,7 +118,7 @@
                 this.successMessage = value;
                 this.successModal = !this.successModal;
             },
-            getDeckLink: id => { return {name: 'DeckDetail', params: { id: id }} }
+            getLink: (deck) => { return {name: 'DeckDetail', params: { id: deck.getId() }}}
         }
     }
 </script>

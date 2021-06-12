@@ -69,7 +69,6 @@
             async onDeckDelete() {
                 if(this.$refs.deckDeleteForm.validate()) {
                     await DeckModule.delete(this.deck).then(()=>{
-                        debugger
                         this.$emit('deleted', 'Колода успешно удалена!');
                     }).catch((error)=>{
                         console.log(error);

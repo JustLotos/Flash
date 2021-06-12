@@ -122,7 +122,6 @@
                 this.successModal = !this.successModal;
             },
             onDeleteDeck(value) {
-                debugger
                 this.deleteDeckModal = !this.deleteDeckModal;
                 this.successMessage = value;
                 this.successModal = !this.successModal;
@@ -131,9 +130,6 @@
             handleSuccessCreate(value) {
                 this.successMessage = value;
                 this.successModal = !this.successModal;
-            },
-            test: function () {
-                debugger
             }
         }
     }

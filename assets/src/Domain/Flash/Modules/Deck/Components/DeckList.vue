@@ -4,9 +4,9 @@
             <v-row justify="center">
                 <v-col cols="9">
                     <list-objects
-                            :items="getDecks"
-                            :items-id="getDecksById"
-                            :pagination="{perPage: 10, buttonsCount: 7}"
+                        :items="getDecks"
+                        :items-id="getDecksById"
+                        :pagination="{perPage: 10, buttonsCount: 7}"
                     >
                         <template v-slot:item="deck">
                             <deck-list-item :deck="deck.item" />

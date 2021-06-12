@@ -23,9 +23,12 @@ export default class DeckDetailPage extends Vue {
     get isLoading() { return AppModule.isLoading }
 
     beforeRouteEnter (to, from, next) {
-        DeckModule.get(new Deck(to.params?.id)).then(function (data) {
-            next(vm => vm.setDeck(DeckModule.deckById(to.params?.id)))
+        let deck: Deck = new Deck(to.params);
+
+        DeckModule.get(deck).then(function () {
+            next(vm => vm.setDeck(DeckModule.deckById(deck.getId())))
         }).catch(function (data) {
+            console.log(data);
             Router.push({name: 'Collection'});
         });
     }

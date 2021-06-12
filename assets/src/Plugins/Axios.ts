@@ -11,7 +11,7 @@ let Axios = axios.create({
 
 Axios.interceptors.response.use(
     (response) => { return response },
-    function (error) {
+    async function (error) {
         UserModule.UNSET_LOADING();
         const originalRequest: AxiosRequestConfig = error.config;
 
@@ -25,13 +25,14 @@ Axios.interceptors.response.use(
             return Router.push({name: 'Login'});
         }
 
+        // @ts-ignore
         if (error.response?.status === 401 && !originalRequest._retry) {
+            // @ts-ignore
             originalRequest._retry = true;
             // noinspection TypeScriptValidateTypes
-            UserModule.refreshToken().then(() => {
-                originalRequest.headers['Authorization'] = 'Bearer' + UserModule.user.accessToken;
-                return Axios(originalRequest);
-            });
+            await UserModule.refreshToken();
+            originalRequest.headers['Authorization'] = 'Bearer' + UserModule.user.accessToken;
+            return Axios(originalRequest);
         }
 
         Logger.logAPIError(error);

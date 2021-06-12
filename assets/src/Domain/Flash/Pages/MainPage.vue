@@ -18,8 +18,8 @@ export default class MainPage extends Vue{
     get decksById() { return DeckModule.decksById || {} }
 
     beforeRouteEnter (to, from, next) {
-        !UserModule.isAuthenticated ? next(AppModule.getRedirectToUnAuth) : next()
-        DeckModule.fetchDecks().then(function (data) {}).catch(function (data) {});
+        DeckModule.fetchDecks().catch(data => console.log(data));
+        next();
     }
 }
 </script>

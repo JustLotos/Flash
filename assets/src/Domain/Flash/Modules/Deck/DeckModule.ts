@@ -5,10 +5,10 @@ import DeckService from "./DeckService";
 import {Deck} from "./Deck";
 import {cloneObject} from "../../../../Utils/Helpers";
 import Vue from "vue";
+import Card from "./Card/Card";
 
-@Module({dynamic: true, store: Store, name: 'DeckModule'})
+@Module({dynamic: true, store: Store, name: 'DeckModule', namespaced: true})
 class VuexDeck extends VuexModule {
-    deck: Deck = new Deck(-1, "default");
     allIds = [];
     byId = {};
 
@@ -29,17 +29,15 @@ class VuexDeck extends VuexModule {
 
     @Mutation
     private FETCH_DECKS(data: any) {
+        data.forEach((dataItem: any)=>{
+            let deck: Deck = Deck.parseJSON(dataItem);
 
-        data.forEach((deck: Deck)=>{
-            let newDeck = cloneObject(deck);
-            if (newDeck.cards) {
-                newDeck.cards = newDeck.cards.map((card: { id: any; }) => card.id);
-            }
-            Vue.set(this.byId, newDeck.id, newDeck);
             // @ts-ignore
-            if (!this.allIds.includes(newDeck.id)) {
+            Vue.set(this.byId, deck.getId(), deck);
+            // @ts-ignore
+            if (!this.allIds.includes(deck.getId())) {
                 // @ts-ignore
-                this.allIds.push(newDeck.id);
+                this.allIds.push(deck.getId());
             }
         });
     }
@@ -48,31 +46,16 @@ class VuexDeck extends VuexModule {
     public async add(data: Deck): Promise<any> {
         AppModule.loading();
         const response  = await DeckService.add(data);
-        this.ADD(response.data);
+        this.FETCH_DECKS([response.data]);
         AppModule.unsetLoading();
         return response.data;
     }
-
-    @Mutation
-    private ADD(deck: Deck) {
-        let newDeck = cloneObject(deck);
-        if (newDeck.cards) {
-            newDeck.cards = newDeck.cards.map((card: { id: any; }) => card.id);
-        }
-        Vue.set(this.byId, newDeck.id, newDeck);
-        // @ts-ignore
-        if (!this.allIds.includes(newDeck.id)) {
-            // @ts-ignore
-            this.allIds.push(newDeck.id);
-        }
-    }
-
 
     @Action({ rawError: true })
     public async update(data: Deck): Promise<any> {
         AppModule.loading();
         const response  = await DeckService.update(data);
-        this.ADD(response.data);
+        this.FETCH_DECKS([response.data]);
         AppModule.unsetLoading();
         return response.data;
     }
