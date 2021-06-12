@@ -1,6 +1,6 @@
 <template>
     <v-form ref="form">
-        <v-row justify="center" no-gutters style="width: 560px">
+        <v-row justify="center" no-gutters style="width: 600px">
             <v-col v-if="commonError" cols="12" sm="8">
                 <v-alert
                     class="mt-5"
@@ -10,22 +10,22 @@
             </v-col>
             <v-col cols="12" sm="8">
                 <control-name
-                        v-model="deck.name"
-                        :error-message="errors.name"
+                        v-model="getDeck.name"
+                        :error-message="getErrors.name"
                 ></control-name>
             </v-col>
             <v-flex v-if="detailSettings.show">
                 <v-row justify="center">
                     <v-col cols="12" sm="8">
                         <control-text
-                            v-model="deck.description"
-                            :error-message="errors.description">
+                            v-model="getDeck.description"
+                            :error-message="getErrors.description">
                         </control-text>
                     </v-col>
                     <v-col cols="12" sm="8">
                         <control-slider
-                            v-model:slider="deck.limit_repeat"
-                            :error-message="errors.limit_repeat"
+                            v-model:slider="getDeck.limit_repeat"
+                            :error-message="getErrors.limit_repeat"
                             :hint="'Количество карточек доступных для повторения в день'"
                         >
                             <template v-slot:label="{value}">
@@ -35,8 +35,8 @@
                     </v-col>
                     <v-col cols="12" sm="8">
                         <control-slider
-                            v-model:slider="deck.limit_learning"
-                            :error-message="errors.limit_learning"
+                            v-model:slider="getDeck.limit_learning"
+                            :error-message="getErrors.limit_learning"
                             :hint="'Количество карточек доступных для повторения в день'"
                             :label="'Изучение'"
                         >
@@ -47,8 +47,8 @@
                     </v-col>
                     <v-col cols="12" sm="8">
                         <control-slider
-                            v-model:slider="deck.difficulty_index"
-                            :error-message="errors.difficulty_index"
+                            v-model:slider="getDeck.difficulty_index"
+                            :error-message="getErrors.difficulty_index"
                             :hint="'Этот коэффициент влияет вобщем на частоту повторения'"
                             :label="'Коэффициент сложности'"
                         >
@@ -59,8 +59,8 @@
                     </v-col>
                     <v-col cols="12" sm="8">
                         <control-slider
-                            v-model:slider="deck.base_index"
-                            :error-message="errors.base_index"
+                            v-model:slider="getDeck.base_index"
+                            :error-message="getErrors.base_index"
                             :hint="'Из данного коэффициента рассчитываются периоды повторения'"
                             :label="'Базовый коэффициент'"
                         >
@@ -71,8 +71,8 @@
                     </v-col>
                     <v-col cols="12" sm="9">
                         <control-slider
-                            v-model:slider="deck.modifier_index"
-                            :error-message="errors.modifier_index"
+                            v-model:slider="getDeck.modifier_index"
+                            :error-message="getErrors.modifier_index"
                             :hint="'Из данного коэффициента рассчитывается то насколько быстро будет первое повторение'"
                             :label="'Дополнительный коэффициент'"
                         >
@@ -84,11 +84,12 @@
                 </v-row>
             </v-flex>
         </v-row>
-        <v-row :justify-sm="'center'">
+        <v-row :justify-sm="'center'" class="mb-2">
             <v-col sm="auto">
                 <v-btn
                     elevation="0"
                     @click="toggleDetailSettings"
+                    class="mr-2"
                 >{{detailSettings.message}}</v-btn>
                 <v-btn color="primary" @click="onSubmitForm" :loading="isLoading">
                     <slot name="submit"></slot>
@@ -112,7 +113,10 @@
                 type: String,
                 required: true
             },
-            deck: new Deck,
+            deck: {
+                required: true,
+                default: new Deck()
+            },
             errors: {
                 type: Object,
                 default: {}
@@ -122,6 +126,14 @@
             },
             isLoading: {
                 default: false
+            }
+        },
+        computed: {
+            getDeck: function () {
+                return this.deck || {};
+            },
+            getErrors: function () {
+                return this.errors || {};
             }
         },
         data: function () {

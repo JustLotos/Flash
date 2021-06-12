@@ -24,7 +24,6 @@ export default class DeckDetailPage extends Vue {
 
     beforeRouteEnter (to, from, next) {
         let deck: Deck = new Deck(to.params);
-
         DeckModule.get(deck).then(function () {
             next(vm => vm.setDeck(DeckModule.deckById(deck.getId())))
         }).catch(function (data) {

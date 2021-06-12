@@ -11,14 +11,15 @@ export default {
     },
     async update(deck: Deck) {
         // @ts-ignore
-        return Axios.put(ApiRouter.getRouteByName('updateDeck', { id: deck.id }).path, deck);
+        return Axios.put(ApiRouter.getRouteByName('updateDeck', { id: deck.getId() }).path, deck);
     },
     async delete(deck: Deck) {
         // @ts-ignore
-        return Axios.delete(ApiRouter.getRouteByName('deleteDeck', { id: deck.id }).path);
+        return Axios.delete(ApiRouter.getRouteByName('deleteDeck', { id: deck.getId() }).path);
     },
     async get(deck: Deck) {
+
         // @ts-ignore
-        return Axios.get(ApiRouter.getRouteByName('getDeck', { id: deck.id }).path);
+        return Axios.get(ApiRouter.getRouteByName('getDeck', { id: deck.getId() }).path);
     }
 };

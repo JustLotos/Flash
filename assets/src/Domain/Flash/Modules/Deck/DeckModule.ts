@@ -3,11 +3,14 @@ import {Store} from "../../../App/Store";
 import {AppModule} from "../../../App/AppModule";
 import DeckService from "./DeckService";
 import {Deck} from "./Deck";
-import {cloneObject} from "../../../../Utils/Helpers";
 import Vue from "vue";
-import Card from "./Card/Card";
 
-@Module({dynamic: true, store: Store, name: 'DeckModule', namespaced: true})
+@Module({
+    dynamic: true,
+    store: Store,
+    name: 'DeckModule',
+    namespaced: true
+})
 class VuexDeck extends VuexModule {
     allIds = [];
     byId = {};
@@ -63,6 +66,7 @@ class VuexDeck extends VuexModule {
     @Action({ rawError: true })
     public async delete(deck: Deck): Promise<any> {
         AppModule.loading();
+
         const response  = await DeckService.delete(deck);
         this.DELETE(deck);
         AppModule.unsetLoading();
@@ -80,6 +84,7 @@ class VuexDeck extends VuexModule {
     @Action({ rawError: true })
     public async get(deck: Deck): Promise<any> {
         AppModule.loading();
+
         const response  = await DeckService.get(deck);
         this.FETCH_DECKS([response.data]);
         AppModule.unsetLoading();

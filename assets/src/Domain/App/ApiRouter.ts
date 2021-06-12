@@ -14,21 +14,23 @@ class APIRouter {
     }
 
     public getRouteByName(name: string, params = {}): RouteConfig {
-        let result = this.$links.filter((link: Link) => link.name === name).pop();
-        if (!result) throw `Url with name ${name} not found`;
+        let searchRoute = this.$links.filter((link: any) => link.name === name).pop();
+        if (!searchRoute) throw `Url with name ${name} not found`;
 
         Object.entries(params).forEach(([key, value]) => {
-            if(result) {
+            if(searchRoute) {
+                searchRoute = Object.assign({}, searchRoute);
                 // @ts-ignore
-                result.path = result.path.replace('{' + key + '}', value);
+                searchRoute.path = searchRoute.path.replace('{' + key + '}', value);
             }
         });
 
-        return result;
+        console.log(searchRoute);
+        return searchRoute;
     }
 
     public getRouteByPath(path: string): RouteConfig {
-        let result = this.$links.filter((link: Link) => link.path === path).pop();
+        let result = this.$links.filter((link: any) => link.path === path).pop();
         if (!result) throw `Url with path ${path} not found`;
         return result;
     }

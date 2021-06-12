@@ -19,10 +19,9 @@ export class Deck {
     public getId(): Number|String { return this.id }
     public getName(): String { return this.name }
     public getUpdatedAt(): String { return this.updatedAt }
-    public getDescription(): String { return this.description}
+    public getDescription(): String { return this.description }
     public getCards(): Array<Number> { return this.cards }
     public setCards(cards: Array<Number>) { this.cards = cards }
-
 
     public getFormattedDate() {
         return new Date(this.updatedAt).toLocaleDateString();

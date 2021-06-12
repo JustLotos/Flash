@@ -1,7 +1,12 @@
 <template>
     <v-card>
         <v-card-title class="justify-center">Редактирование колоды</v-card-title>
-        <deck-form :deck="deck" :event-name="'update'" @update="update" :errors="updateErrors">
+        <deck-form
+                :deck="deck"
+                :event-name="'update'"
+                :errors="updateErrors"
+                @update="update"
+        >
             <template v-slot:submit>Сохранить</template>
         </deck-form>
     </v-card>
@@ -11,13 +16,15 @@
     import DeckForm from "../DeckForm";
     import {mapGetters} from 'vuex';
     import {DeckModule} from "../../DeckModule";
+    import {Deck} from "../../Deck";
     export default {
         name: "DeckUpdate",
         components: {DeckForm},
         props: {
-            id: {
-                required: true
-            },
+            deck: {
+                required: true,
+                default: new Deck()
+            }
         },
         data: function() {
             return {
@@ -25,13 +32,17 @@
             }
         },
         computed: {
-            deck: () => DeckModule.deckById(this.id),
-            updateErrors: () => this.errors ? this.errors : {},
+            getDeck: function () {
+                return this.deck || {};
+            },
+            updateErrors:function() {
+                return this.errors || {}
+            },
         },
         methods: {
             async update (deck) {
                 await DeckModule.update(deck).then(()=>{
-                    this.$emit('deck-updated', 'Колода успешно сохранена!');
+                    this.$emit('updated', 'Колода успешно сохранена!');
                 }).catch((errors)=>{console.log(errors);})
             }
         },

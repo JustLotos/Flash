@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs10 class="justify-center">
+    <v-flex xs10 class="justify-center" style="max-width: 600px">
         <v-form ref="deckDeleteForm">
             <v-card>
                 <v-flex xs10 offset-xs1 class="text-center">

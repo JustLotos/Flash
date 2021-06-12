@@ -3,9 +3,24 @@
         <v-card max-width="900px" style="margin: auto">
             <v-row justify="center">
                 <v-col cols="9">
+                    <v-toolbar dense>
+                        <v-toolbar-title v-if="searchToggle">
+                            <v-text-field hide-details prepend-icon="mdi-magnify" single-line v-model="searchField"/>
+                        </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-btn v-if="!searchToggle" icon @click="toggleSearch()">
+                            <v-icon>mdi-magnify</v-icon>
+                        </v-btn>
+                        <v-btn icon>
+                            <v-icon>mdi-heart</v-icon>
+                        </v-btn>
+                        <v-btn icon>
+                            <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                    </v-toolbar>
                     <list-objects
                         :items="getDecks"
-                        :items-id="getDecksById"
+                        :items-id="getDecksByIdSortByDate"
                         :pagination="{perPage: 10, buttonsCount: 7}"
                     >
                         <template v-slot:item="deck">
@@ -60,6 +75,7 @@
     import SuccessModal from "../../../../App/Components/Modal/SuccessModal.vue";
     import {DeckModule} from "../DeckModule";
     import {AppModule} from "../../../../App/AppModule";
+    import {Deck} from "../Deck";
 
     export default {
         name: 'DeckList',
@@ -69,6 +85,9 @@
                 createModal: false,
                 successModal: false,
                 successMessage: '',
+                searchToggle: false,
+                searchField: "",
+                toggleBiggerToolbar: true
             }
         },
         props: {
@@ -83,7 +102,23 @@
         },
         computed: {
             getDecks: function() { return this.decks },
-            getDecksById: function() { return this.decksById },
+            getDecksByIdSortByDate: function (value) {
+
+                debugger
+                let decks = this.getDecks;
+                let deckEntries = Object.entries(decks);
+
+                deckEntries.sort(function (a, b) {
+                    return new Date(b[1].getUpdatedAt()) - new Date(a[1].getUpdatedAt());
+                });
+
+                let sortedDeck = [];
+                deckEntries.forEach(item => sortedDeck.push(item[0]));
+                return sortedDeck;
+            },
+            getDecksById: function() {
+                return this.decksById
+            },
             createModalBtnPlacement: function() {
                 let empty = !!this.decksById && !!this.decksById.length;
                 return { 'on-side': empty, 'on-card': !empty }
@@ -98,6 +133,10 @@
                 this.successMessage = value;
                 this.successModal = !this.successModal;
             },
+            toggleSearch: function () {
+                console.log(this.searchToggle);
+                this.searchToggle = !this.searchToggle;
+            }
         }
     }
 </script>
