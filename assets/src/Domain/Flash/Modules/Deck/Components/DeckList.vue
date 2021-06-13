@@ -17,9 +17,12 @@
                         <v-btn icon>
                             <v-icon>mdi-dots-vertical</v-icon>
                         </v-btn>
+                        <v-btn v-if="showClearButton" absolute top right icon dark @click="clearToolbar()">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
                     </v-toolbar>
                     <list-objects
-                        :items="getDecks"
+                        :items="getDecks"ti
                         :items-id="getDecksByIdSortByDate"
                         :pagination="{perPage: 10, buttonsCount: 7}"
                     >
@@ -87,7 +90,6 @@
                 successMessage: '',
                 searchToggle: false,
                 searchField: "",
-                toggleBiggerToolbar: true
             }
         },
         props: {
@@ -102,9 +104,7 @@
         },
         computed: {
             getDecks: function() { return this.decks },
-            getDecksByIdSortByDate: function (value) {
-
-                debugger
+            getDecksByIdSortByDate: function () {
                 let decks = this.getDecks;
                 let deckEntries = Object.entries(decks);
 
@@ -123,7 +123,10 @@
                 let empty = !!this.decksById && !!this.decksById.length;
                 return { 'on-side': empty, 'on-card': !empty }
             },
-            isLoading: () => AppModule.isLoading
+            isLoading: () => AppModule.isLoading,
+            showClearButton(): function {
+                return this.searchToggle;
+            }
         },
         methods: {
             createModalToggle: function() {
@@ -136,7 +139,11 @@
             toggleSearch: function () {
                 console.log(this.searchToggle);
                 this.searchToggle = !this.searchToggle;
-            }
+            },
+            clearToolbar: function() {
+                this.searchToggle = false;
+            },
+
         }
     }
 </script>
