@@ -1,5 +1,10 @@
 <template>
-    <list-objects :items="getCards" :items-id="getCardsId" pagination="true">
+    <list-objects
+        :items="getCards"
+        :items-id="getCardsId"
+        pagination="true"
+        :elements-on-page="7"
+    >
         <template v-slot:item="{item}">
             <card-list-row v-if="item" :card="item"></card-list-row>
         </template>

@@ -32,7 +32,7 @@
         },
         methods: {
             getLink: function () {
-                return { name: 'getCard', params: {id: this.getCard.id} };
+                return { name: 'CardDetail', params: {id: this.getCard.id} };
             }
         }
     }

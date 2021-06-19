@@ -103,11 +103,10 @@
     import ControlName from "../../../../App/Components/FormElements/ControlName.vue";
     import ControlText from "../../../../App/Components/FormElements/ControlText.vue";
     import ControlSlider from "../../../../App/Components/FormElements/ControlSlider.vue";
-    import {cloneObject} from "../../../../../Utils/Helpers";
     import {Deck} from "../Deck";
     export default {
         name: "DeckForm",
-        components: {ControlSlider, ControlText, ControlText, ControlName},
+        components: {ControlSlider, ControlText, ControlName},
         props: {
             eventName: {
                 type: String,

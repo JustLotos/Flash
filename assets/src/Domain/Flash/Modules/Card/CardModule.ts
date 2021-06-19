@@ -5,6 +5,7 @@ import Vue from "vue";
 import CardService from "./CardService";
 import Card from "./Card";
 import {Deck} from "../Deck/Deck";
+import CardByDeckDTO from "../../DTO/CardByDeckDTO";
 
 @Module({
     dynamic: true,
@@ -21,7 +22,10 @@ class VuexCard extends VuexModule {
     // @ts-ignore
     public get cardById() {return  id => this.byId[id] }
     public get cardsByDeck() { return (id) => {
+        console.log(this.allIds);
+        console.log(this.byId);
         let cards = Object.values(this.byId).filter(value => value.deck === +id);
+        console.log(cards);
         return cards.map((card: Card) => card.getId());
     }}
 
@@ -49,14 +53,16 @@ class VuexCard extends VuexModule {
         });
     }
     //
-    // @Action({ rawError: true })
-    // public async add(data: Deck): Promise<any> {
-    //     AppModule.loading();
-    //     const response  = await DeckService.add(data);
-    //     this.FETCH_DECKS([response.data]);
-    //     AppModule.unsetLoading();
-    //     return response.data;
-    // }
+    @Action({ rawError: true })
+    public async add(dto: CardByDeckDTO): Promise<any> {
+        AppModule.loading();
+        const response  = await CardService.add(dto);
+        console.log(response);
+        debugger
+        this.FETCH([response.data]);
+        AppModule.unsetLoading();
+        return response.data;
+    }
     //
     // @Action({ rawError: true })
     // public async update(data: Deck): Promise<any> {

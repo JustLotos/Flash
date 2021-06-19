@@ -48,7 +48,7 @@ class Card
 
     /**
      * @var Deck
-     * @Serializer\Groups({Card::GROUP_LIST})
+     * @Serializer\Groups({Card::GROUP_LIST, Card::GROUP_ONE})
      * @ORM\ManyToOne(targetEntity="App\Domain\Flash\Deck\Entity\Deck", inversedBy="cards")
      * @ORM\JoinColumn(name="deck_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */

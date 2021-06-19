@@ -52,7 +52,10 @@
                                     <v-col cols="12" sm8 v-if="getCardsId.length">
                                         <v-expansion-panels flat hover class="mt-2">
                                             <v-expansion-panel>
-                                                <v-expansion-panel-header expand-icon="mdi-menu-down" color="light">Карточки</v-expansion-panel-header>
+                                                <v-expansion-panel-header
+                                                    expand-icon="mdi-menu-down"
+                                                    color="light"
+                                                >Карточки</v-expansion-panel-header>
                                                 <v-expansion-panel-content eager>
                                                     <card-list :cards-id="getCardsId" :cards="getCards"/>
                                                 </v-expansion-panel-content>
@@ -67,6 +70,9 @@
             </v-card>
         </v-col>
 
+      <modal v-model="createCardModal" type="wide">
+        <card-create @created="onCreateCard" :deck="getDeck" />
+      </modal>
         <modal v-model="editDeckModal" type="short">
             <deck-update @updated="onUpdateDeck" :deck="getDeck"/>
         </modal>
@@ -88,9 +94,10 @@
     import Router from "../../../../App/Router";
     import {CardModule} from "../../Card/CardModule";
     import CardList from "../../Card/Components/CardList";
+    import CardCreate from "../../Card/Components/CRUD/CardCreate";
     export default {
         name: "DeckDetail",
-        components: {CardList, ListObjects, DeckDelete, DeckUpdate, Modal},
+        components: {CardCreate, CardList, ListObjects, DeckDelete, DeckUpdate, Modal},
         props: {
             deck: {
                 required: true,
@@ -128,7 +135,8 @@
                 this.deleteDeckModal = !this.deleteDeckModal;
             },
             createModalToggle: function() {
-                this.createModal = !this.createModal;
+                console.log('123');
+                this.createCardModal = !this.createCardModal;
             },
             onUpdateDeck: function (value) {
                 this.editDeckModal = !this.editDeckModal;
@@ -141,9 +149,10 @@
                 this.successModal = !this.successModal;
                 Router.push({name: 'Collection'});
             },
-            handleSuccessCreate: function(value) {
-                this.successMessage = value;
-                this.successModal = !this.successModal;
+            onCreateCard: function (value) {
+              console.log('card created');
+              console.log(value);
+              this.createCardModal = !this.createCardModal;
             }
         }
     }
