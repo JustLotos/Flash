@@ -64,6 +64,7 @@ class VuexCard extends VuexModule {
     @Action({ rawError: true })
     public async update(card: Card): Promise<any> {
         AppModule.loading();
+        console.log(card)
         const response  = await CardService.update(card);
         this.FETCH([response.data]);
         AppModule.unsetLoading();

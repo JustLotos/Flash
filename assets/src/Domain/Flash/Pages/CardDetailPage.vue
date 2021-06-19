@@ -1,7 +1,7 @@
 <template>
     <v-flex>
-        <v-row justify="space-around">
-            <v-col cols="12" md="10">
+        <v-row justify="space-around" >
+            <v-col cols="12" md="10" style="max-width: 900px">
                 <v-card :elevation="18" class="pa-12" >
                     <v-card-title class="d-flex" style="justify-content: space-between">
                       {{ getCard.getLabel() }}
@@ -15,11 +15,11 @@
                         <v-card-subtitle>Содержимое карточки</v-card-subtitle>
                         <v-col cols="12">
                             <v-card-text>Ключ</v-card-text>
-                            {{ getCard.getFrontData() }}
+                            {{ getCard.getFrontData }}
                         </v-col>
                         <v-col cols="12">
                             <v-card-text>Значение</v-card-text>
-                            {{ getCard.getBackData() }}
+                            {{ getCard.getBackData }}
                         </v-col>
                     </v-row>
                 </v-card>

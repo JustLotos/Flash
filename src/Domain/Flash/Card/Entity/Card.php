@@ -150,6 +150,11 @@ class Card
         array $records
     ): self {
         $this->updatedAt = $date;
+
+        foreach ($records as $record) {
+
+        }
+
         return $this;
     }
 

@@ -1,8 +1,8 @@
 <template>
-    <v-form ref="cardForm" class="ma-0">
-        <v-row justify="center" class="ma-0 pa-0">
-            <v-col cols="12" sm="10" class="ma-0 pa-0">
-                <v-card-title class="justify-center align-center pa-0">
+    <v-form ref="cardForm">
+        <v-row justify="center">
+            <v-col cols="12" sm="10">
+                <v-card-title class="justify-center align-center">
                     <span class="pr-3"><slot name="title"/></span>
                 </v-card-title>
             </v-col>
@@ -13,10 +13,10 @@
                     <control-name v-model="getCard.getLabel()" />
                 </v-col>
                 <v-col cols="12" sm="11" class="ma-0 pa-0 mb-2">
-                    <control-text v-model="getCard.getFrontData()" />
+                    <control-text v-model="getCard.getFrontData" label="Ключ" />
                 </v-col>
                 <v-col cols="12" sm="11" class="ma-0 pa-0">
-                    <control-text v-model="getCard.getBackData()" />
+                    <control-text v-model="getCard.getBackData" label="Значение" />
                 </v-col>
             </v-row>
         </v-flex>

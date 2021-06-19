@@ -18,7 +18,7 @@ export default class Card {
     public getId(): number { return this.id }
     public getDeck(): number { return this.deck }
     public getLabel(): string { return this.label }
-    public getFrontData(): string {
+    get getFrontData(): string {
         let records = this.records.filter((record: Record) => record.isFront());
         if(records.length) {
             return records[0].getValue();
@@ -27,13 +27,27 @@ export default class Card {
         return '';
     }
 
-    public getBackData(): string {
+    set getFrontData(value: string) {
+        let records = this.records.filter((record: Record) => record.isFront());
+        if(records.length) {
+             records[0].setValue(value);
+        }
+    }
+
+    get getBackData(): string {
         console.log(this.records);
         let records = this.records.filter((record: Record) => record.isBack());
         if(records.length) {
             return records[0].getValue();
         }
         return '';
+    }
+
+    set getBackData(value: string) {
+        let records = this.records.filter((record: Record) => record.isBack());
+        if(records.length) {
+            records[0].setValue(value);
+        }
     }
 
     public static parseJSON(data: any): Card {

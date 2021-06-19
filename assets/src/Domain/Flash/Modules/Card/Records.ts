@@ -2,7 +2,7 @@ import Card from "./Card";
 
 export default class Record {
     private readonly id: number;
-    private readonly value: string;
+    private value: string;
     private readonly side: string;
 
     constructor({id, value, side} = {}) {
@@ -13,6 +13,7 @@ export default class Record {
 
     public getId(): number { return this.id }
     public getValue(): string { return this.value }
+    public setValue(value: string) { this.value = value }
     public isFront(): boolean { return this.side === 'frontSide' }
     public isBack(): boolean { return this.side === 'backSide'}
 

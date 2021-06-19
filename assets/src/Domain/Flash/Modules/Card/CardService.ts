@@ -14,7 +14,7 @@ export default {
     },
     async update(card: Card) {
         // @ts-ignore
-        return Axios.put(ApiRouter.getRouteByName('updateCard', { id: card.getId() }).path, card);
+        return Axios.put(ApiRouter.getRouteByName('updateCardWithRecords', { id: card.getId() }).path, card);
     },
     async delete(card: Card) {
         // @ts-ignore

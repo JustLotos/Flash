@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\Flash\Record\Entity;
 
 use App\Domain\Flash\Card\Entity\Card;
-use App\Domain\Flash\Card\Entity\Types\Id;
 use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
@@ -17,7 +16,7 @@ use DateTimeImmutable;
 class Record
 {
     /**
-     * @var Id
+     * @var integer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -115,11 +114,14 @@ class Record
         $this->card = $card;
     }
 
-    public function getId(): Id
+    public function getId(): int
     {
         return $this->id;
     }
 
+    public function setId(int $id) {
+        $this->id = $id;
+    }
     public function getCard(): Card
     {
         return  $this->card;
@@ -138,5 +140,23 @@ class Record
     public function getValue(): string
     {
         return $this->value;
+    }
+
+    public function update(
+        string $value,
+        DateTimeImmutable $date
+    ) {
+        $this->value = $value;
+        $this->updatedAt = $date;
+    }
+
+    public static function parseFromJson(
+        int $id,
+        string $value,
+        DateTimeImmutable $date
+    ): Record {
+        $record = new self($value, $date);
+        $record->setId($id);
+        return $record;
     }
 }

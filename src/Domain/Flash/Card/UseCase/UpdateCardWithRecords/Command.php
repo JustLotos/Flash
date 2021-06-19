@@ -21,7 +21,7 @@ class Command
     {
         $records = [];
         foreach ($this->records as $record) {
-            $records[] = new Record($record, new DateTimeImmutable());
+            $records[] = Record::parseFromJson($record['id'], $record['value'], new DateTimeImmutable());
         }
 
         return $records;
