@@ -47,6 +47,13 @@ class Record
     private $value;
 
     /**
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     * @Serializer\Groups({Record::GROUP_LIST, Record::GROUP_ONE})
+     */
+    private $side;
+
+    /**
      * @var Card
      * @ORM\ManyToOne(targetEntity="App\Domain\Flash\Card\Entity\Card", inversedBy="records")
      * @ORM\JoinColumn(name="card_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
@@ -72,7 +79,36 @@ class Record
     ): Record {
         $record = new self($value, $date);
         $record->setCard($card);
+        $record->setFrontSide();
         return $record;
+    }
+
+    public static function makeFront(
+        Card $card,
+        string $value,
+        DateTimeImmutable $date
+    ): Record {
+        $record = self::makeByCard($card, $value, $date);
+        $record->setFrontSide();
+        return $record;
+    }
+
+    public static function makeBack(
+        Card $card,
+        string $value,
+        DateTimeImmutable $date
+    ): Record {
+        $record = self::makeByCard($card, $value, $date);
+        $record->setBackSide();
+        return $record;
+    }
+
+    private function setBackSide() {
+        $this->side = 'backSide';
+    }
+
+    private function setFrontSide() {
+        $this->side = 'frontSide';
     }
 
     public function setCard(Card $card) {

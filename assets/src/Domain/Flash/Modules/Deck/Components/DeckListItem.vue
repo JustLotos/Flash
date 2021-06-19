@@ -82,8 +82,8 @@
             <modal v-model="deleteModal" type="wide">
                 <deck-delete @deleted="onDeckDelete" :deck="getDeck"/>
             </modal>
-            <modal v-model="successModal" type="short">{{successMessage}}
-                <v-alert type="success"><slot>Операция выполнена успешно!</slot></v-alert>
+            <modal v-model="successModal" type="short">
+                <v-alert type="success">{{successMessage}}</v-alert>
             </modal>
         </v-layout>
     </v-main>

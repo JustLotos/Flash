@@ -15,24 +15,27 @@
     </v-hover>
 </template>
 
-<script>
+<script lang="ts">
+    import Card from "../Card";
+
     export default {
         name: "CardListRow",
         props: {
             card: {
+              type: Card,
               required: true,
-              default: {}
+              default: () => new Card()
             }
         },
         computed: {
-            getCard: function () { return this.card; },
+            getCard: function () : Card { return this.card; },
             getCardTitle: function () {
-                return this.getCard.id.slice(0 , 25);
+                return this.getCard.getLabel().slice(0 , 25);
             }
         },
         methods: {
             getLink: function () {
-                return { name: 'CardDetail', params: {id: this.getCard.id} };
+                return { name: 'CardDetail', params: {id: this.getCard.getId()} };
             }
         }
     }

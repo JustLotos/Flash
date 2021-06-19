@@ -20,12 +20,11 @@ class VuexCard extends VuexModule {
     public get cards() { return this.byId; }
     public get cardsById() { return this.allIds }
     // @ts-ignore
-    public get cardById() {return  id => this.byId[id] }
+    public get cardById(): (id: number) => Card {
+        return (id) => this.byId[id] as Card
+    }
     public get cardsByDeck() { return (id) => {
-        console.log(this.allIds);
-        console.log(this.byId);
         let cards = Object.values(this.byId).filter(value => value.deck === +id);
-        console.log(cards);
         return cards.map((card: Card) => card.getId());
     }}
 
@@ -57,49 +56,45 @@ class VuexCard extends VuexModule {
     public async add(dto: CardByDeckDTO): Promise<any> {
         AppModule.loading();
         const response  = await CardService.add(dto);
-        console.log(response);
-        debugger
+        this.FETCH([ response.data ]);
+        AppModule.unsetLoading();
+        return response.data;
+    }
+
+    @Action({ rawError: true })
+    public async update(card: Card): Promise<any> {
+        AppModule.loading();
+        const response  = await CardService.update(card);
         this.FETCH([response.data]);
         AppModule.unsetLoading();
         return response.data;
     }
-    //
-    // @Action({ rawError: true })
-    // public async update(data: Deck): Promise<any> {
-    //     AppModule.loading();
-    //     const response  = await DeckService.update(data);
-    //     this.FETCH_DECKS([response.data]);
-    //     AppModule.unsetLoading();
-    //     return response.data;
-    // }
-    //
-    // @Action({ rawError: true })
-    // public async delete(deck: Deck): Promise<any> {
-    //     AppModule.loading();
-    //
-    //     const response  = await DeckService.delete(deck);
-    //     this.DELETE(deck);
-    //     AppModule.unsetLoading();
-    //     return response.data;
-    // }
-    //
-    // @Mutation
-    // private DELETE(deck: Deck) {
-    //     // @ts-ignore
-    //     Vue.delete(this.byId, deck.id);
-    //     // @ts-ignore
-    //     this.allIds.splice(this.allIds.indexOf(deck.id), 1)
-    // }
-    //
-    // @Action({ rawError: true })
-    // public async get(deck: Deck): Promise<any> {
-    //     AppModule.loading();
-    //
-    //     const response  = await DeckService.get(deck);
-    //     this.FETCH_DECKS([response.data]);
-    //     AppModule.unsetLoading();
-    //     return response.data;
-    // }
+
+    @Action({ rawError: true })
+    public async delete(card: Card): Promise<any> {
+        AppModule.loading();
+        const response  = await CardService.delete(card);
+        this.DELETE(card);
+        AppModule.unsetLoading();
+        return response.data;
+    }
+
+    @Mutation
+    private DELETE(card: Card) {
+        // @ts-ignore
+        Vue.delete(this.byId, card.id);
+        // @ts-ignore
+        this.allIds.splice(this.allIds.indexOf(card.id), 1)
+    }
+
+    @Action({ rawError: true })
+    public async get(card: Card): Promise<any> {
+        AppModule.loading();
+        const response  = await CardService.get(card);
+        this.FETCH([response.data]);
+        AppModule.unsetLoading();
+        return response.data;
+    }
 }
 
 

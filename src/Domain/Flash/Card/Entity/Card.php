@@ -88,8 +88,16 @@ class Card
      */
     private $state;
 
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     * @Serializer\Groups({Card::GROUP_LIST, Card::GROUP_ONE})
+     * @Serializer\Type(name="string")
+     */
+    private $label;
+
     /** @var int
-     *  @ORM\Column(type="integer")
+     *  @ORM\Column(type="integer", nullable=true)
      *  @Serializer\Groups({Card::GROUP_ONE})
      * @Serializer\Type(name="integer")
      */
@@ -101,7 +109,8 @@ class Card
     public function __construct(
         Deck $deck,
         Id $id,
-        DateTimeImmutable $date
+        DateTimeImmutable $date,
+        string $label = ''
     ) {
         $this->deck = $deck;
         $this->id = $id;
@@ -111,15 +120,17 @@ class Card
         $this->records = new ArrayCollection();
         $this->repeats = new ArrayCollection();
         $this->currentRepeatInterval = $deck->getSettings()->getBaseInterval();
+        $this->label = $label;
     }
 
     public static function createWithRecords(
         Deck $deck,
         Id $id,
         DateTimeImmutable $date,
-        array $records
+        array $records,
+        string $label = ''
     ): self {
-        $card = new self($deck, $id, $date);
+        $card = new self($deck, $id, $date, $label);
         foreach ($records as $record) {
             if ($record instanceof Record) {
                 $card->addRecord($record);

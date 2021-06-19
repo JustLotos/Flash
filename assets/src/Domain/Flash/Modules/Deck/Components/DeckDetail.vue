@@ -31,22 +31,13 @@
                         <v-card-actions>
                             <v-flex>
                                 <v-row>
-                                    <v-col cols="12" sm8>
+                                    <v-col cols="12" sm8 v-if="false">
                                         <v-hover open-delay="0.3s" v-slot:default="{hover}">
                                             <v-btn block depressed x-large color="primary" class="mb-2"
                                                 :elevation="hover ? 24 : 0"
                                                 :class="{'on-hover':hover}"
                                                 :to="{name: 'Collection', params: {id: getDeck.id}}"
                                             >Учить</v-btn>
-                                        </v-hover>
-                                    </v-col>
-                                    <v-col cols="12" sm8>
-                                        <v-hover open-delay="0.3s" v-slot:default="{hover}">
-                                            <v-btn block depressed x-large color="primary" class="mb-2"
-                                                :elevation="hover ? 24 : 0"
-                                                :class="{'on-hover':hover}"
-                                                @click="createModalToggle"
-                                            >Добавить новые карточки</v-btn>
                                         </v-hover>
                                     </v-col>
                                     <v-col cols="12" sm8 v-if="getCardsId.length">
@@ -58,6 +49,15 @@
                                                 >Карточки</v-expansion-panel-header>
                                                 <v-expansion-panel-content eager>
                                                     <card-list :cards-id="getCardsId" :cards="getCards"/>
+                                                    <v-col cols="12" sm8>
+                                                      <v-hover open-delay="0.3s" v-slot:default="{hover}">
+                                                        <v-btn block depressed x-large color="primary" class="mb-2"
+                                                               :elevation="hover ? 24 : 0"
+                                                               :class="{'on-hover':hover}"
+                                                               @click="createModalToggle"
+                                                        >Добавить карту</v-btn>
+                                                      </v-hover>
+                                                    </v-col>
                                                 </v-expansion-panel-content>
                                             </v-expansion-panel>
                                         </v-expansion-panels>

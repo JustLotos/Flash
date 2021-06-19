@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <card-form :event-name="'add'" @add="create" :errors="errors">
+        <card-form @submitted="create" :errors="errors">
             <template v-slot:title>Добавление новой карточки</template>
             <template v-slot:submit>Добавить</template>
         </card-form>

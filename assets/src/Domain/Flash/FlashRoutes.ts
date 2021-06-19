@@ -2,6 +2,7 @@ import {RouteConfig} from "vue-router";
 import BaseLayout from "../App/Layouts/BaseLayout.vue";
 import MainPage from "./Pages/MainPage.vue";
 import DeckDetailPage from "./Pages/DeckDetailPage.vue";
+import CardDetailPage from "./Pages/CardDetailPage.vue";
 
 export const FlashRoutes: Array<RouteConfig> = [
     {
@@ -13,7 +14,7 @@ export const FlashRoutes: Array<RouteConfig> = [
         meta: { label: 'DeckDetail', icon: 'mdi-flash', menu: false, auth: true, layout: BaseLayout, sortRate: 1},
     },
     {
-        path: '/card/:id', name: 'CardDetail', component: DeckDetailPage,
+        path: '/card/:id', name: 'CardDetail', component: CardDetailPage,
         meta: { label: 'CardDetail', icon: 'mdi-flash', menu: false, auth: true, layout: BaseLayout, sortRate: 1},
     }
 ];

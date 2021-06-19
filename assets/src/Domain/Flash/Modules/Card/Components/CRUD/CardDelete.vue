@@ -12,18 +12,23 @@
 </template>
 
 <script>
+    import Card from "../../Card";
+    import {CardModule} from "../../CardModule";
     export default {
         name: "CardDelete",
         props: {
-            id: '',
+            card: {
+              type: Card,
+              required: true,
+              default: () => new Card()
+            },
         },
         methods: {
             async onDelete () {
-                //await this.$store.dispatch("DeckStore/delete", this.deck);
-                this.$emit('card-deleted', false);
+                let deckId = this.card.getDeck();
+                await CardModule.delete(this.card);
+                this.$emit('deleted', deckId);
             }
         }
     }
 </script>
-
-<style scoped></style>

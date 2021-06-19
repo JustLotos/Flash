@@ -69,6 +69,41 @@ abstract class BaseFixture extends Fixture
     }
 
 
+    /**
+     * Create many objects at once:
+     *
+     *      $this->createMany(10, function(int $i) {
+     *          $user = new User();
+     *          $user->setFirstName('Ryan');
+     *
+     *           return $user;
+     *      });
+     *
+     * @param string $groupName Tag these created objects with this group name,
+     *                          and use this later with getRandomReference(s)
+     *                          to fetch only from this specific group.
+     */
+    protected function createManyDouble(int $count, string $groupName, callable $factory) : void
+    {
+        for ($i = 0; $i < $count; $i++) {
+            $entityOnce = $factory($i);
+            $entityDouble = $factory($i);
+            if ($entityOnce === null) {
+                return;
+            }
+            if ($entityDouble === null) {
+                return;
+            }
+
+            $this->manager->persist($entityOnce);
+            $this->manager->persist($entityDouble);
+            // store for usage later as groupName_#COUNT#
+            $this->addReference(sprintf('%s_%d_once', $groupName, $i), $entityOnce);
+            $this->addReference(sprintf('%s_%d_double', $groupName, $i), $entityDouble);
+        }
+    }
+
+
     protected function createOne(string $groupUnique, string $groupName, callable $factory) {
         $entity = $factory();
         if ($entity === null) {

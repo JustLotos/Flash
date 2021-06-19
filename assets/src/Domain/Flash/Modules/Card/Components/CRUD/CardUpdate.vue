@@ -1,48 +1,34 @@
 <template>
-    <v-card>
-        <card-form v-if="card" :card="card" :event-name="'update'" @update="update" :errors="updateErrors">
+    <v-card class="m-5" style="min-width: 600px">
+        <card-form :card="card" :errors="getErrors" @submitted="update">
             <template v-slot:title>Редактрирование карточки</template>
             <template v-slot:submit>Сохранить</template>
         </card-form>
     </v-card>
 </template>
 
-<script>
-    import CardForm from "./CardForm";
-    import {cardDefault} from "../../../plugins/helpers";
-    import {mapGetters} from "vuex";
+<script lang="ts">
+    import CardForm from "../CardForm";
+    import Card from "../../Card";
+    import {CardModule} from "../../CardModule";
     export default {
         name: "CardUpdate",
         components: {CardForm},
         props: {
             card: {
-                type: Object,
-                required: true
+                type: Card,
+                required: true,
+                default: () => new Card()
             }
         },
         computed: {
-            updateErrors: function () {
-                if (this.errors) {
-                    return this.errors;
-                }
-                return cardDefault();
-            },
-            ...mapGetters('CardStore',{
-                errors: 'errorsUpdate',
-            })
+            getErrors: function () { return {} },
         },
         methods: {
-            async update(card) {
-                console.log(card);
-                await this.$store.dispatch("CardStore/update", card)
-                    .then(()=>{
-                        this.$emit('card-update', 'Карточка успешно сохранена!');
-                    })
-                    .catch((errors)=>{console.log(errors);});
+            async update(card: Card) {
+                await CardModule.update(card).catch(() => {})
+                this.$emit('updated', 'Карточка успешно Обновлена!');
             }
         }
     }
 </script>
-
-<style scoped>
-</style>

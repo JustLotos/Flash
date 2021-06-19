@@ -39,7 +39,7 @@ class CardController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/repeatInfo/", name="getCard", methods={"GET"})
+     * @Route("/{id}/repeatInfo/", name="getCardRepeatInfo", methods={"GET"})
      * @param Card $card
      * @return Response
      * @throws Exception

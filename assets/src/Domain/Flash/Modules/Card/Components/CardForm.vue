@@ -10,10 +10,13 @@
         <v-flex>
             <v-row justify="center" class="ma-0 pa-0">
                 <v-col cols="12" sm="11" class="ma-0 pa-0 mb-2">
-                    <control-text v-model="getCard.getFrontData" />
+                    <control-name v-model="getCard.getLabel()" />
+                </v-col>
+                <v-col cols="12" sm="11" class="ma-0 pa-0 mb-2">
+                    <control-text v-model="getCard.getFrontData()" />
                 </v-col>
                 <v-col cols="12" sm="11" class="ma-0 pa-0">
-                    <control-text v-model="getCard.getBackData" />
+                    <control-text v-model="getCard.getBackData()" />
                 </v-col>
             </v-row>
         </v-flex>
@@ -36,11 +39,6 @@
         name: "CardForm",
         components: {ControlName, ControlText},
         props: {
-            eventName: {
-                type: String,
-                required: true,
-                default: 'submitted'
-            },
             card: {
                 type: Card,
                 default: () => new Card(),
@@ -66,7 +64,7 @@
         methods: {
             onSubmitForm() {
                 if (this.$refs.cardForm.validate()) {
-                    this.$emit(this.eventName, this.getCard);
+                    this.$emit('submitted', this.getCard);
                 }
             }
         }

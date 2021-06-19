@@ -1,37 +1,56 @@
 import {Deck} from "../Deck/Deck";
+import Record from "./Records";
 
 export default class Card {
-    private readonly id: Number;
-    private readonly deck: Number;
-    private records: [string] = [];
-
+    private readonly id: number;
+    private readonly label: string;
+    private readonly deck: number;
+    private readonly records: [Record] = [];
 
     // @ts-ignore
-    constructor({id, deck} = {}) {
+    constructor({id, deck, records, label} = {}) {
         this.id = id || 0;
         this.deck = deck || 0;
+        this.records = records || [];
+        this.label = label || id || '';
     }
 
-    public getId(): Number|String { return this.id }
-    public getDeck(): Number|String { return this.deck }
-    get getFrontData(): String { return '123' }
-    set getFrontData(data: string) {
-        console.log(data)
+    public getId(): number { return this.id }
+    public getDeck(): number { return this.deck }
+    public getLabel(): string { return this.label }
+    public getFrontData(): string {
+        let records = this.records.filter((record: Record) => record.isFront());
+        if(records.length) {
+            return records[0].getValue();
+        }
+
+        return '';
     }
-    get getBackData(): String { return '123' }
-    set getBackData(data: string) {
-        console.log(data)
+
+    public getBackData(): string {
+        console.log(this.records);
+        let records = this.records.filter((record: Record) => record.isBack());
+        if(records.length) {
+            return records[0].getValue();
+        }
+        return '';
     }
 
     public static parseJSON(data: any): Card {
         let cardString: string = JSON.stringify(data);
-        let parsedDeck = JSON.parse(cardString,function (key, value) {
+        let parsedCard = JSON.parse(cardString,function (key, value) {
             if(key === 'deck') {
                 return (new Deck(value)).getId();
             }
+
+            if(key === 'records') {
+                let records = value.length ? value as Array<any> : [];
+                return records.map(data => new Record(data))
+            }
+
             return value;
         });
 
-        return new Card(parsedDeck);
+        return new Card(parsedCard);
     }
 }

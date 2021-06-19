@@ -12,17 +12,16 @@ export default {
         let deckId = dto.getDeck().getId();
         return Axios.post(ApiRouter.getRouteByName('addCard', { deckId }).path, dto.getCard());
     },
-    // async update(deck: Deck) {
-    //     // @ts-ignore
-    //     return Axios.put(ApiRouter.getRouteByName('updateDeck', { id: deck.getId() }).path, deck);
-    // },
-    // async delete(deck: Deck) {
-    //     // @ts-ignore
-    //     return Axios.delete(ApiRouter.getRouteByName('deleteDeck', { id: deck.getId() }).path);
-    // },
-    // async get(deck: Deck) {
-    //
-    //     // @ts-ignore
-    //     return Axios.get(ApiRouter.getRouteByName('getDeck', { id: deck.getId() }).path);
-    // }
+    async update(card: Card) {
+        // @ts-ignore
+        return Axios.put(ApiRouter.getRouteByName('updateCard', { id: card.getId() }).path, card);
+    },
+    async delete(card: Card) {
+        // @ts-ignore
+        return Axios.delete(ApiRouter.getRouteByName('deleteCard', { id: card.getId() }).path);
+    },
+    async get(card: Card) {
+        // @ts-ignore
+        return Axios.get(ApiRouter.getRouteByName('getCard', { id: card.getId() }).path);
+    }
 };
