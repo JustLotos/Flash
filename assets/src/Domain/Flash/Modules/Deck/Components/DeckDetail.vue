@@ -36,7 +36,7 @@
                                             <v-btn block depressed x-large color="primary" class="mb-2"
                                                 :elevation="hover ? 24 : 0"
                                                 :class="{'on-hover':hover}"
-                                                :to="{name: 'train', params: {id: getDeck.id}}"
+                                                :to="{name: 'Collection', params: {id: getDeck.id}}"
                                             >Учить</v-btn>
                                         </v-hover>
                                     </v-col>
@@ -49,15 +49,12 @@
                                             >Добавить новые карточки</v-btn>
                                         </v-hover>
                                     </v-col>
-                                    <v-col cols="12" sm8 v-if="false">
+                                    <v-col cols="12" sm8 v-if="getCardsId.length">
                                         <v-expansion-panels flat hover class="mt-2">
                                             <v-expansion-panel>
                                                 <v-expansion-panel-header expand-icon="mdi-menu-down" color="light">Карточки</v-expansion-panel-header>
                                                 <v-expansion-panel-content eager>
-<!--                                                    <list-objects :items="cards" :items-id="cardsId" pagination="true">-->
-<!--                                                        <template v-slot:item="{item}"></template>-->
-<!--                                                    </list-objects>-->
-<!--                                                    <card-list :cards-id="deck.cards"/>-->
+                                                    <card-list :cards-id="getCardsId" :cards="getCards"/>
                                                 </v-expansion-panel-content>
                                             </v-expansion-panel>
                                         </v-expansion-panels>
@@ -71,7 +68,7 @@
         </v-col>
 
         <modal v-model="editDeckModal" type="short">
-            <deck-update @deck-updated="onUpdateDeck" :id="getDeck.id"/>
+            <deck-update @updated="onUpdateDeck" :deck="getDeck"/>
         </modal>
         <modal v-model="deleteDeckModal" type="short">
             <deck-delete @deleted="onDeleteDeck" :deck="getDeck" />
@@ -83,20 +80,25 @@
 </template>
 
 <script>
-    import SuccessModal from "../../../../App/Components/Modal/SuccessModal.vue";
     import Modal from "../../../../App/Components/Modal/Modal.vue";
     import DeckUpdate from "./CRUD/DeckUpdate.vue";
     import DeckDelete from "./CRUD/DeckDelete.vue";
     import {Deck} from "../Deck";
-    import Router from "../../../../App/Router";
     import ListObjects from "../../../../App/Components/List/ListObjects";
+    import Router from "../../../../App/Router";
+    import {CardModule} from "../../Card/CardModule";
+    import CardList from "../../Card/Components/CardList";
     export default {
         name: "DeckDetail",
-        components: {ListObjects, DeckDelete, DeckUpdate, Modal},
+        components: {CardList, ListObjects, DeckDelete, DeckUpdate, Modal},
         props: {
             deck: {
                 required: true,
                 default: new Deck()
+            },
+            cards: {
+                required: true,
+                default: []
             }
         },
         data: function () {
@@ -110,24 +112,36 @@
             }
         },
         computed: {
-            getDeck() { return this.deck || {}}
+            getDeck() { return this.deck || {} },
+            getCardsId() {
+              return this.cards || {}
+            },
+            getCards() {
+              return CardModule.cards || {}
+            }
         },
         methods: {
-            editDeckModalToggle() { this.editDeckModal = !this.editDeckModal;},
-            deleteDeckModalToggle() { this.deleteDeckModal = !this.deleteDeckModal},
-            createModalToggle() { this.createModal = !this.createModal },
-            onUpdateDeck(value) {
+            editDeckModalToggle: function() {
+                this.editDeckModal = !this.editDeckModal;
+            },
+            deleteDeckModalToggle: function() {
+                this.deleteDeckModal = !this.deleteDeckModal;
+            },
+            createModalToggle: function() {
+                this.createModal = !this.createModal;
+            },
+            onUpdateDeck: function (value) {
                 this.editDeckModal = !this.editDeckModal;
                 this.successMessage = value;
                 this.successModal = !this.successModal;
             },
-            onDeleteDeck(value) {
+            onDeleteDeck: function(value) {
                 this.deleteDeckModal = !this.deleteDeckModal;
                 this.successMessage = value;
                 this.successModal = !this.successModal;
-                // Router.push({name: 'Collection'});
+                Router.push({name: 'Collection'});
             },
-            handleSuccessCreate(value) {
+            handleSuccessCreate: function(value) {
                 this.successMessage = value;
                 this.successModal = !this.successModal;
             }

@@ -120,7 +120,7 @@
             };
         },
         computed: {
-            getDeck() {return new Deck(this.deck) || {} },
+            getDeck() { return new Deck(this.deck) || {} },
             getFormattedDate() { return this.getDeck.getFormattedDate() || '' }
         },
         methods: {
@@ -136,7 +136,9 @@
                 this.successMessage = value;
                 this.successModal = !this.successModal;
             },
-            getLink: (deck) => { return {name: 'DeckDetail', params: { id: deck.getId() }}},
+            getLink: function(deck) {
+                return {name: 'DeckDetail', params: { id: deck.getId() }}
+            },
             toggleFullDescription: function () {
                 this.shortDescription = !this.shortDescription;
             }

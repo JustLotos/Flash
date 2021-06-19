@@ -11,5 +11,9 @@ export const FlashRoutes: Array<RouteConfig> = [
     {
         path: '/collection/:id', name: 'DeckDetail', component: DeckDetailPage,
         meta: { label: 'DeckDetail', icon: 'mdi-flash', menu: false, auth: true, layout: BaseLayout, sortRate: 1},
+    },
+    {
+        path: '/card/:id', name: 'CardDetail', component: DeckDetailPage,
+        meta: { label: 'CardDetail', icon: 'mdi-flash', menu: false, auth: true, layout: BaseLayout, sortRate: 1},
     }
 ];

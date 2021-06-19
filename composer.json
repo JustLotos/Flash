@@ -52,9 +52,7 @@
         "squizlabs/php_codesniffer": "*"
     },
     "config": {
-        "preferred-install": {
-            "*": "dist"
-        },
+        "preferred-install": "source",
         "sort-packages": true
     },
     "autoload": {

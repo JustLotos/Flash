@@ -2,10 +2,10 @@
     <v-card>
         <v-card-title class="justify-center">Редактирование колоды</v-card-title>
         <deck-form
-                :deck="deck"
-                :event-name="'update'"
-                :errors="updateErrors"
-                @update="update"
+            :deck="deck"
+            :event-name="'update'"
+            :errors="updateErrors"
+            @update="update"
         >
             <template v-slot:submit>Сохранить</template>
         </deck-form>

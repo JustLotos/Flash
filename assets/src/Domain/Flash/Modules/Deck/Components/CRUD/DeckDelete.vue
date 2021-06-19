@@ -5,10 +5,10 @@
                 <v-flex xs10 offset-xs1 class="text-center">
                     <v-card-title primary-title class="justify-center">
                         <v-alert
-                                class="mt-5"
-                                v-if="deleteError"
-                                type="error"
-                                transition="fade-transition"
+                            class="mt-5"
+                            v-if="deleteError"
+                            type="error"
+                            transition="fade-transition"
                         >{{deleteError}}</v-alert>
                         Введите имя колоды: {{deck.name}}
                     </v-card-title>
@@ -69,6 +69,7 @@
             async onDeckDelete() {
                 if(this.$refs.deckDeleteForm.validate()) {
                     await DeckModule.delete(this.deck).then(()=>{
+                        console.log('Колода успешно удалена!')
                         this.$emit('deleted', 'Колода успешно удалена!');
                     }).catch((error)=>{
                         console.log(error);

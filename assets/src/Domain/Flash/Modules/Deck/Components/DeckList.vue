@@ -124,7 +124,7 @@
                 return { 'on-side': empty, 'on-card': !empty }
             },
             isLoading: () => AppModule.isLoading,
-            showClearButton(): function {
+            showClearButton: function() {
                 return this.searchToggle;
             }
         },

@@ -1,5 +1,3 @@
-import Card from "./Card/Card";
-
 export class Deck {
     private readonly id: Number;
     private readonly name: String;
