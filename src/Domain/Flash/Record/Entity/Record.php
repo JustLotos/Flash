@@ -56,11 +56,12 @@ class Record
      * @var Card
      * @ORM\ManyToOne(targetEntity="App\Domain\Flash\Card\Entity\Card", inversedBy="records")
      * @ORM\JoinColumn(name="card_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @Serializer\Groups({Card::GROUP_ONE})
      */
     private $card;
 
-    public const GROUP_LIST = 'GROUP_LIST';
-    public const GROUP_ONE = 'GROUP_ONE';
+    public const GROUP_LIST = 'RECORD_GROUP_LIST';
+    public const GROUP_ONE = 'RECORD_GROUP_ONE';
 
     public function __construct(
         string $value,

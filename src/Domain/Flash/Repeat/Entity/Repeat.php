@@ -60,11 +60,12 @@ class Repeat
      * @var Card
      * @ORM\ManyToOne(targetEntity="App\Domain\Flash\Card\Entity\Card", inversedBy="repeats")
      * @ORM\JoinColumn(name="card_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @Serializer\Groups({Repeat::GROUP_ONE})
      */
     private $card;
 
-    public const GROUP_LIST = 'GROUP_LIST';
-    public const GROUP_ONE = 'GROUP_ONE';
+    public const GROUP_LIST = 'REPEAT_GROUP_LIST';
+    public const GROUP_ONE = 'REPEAT_GROUP_ONE';
 
     public function __construct(Card $card, DateTimeImmutable $date, float $ratingScore, int $time)
     {

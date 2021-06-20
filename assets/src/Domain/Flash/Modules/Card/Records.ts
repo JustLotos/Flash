@@ -2,16 +2,19 @@ import Card from "./Card";
 
 export default class Record {
     private readonly id: number;
-    private value: string;
+    private readonly card: number;
     private readonly side: string;
+    private value: string;
 
-    constructor({id, value, side} = {}) {
+    constructor({id, value, side, card} = {}) {
         this.id = id || 0;
         this.value = value || '';
         this.side = side;
+        this.card = card;
     }
 
     public getId(): number { return this.id }
+    public getCard(): number { return this.card }
     public getValue(): string { return this.value }
     public setValue(value: string) { this.value = value }
     public isFront(): boolean { return this.side === 'frontSide' }

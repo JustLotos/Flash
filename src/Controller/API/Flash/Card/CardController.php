@@ -35,7 +35,11 @@ class CardController extends AbstractController
      */
     public function getCard(Card $card): Response
     {
-        return $this->response($this->serializer->serialize($card, Card::GROUP_ONE));
+        return $this->response($this->serializer->serialize($card, [
+            Card::GROUP_ONE,
+            Record::GROUP_ONE,
+            Repeat::GROUP_ONE
+        ]));
     }
 
     /**

@@ -4,6 +4,7 @@ import {AppModule} from "./AppModule";
 import {UserModule} from "../User/UserModule";
 import {DeckModule} from "../Flash/Modules/Deck/DeckModule";
 import {CardModule} from "../Flash/Modules/Card/CardModule";
+import {RepeatModule} from "../Flash/Modules/Repeat/RepeatModule";
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ export interface IRootState {
     AppModule: AppModule;
     DeckModule: DeckModule;
     CardModule: CardModule;
+    RepeatModule: RepeatModule
 }
 
 export const Store = new Vuex.Store<IRootState>({});

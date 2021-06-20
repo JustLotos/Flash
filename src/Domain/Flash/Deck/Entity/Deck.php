@@ -25,7 +25,7 @@ class Deck
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({Deck::GROUP_LIST, Deck::GROUP_ONE})
+     * @Serializer\Groups({Deck::GROUP_LIST, Deck::GROUP_ONE, Card::GROUP_LIST})
      */
     private $id;
 
@@ -46,7 +46,7 @@ class Deck
     /**
      * @var DateTimeImmutable
      * @ORM\Column(type="datetime_immutable")
-     * @Serializer\Groups({Deck::GROUP_LIST, Deck::GROUP_ONE})
+     * @Serializer\Groups({Deck::GROUP_ONE})
      */
     private $createdAt;
 
@@ -83,8 +83,9 @@ class Deck
      */
     private $cards;
 
-    public const GROUP_LIST = 'GROUP_LIST';
-    public const GROUP_ONE = 'GROUP_ONE';
+    public const GROUP_LIST = 'DECK_GROUP_LIST';
+    public const GROUP_ONE = 'DECK_GROUP_ONE';
+
 
     public function __construct(
         Learner $learner,

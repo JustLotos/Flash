@@ -26,7 +26,7 @@ class Card
      * @ORM\Id()
      * @ORM\Column(type="flash_card_id")
      * @Serializer\Type(name="string")
-     * @Serializer\Groups({Card::GROUP_LIST, Deck::GROUP_ONE})
+     * @Serializer\Groups({Card::GROUP_LIST, Card::GROUP_ONE, Deck::GROUP_ONE})
      */
     private $id;
 
@@ -48,9 +48,9 @@ class Card
 
     /**
      * @var Deck
-     * @Serializer\Groups({Card::GROUP_LIST, Card::GROUP_ONE})
      * @ORM\ManyToOne(targetEntity="App\Domain\Flash\Deck\Entity\Deck", inversedBy="cards")
      * @ORM\JoinColumn(name="deck_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @Serializer\Groups({Card::GROUP_LIST})
      */
     private $deck;
 
@@ -62,7 +62,7 @@ class Card
      *     orphanRemoval=true,
      *     cascade={"persist"}
      * )
-     * @Serializer\Groups({Card::GROUP_LIST, Card::GROUP_ONE})
+     * @Serializer\Groups({Card::GROUP_ONE})
      * @Serializer\Type(name="App\Domain\Flash\Record\Entity\Record")
      */
     private $records;
@@ -103,8 +103,8 @@ class Card
      */
     private $currentRepeatInterval;
 
-    public const GROUP_LIST = 'GROUP_LIST';
-    public const GROUP_ONE = 'GROUP_ONE';
+    public const GROUP_LIST = 'CARD_GROUP_LIST';
+    public const GROUP_ONE = 'CARD_GROUP_ONE';
 
     public function __construct(
         Deck $deck,
@@ -143,19 +143,6 @@ class Card
     public function setCurrentRepeatInterval(int $currentRepeatInterval)
     {
         $this->currentRepeatInterval = $currentRepeatInterval;
-    }
-
-    public function updateWithRecords(
-        DateTimeImmutable $date,
-        array $records
-    ): self {
-        $this->updatedAt = $date;
-
-        foreach ($records as $record) {
-
-        }
-
-        return $this;
     }
 
     public function getRepeats(): Collection

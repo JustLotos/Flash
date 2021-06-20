@@ -6,8 +6,8 @@ namespace App\Domain\Flash\Deck\Entity\Types;
 
 use App\Domain\Flash\Service\AnswerMangerService\Models\ISettings;
 use Doctrine\ORM\Mapping as ORM;
-use DateInterval;
 use JMS\Serializer\Annotation as Serializer;
+use App\Domain\Flash\Deck\Entity\Deck;
 
 /** @ORM\Embeddable */
 class Settings implements ISettings
@@ -15,35 +15,35 @@ class Settings implements ISettings
     /**
      * @var int
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
+     * @Serializer\Groups({Deck::GROUP_ONE})
      */
     private $limitRepeat;
 
     /**
      * @var int
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
+     * @Serializer\Groups({Deck::GROUP_ONE})
      */
     private $limitLearning;
 
     /**
      * @var float
      * @ORM\Column(type="float")
-     * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
+     * @Serializer\Groups({Deck::GROUP_ONE})
      */
     private $difficultyIndex;
 
     /**
      * @var int
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
+     * @Serializer\Groups({Deck::GROUP_ONE})
      */
     private $baseInterval;
 
     /**
      * @var int
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({App\Domain\Flash\Deck\Entity\Deck::GROUP_ONE})
+     * @Serializer\Groups({Deck::GROUP_ONE})
      */
     private $minTimeInterval;
 

@@ -30,7 +30,9 @@ class DeckController extends AdminController
      */
     public function getDeck(Deck $deck): Response
     {
-        return $this->response($this->serializer->serialize($deck, [Deck::GROUP_ONE, Card::GROUP_ONE]));
+        return $this->response($this->serializer->serialize($deck, [
+            Deck::GROUP_ONE
+        ]));
     }
 
     /**

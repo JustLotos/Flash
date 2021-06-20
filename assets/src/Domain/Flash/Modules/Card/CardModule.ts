@@ -6,6 +6,7 @@ import CardService from "./CardService";
 import Card from "./Card";
 import {Deck} from "../Deck/Deck";
 import CardByDeckDTO from "../../DTO/CardByDeckDTO";
+import {RepeatModule} from "../Repeat/RepeatModule";
 
 @Module({
     dynamic: true,
@@ -32,7 +33,7 @@ class VuexCard extends VuexModule {
     @Action({ rawError: true })
     public async fetchCardsByDeck(deck: Deck): Promise<any> {
         AppModule.loading();
-        const response  = await CardService.fetchCardsByDeck(deck);
+        const response = await CardService.fetchCardsByDeck(deck);
         this.FETCH(response.data);
         AppModule.unsetLoading();
         return response.data;
@@ -48,6 +49,11 @@ class VuexCard extends VuexModule {
             if (!this.allIds.includes(card.getId())) {
                 // @ts-ignore
                 this.allIds.push(card.getId());
+            }
+
+            if(card.getRepeats().length) {
+                dataItem.repeats.forEach(repeat => repeat.card = {id: card.getId()})
+                RepeatModule.FETCH(dataItem.repeats);
             }
         });
     }
