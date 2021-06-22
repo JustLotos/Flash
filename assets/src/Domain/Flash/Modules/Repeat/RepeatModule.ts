@@ -2,6 +2,8 @@ import { Action, getModule, Module, Mutation, VuexModule } from "vuex-module-dec
 import {Store} from "../../../App/Store";
 import Vue from "vue";
 import Repeat from "./Repeat";
+import {AppModule} from "../../../App/AppModule";
+import RepeatService from "./RepeatService";
 
 @Module({
     dynamic: true,
@@ -75,22 +77,22 @@ class VuexRepeat extends VuexModule {
     //     return response.data;
     // }
     //
-    // @Action({ rawError: true })
-    // public async delete(card: Card): Promise<any> {
-    //     AppModule.loading();
-    //     const response  = await CardService.delete(card);
-    //     this.DELETE(card);
-    //     AppModule.unsetLoading();
-    //     return response.data;
-    // }
-    //
-    // @Mutation
-    // private DELETE(card: Card) {
-    //     // @ts-ignore
-    //     Vue.delete(this.byId, card.id);
-    //     // @ts-ignore
-    //     this.allIds.splice(this.allIds.indexOf(card.id), 1)
-    // }
+    @Action({ rawError: true })
+    public async delete(repeat: Repeat): Promise<any> {
+        AppModule.loading();
+        const response  = await RepeatService.delete(repeat);
+        this.DELETE(repeat);
+        AppModule.unsetLoading();
+        return response.data;
+    }
+
+    @Mutation
+    private DELETE(repeat: Repeat) {
+        // @ts-ignore
+        Vue.delete(this.byId, repeat.id);
+        // @ts-ignore
+        this.allIds.splice(this.allIds.indexOf(repeat.id), 1)
+    }
     //
     // @Action({ rawError: true })
     // public async get(card: Card): Promise<any> {

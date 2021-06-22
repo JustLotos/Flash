@@ -23,7 +23,6 @@
                         </v-col>
                     </v-row>
                     <v-row>
-                      <v-card-subtitle>Повторения</v-card-subtitle>
                       <v-col cols="12">
                         <v-data-table
                             dense
@@ -31,7 +30,37 @@
                             :items="getDataForTable"
                             item-key="name"
                             class="elevation-1"
-                        />
+                        >
+                          <template v-slot:top>
+                            <v-toolbar
+                                flat
+                            >
+                              <v-toolbar-title>Повторения</v-toolbar-title>
+                              <v-divider
+                                  class="mx-4"
+                                  inset
+                                  vertical
+                              ></v-divider>
+                              <v-spacer></v-spacer>
+                              <v-dialog v-model="deleteRepeatModal" max-width="500px">
+                                <v-card>
+                                  <v-card-title class="text-h5">
+                                    Вы хотите удалить повторение?
+                                  </v-card-title>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" text @click="deleteRepeatToggle">Отмена</v-btn>
+                                    <v-btn color="blue darken-1" text @click="deleteRepeatAction">Удалить</v-btn>
+                                    <v-spacer></v-spacer>
+                                  </v-card-actions>
+                                </v-card>
+                              </v-dialog>
+                            </v-toolbar>
+                          </template>
+                          <template v-slot:item.actions="{ item }">
+                            <v-icon small @click="deleteRepeatToggle(item)">mdi-delete</v-icon>
+                          </template>
+                        </v-data-table>
                       </v-col>
                     </v-row>
                 </v-card>
@@ -72,6 +101,7 @@ import Router from "../../App/Router";
 import {RawLocation} from "vue-router/types/router";
 import ListObjects from "../../App/Components/List/ListObjects.vue";
 import {RepeatModule} from "../Modules/Repeat/RepeatModule";
+import Repeat from "../Modules/Repeat/Repeat";
 
 export default {
         name: "CardDetailPage",
@@ -81,14 +111,17 @@ export default {
                 card: {},
                 updateCardModal: false,
                 deleteCardModal: false,
+                deleteRepeatModal: false,
+                deletedItem: {}
             }
         },
         computed: {
             getRepeatHeaders: function () {
                 return [
-                  {text: 'Дата повторения', value: 'updatedAt'},
-                  {text: 'Время повторения', value: 'time'},
-                  {text: 'Оценка повторения', value: 'ratingScore'},
+                  {text: 'Дата', value: 'updatedAt'},
+                  {text: 'Длительность', value: 'time'},
+                  {text: 'Оценка', value: 'ratingScore'},
+                  {text: 'Actions', value: 'actions', sortable: false },
                 ];
             },
             getDataForTable: function () {
@@ -101,16 +134,23 @@ export default {
         },
         methods: {
             setCard(card) { this.card = card },
-            updateModalToggle: function () {
-                this.updateCardModal = !this.updateCardModal;
-            },
-            deleteModalToggle: function () {
-                this.deleteCardModal =  !this.deleteCardModal;
+            updateModalToggle: function () { this.updateCardModal = !this.updateCardModal; },
+            deleteModalToggle: function () { this.deleteCardModal =  !this.deleteCardModal; },
+            deleteRepeatToggle: function (repeat: Repeat) {
+              this.deletedItem = new Repeat(repeat);
+              this.deleteRepeatModal = !this.deleteRepeatModal;
             },
             onDeleteCard: function (deckId: number) {
                 this.deleteCardModal = !this.deleteCardModal;
                 let route = {name: 'DeckDetail', params: { id: deckId }} as RawLocation
                 Router.push(route);
+            },
+            deleteRepeatAction: async function () {
+                await RepeatModule.delete(this.deletedItem).catch((error) => {
+                    console.log(error);
+                })
+
+                this.deleteRepeatModal = !this.deleteRepeatModal;
             }
         },
         beforeRouteEnter: async function (to , from , next) {

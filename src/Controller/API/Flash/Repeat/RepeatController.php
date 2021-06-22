@@ -12,6 +12,7 @@ use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Command as DiscreteRepeatComm
 use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Handler as DiscreteRepeatHandler;
 use App\Domain\Flash\Repeat\UseCase\GetReadyQueue\Command as GetReadyQueueCommand;
 use App\Domain\Flash\Repeat\UseCase\GetReadyQueue\Handler as GetReadyQueueHandler;
+use App\Domain\Flash\Repeat\UseCase\DeleteRepeat\Handler as DeleteRepeatHandler;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/** @Route(value="api/flash/repeat", name="repeat_") */
+/** @Route(value="api/flash/repeat") */
 class RepeatController extends AbstractController
 {
     use ControllerHelper;
@@ -58,18 +59,15 @@ class RepeatController extends AbstractController
     }
 
 
-//    /**
-//     * @Route("/{id}/delete", name="deleteRepeat", methods={"POST"})
-//     * @param Request $request
-//     * @param Repeat $card
-//     * @param Handler $handler
-//     * @return Response
-//     */
-//    public function deleteRepeatAction(Request $request, Repeat $card, Handler $handler): Response
-//    {
-////        /** @var Command $command */
-////        $command = $this->serializer->deserialize($request, Command::class);
-////        $handler->handle($card, $command);
-//        return $this->response($this->getSimpleSuccessResponse());
-//    }
+    /**
+     * @Route("/{id}/delete/", name="deleteRepeat", methods={"DELETE"})
+     * @param Repeat $repeat
+     * @param DeleteRepeatHandler $handler
+     * @return Response
+     */
+    public function deleteRepeatAction(Repeat $repeat, DeleteRepeatHandler $handler): Response
+    {
+        $handler->handle($repeat);
+        return $this->response($this->getSimpleSuccessResponse());
+    }
 }
