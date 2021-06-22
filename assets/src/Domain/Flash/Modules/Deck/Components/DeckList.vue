@@ -22,7 +22,7 @@
                         </v-btn>
                     </v-toolbar>
                     <list-objects
-                        :items="getDecks"ti
+                        :items="getDecks"
                         :items-id="getDecksByIdSortByDate"
                         :pagination="{perPage: 10, buttonsCount: 7}"
                     >

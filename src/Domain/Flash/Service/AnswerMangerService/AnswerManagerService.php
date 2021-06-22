@@ -15,6 +15,8 @@ use Exception;
 
 class AnswerManagerService
 {
+    const LITTLE = 0.00001;
+    const MAX = 2147483600;
     /**
      * @param Card $card
      * @param IAnswer $answer
@@ -35,10 +37,14 @@ class AnswerManagerService
             }
         }
 
-        $averageTime = $totalTime / $card->getRepeats()->count();
-        $averageTimeIndex = $answer->getTime() / $averageTime;
-        $countRepeatIndex = $successCount / $card->getRepeats()->count();
-        $newInterval = $simpleIndex * $countRepeatIndex / $averageTimeIndex;
+        $averageTime = $totalTime / ($card->getRepeats()->count() + self::LITTLE);
+        $averageTimeIndex = $answer->getTime() / ($averageTime + self::LITTLE);
+        $countRepeatIndex = $successCount / ($card->getRepeats()->count() + self::LITTLE) ;
+        $newInterval = $simpleIndex * $countRepeatIndex / ($averageTimeIndex + self::LITTLE);
+
+        if($newInterval > self::MAX) {
+            $newInterval = self::MAX;
+        }
 
         if ($newInterval < $deck->getSettings()->getMinTimeInterval()) {
             $newInterval = $deck->getSettings()->getMinTimeInterval();
