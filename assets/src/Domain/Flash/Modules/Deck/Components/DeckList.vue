@@ -4,21 +4,15 @@
             <v-row justify="center">
                 <v-col cols="9">
                     <v-toolbar dense>
-                        <v-toolbar-title v-if="searchToggle">
-                            <v-text-field hide-details prepend-icon="mdi-magnify" single-line v-model="searchField"/>
-                        </v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-btn v-if="!searchToggle" icon @click="toggleSearch()">
-                            <v-icon>mdi-magnify</v-icon>
-                        </v-btn>
-                        <v-btn icon>
-                            <v-icon>mdi-heart</v-icon>
-                        </v-btn>
-                        <v-btn icon>
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                        <v-btn v-if="showClearButton" absolute top right icon dark @click="clearToolbar()">
-                            <v-icon>mdi-close</v-icon>
+                        <v-text-field
+                            v-if="!searchToggle"
+                            hide-details
+                            prepend-icon="mdi-magnify"
+                            single-line
+                            v-model="searchField"
+                        />
+                        <v-btn icon @click="clearToolbar()">
+                          <v-icon>mdi-close</v-icon>
                         </v-btn>
                     </v-toolbar>
                     <list-objects
@@ -30,10 +24,13 @@
                             <deck-list-item :deck="deck.item" />
                         </template>
                         <template v-slot:empty>
-                            <v-row v-if="isLoading" justify="center" style="padding: 15px">
+                            <v-row v-if="isLoading" justify="center" style="padding: 150px 100px 150px 100px">
                                 <v-progress-circular :size="70" :width="7" color="primary" indeterminate />
                             </v-row>
-                            <v-row v-else justify="center">
+                            <v-row v-else-if="searchField" justify="center" style="padding: 150px 100px 150px 100px">
+                              <v-col cols="12" class="text-center">Ничего не найдено</v-col>
+                            </v-row>
+                            <v-row v-else justify="center" style="padding: 150px 100px 150px 100px">
                                 <v-col cols="12" class="text-center">Колоды еще не добавлены</v-col>
                             </v-row>
                         </template>
@@ -65,11 +62,11 @@
             </v-main>
         </v-dialog>
 
-        <success-modal v-model="successModal">{{successMessage}}</success-modal>
+        <success-modal v-model="successModal" modal >{{successMessage}}</success-modal>
     </v-main>
 </template>
 
-<script>
+<script lang="ts">
     import {mapGetters} from 'vuex';
     import DeckListItem from "./DeckListItem";
     import ListObjects from "../../../../App/Components/List/ListObjects.vue";
@@ -108,6 +105,13 @@
                 let decks = this.getDecks;
                 let deckEntries = Object.entries(decks);
 
+                if(this.searchField) {
+                    deckEntries = deckEntries.filter(([key, deck]) => {
+                      return deck.getName().includes(this.searchField) ||
+                          deck.getDescription().includes(this.searchField);
+                    });
+                }
+
                 deckEntries.sort(function (a, b) {
                     return new Date(b[1].getUpdatedAt()) - new Date(a[1].getUpdatedAt());
                 });
@@ -143,7 +147,6 @@
             clearToolbar: function() {
                 this.searchToggle = false;
             },
-
         }
     }
 </script>

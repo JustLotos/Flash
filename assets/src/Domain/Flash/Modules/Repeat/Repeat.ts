@@ -46,6 +46,7 @@ export default class Repeat {
             }
 
             if(key === 'interval') {
+                console.log(value);
                 return DateHelper.formatInterval(value);
             }
 
