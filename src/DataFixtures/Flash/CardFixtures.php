@@ -50,13 +50,15 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
         /** @var  $answers */
         $answers = DiscreteAnswer::getStates();
         $index = $this->faker->numberBetween(0, 10) % count($answers);
-
         for ($i = 0; $i <10; $i++) {
             /** @var Repeat $lastRepeat */
             $lastRepeat = $card->getRepeats()->last();
+            $timeRepeat = $this->faker->numberBetween(5, 120);
 
             if($lastRepeat) {
-                $totalTime = $lastRepeat->getInterval() + $card->getCurrentRepeatInterval();
+                $totalTime = $timeRepeat
+                    + $lastRepeat->getUpdatedAt()->getTimestamp()
+                    + $card->getCurrentRepeatInterval();
                 $dateAnswer = (new \DateTimeImmutable())->setTimestamp($totalTime);
             } else {
                 $dateAnswer = DateTimeImmutable::createFromMutable(
@@ -64,11 +66,7 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
                 );
             }
 
-            $answer = new DiscreteAnswer(
-                $dateAnswer,
-                $this->faker->numberBetween(5, 120),
-                $answers[$index]
-            );
+            $answer = new DiscreteAnswer($dateAnswer, $timeRepeat, $answers[$index]);
 
             $repeat = new Repeat(
                 $card,
