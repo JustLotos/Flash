@@ -49,6 +49,14 @@ class Repeat
     private $time;
 
     /**
+     * @var int
+     * @ORM\Column(type="integer")
+     * @Serializer\Groups({Repeat::GROUP_ONE})
+     * @Serializer\Type(name="integer")
+     */
+    private $interval;
+
+    /**
      * @var float
      * @ORM\Column(type="float")
      * @Serializer\Type(name="float")
@@ -67,13 +75,19 @@ class Repeat
     public const GROUP_LIST = 'REPEAT_GROUP_LIST';
     public const GROUP_ONE = 'REPEAT_GROUP_ONE';
 
-    public function __construct(Card $card, DateTimeImmutable $date, float $ratingScore, int $time)
-    {
+    public function __construct(
+        Card $card,
+        DateTimeImmutable $date,
+        float $ratingScore,
+        int $time,
+        int $interval
+    ) {
         $this->card = $card;
         $this->createdAt = $date;
         $this->updatedAt = $date;
         $this->time = $time;
         $this->ratingScore = $ratingScore;
+        $this->interval = $interval;
     }
 
     public function getId(): int
@@ -104,5 +118,10 @@ class Repeat
     public function getTime(): int
     {
         return $this->time;
+    }
+
+    public function getInterval(): int
+    {
+        return  $this->interval;
     }
 }

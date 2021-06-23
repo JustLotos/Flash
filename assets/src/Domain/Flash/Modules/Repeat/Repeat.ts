@@ -1,4 +1,5 @@
 import Card from "../Card/Card";
+import {DateHelper} from "../../../../Utils/DateHelper";
 
 export default class Repeat {
     private readonly id: number;
@@ -7,14 +8,16 @@ export default class Repeat {
     private readonly time: string;
     private readonly ratingScore: number;
     private readonly card: string;
+    private readonly interval: number;
 
-    constructor({id, createdAt, updatedAt, time, ratingScore, card} = {}) {
+    constructor({id, createdAt, updatedAt, time, ratingScore, card, interval} = {}) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.time = time;
         this.ratingScore = ratingScore;
         this.card = card;
+        this.interval = interval;
     }
 
     get getId(): number { return this.id }
@@ -22,6 +25,7 @@ export default class Repeat {
     get getCreatedAt() { return Date.parse(this.createdAt); }
     get getUpdatedAt(): string { return this.updatedAt; }
     get getTime(): string { return this.time; }
+    get getInterval(): number { return this.interval;  }
     get getRatingScore(): number { return this.ratingScore; }
 
     public static parseJSON(data: any) {
@@ -37,8 +41,13 @@ export default class Repeat {
                 let mo = new Intl.DateTimeFormat('ru', { month: '2-digit' }).format(d);
                 let da = new Intl.DateTimeFormat('ru', { day: '2-digit' }).format(d);
                 let hr = new Intl.DateTimeFormat('ru', { hour: '2-digit' }).format(d);
-                return `${ye} / ${mo} / ${da}:${hr}`
+                return `${ye} | ${mo} | ${da}:${hr}`
             }
+
+            if(key === 'interval') {
+                return DateHelper.formatInterval(value);
+            }
+
 
             return value;
         });

@@ -26,7 +26,7 @@ class Handler
 
     public function handle(Deck $deck, Command $command): Card
     {
-        $card = Card::createWithRecords($deck, Id::next(), new DateTimeImmutable(), $command->getRecords());
+        $card = Card::createWithRecords($deck, new DateTimeImmutable(), $command->getRecords());
         $this->repository->add($card);
         try {
             $deck->addCard($card);

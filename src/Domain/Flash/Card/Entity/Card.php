@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Flash\Card\Entity;
 
-use App\Domain\Flash\Card\Entity\Types\Id;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Record\Entity\Record;
 use App\Domain\Flash\Repeat\Entity\Repeat;
@@ -22,10 +21,11 @@ use DateTimeImmutable;
 class Card
 {
     /**
-     * @var Id
+     * @var int
      * @ORM\Id()
-     * @ORM\Column(type="flash_card_id")
-     * @Serializer\Type(name="string")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue()
+     * @Serializer\Type(name="integer")
      * @Serializer\Groups({Card::GROUP_LIST, Card::GROUP_ONE, Deck::GROUP_ONE})
      */
     private $id;
@@ -108,12 +108,10 @@ class Card
 
     public function __construct(
         Deck $deck,
-        Id $id,
         DateTimeImmutable $date,
         string $label = ''
     ) {
         $this->deck = $deck;
-        $this->id = $id;
         $this->createdAt = $date;
         $this->updatedAt = $date;
         $this->state = 'new';
@@ -125,12 +123,11 @@ class Card
 
     public static function createWithRecords(
         Deck $deck,
-        Id $id,
         DateTimeImmutable $date,
         array $records,
         string $label = ''
     ): self {
-        $card = new self($deck, $id, $date, $label);
+        $card = new self($deck, $date, $label);
         foreach ($records as $record) {
             if ($record instanceof Record) {
                 $card->addRecord($record);
@@ -159,7 +156,7 @@ class Card
         return $this;
     }
 
-    public function getId(): Id
+    public function getId(): int
     {
         return $this->id;
     }

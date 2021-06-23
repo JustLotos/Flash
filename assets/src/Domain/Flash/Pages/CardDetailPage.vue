@@ -30,7 +30,6 @@
                             :items="getDataForTable"
                             item-key="name"
                             class="elevation-24"
-
                         >
                           <template v-slot:top>
                             <v-toolbar flat>
@@ -116,11 +115,18 @@ export default {
                   {text: 'Дата', value: 'updatedAt'},
                   {text: 'Длительность', value: 'time'},
                   {text: 'Оценка', value: 'ratingScore'},
+                  {text: 'Интервал', value: 'interval'},
                   {text: '', value: 'actions', sortable: false },
                 ];
             },
             getDataForTable: function () {
-                return Object.values(RepeatModule.repeats);
+                let repeatsId: Array<number> = RepeatModule.repeatsByCard(this.getCard.getId());
+                let repeats = RepeatModule.repeats;
+                let resultRepeats = {};
+                repeatsId.map((id: number) => {
+                    resultRepeats[id] = repeats[id];
+                });
+                return Object.values(resultRepeats);
             },
             getCard: function(): Card {
                 let cardId = new Card(this.card).getId();

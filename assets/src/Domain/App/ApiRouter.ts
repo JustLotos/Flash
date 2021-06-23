@@ -25,7 +25,8 @@ class APIRouter {
             }
         });
 
-        console.log(searchRoute);
+
+        // console.log(searchRoute);
         return searchRoute;
     }
 

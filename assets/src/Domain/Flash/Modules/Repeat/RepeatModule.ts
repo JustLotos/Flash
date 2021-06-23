@@ -24,11 +24,9 @@ class VuexRepeat extends VuexModule {
     }
 
     public get repeatsByCard() { return (id) => {
-        console.log(this.byId);
         let repeats = Object.values(this.byId).filter(value => {
             return value.card === id
         });
-        console.log(repeats);
         return repeats.map((repeats: Repeat) => repeats.getId);
     }}
 

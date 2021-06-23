@@ -53,7 +53,7 @@ class Settings implements ISettings
     public const DEFAULT_DIFFICULTY_INDEX = 1;
 
     public function __construct(
-        int $aseInterval = 3600,
+        int $aseInterval = 300,
         int $minTimeInterval = 60,
         int $limitRepeat = self::DEFAULT_LIMIT_REPEAT,
         int $limitLearning = self::DEFAULT_LIMIT_LEARNING,

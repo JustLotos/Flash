@@ -26,12 +26,7 @@ class Handler
 
     public function handle(Deck $deck): Card
     {
-        $card = new Card(
-            $deck,
-            Id::next(),
-            new DateTimeImmutable()
-        );
-
+        $card = new Card($deck, new DateTimeImmutable());
         $this->repository->add($card);
         $deck->addCard($card);
         $this->flusher->flush();

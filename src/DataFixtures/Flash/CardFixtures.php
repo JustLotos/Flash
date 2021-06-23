@@ -52,18 +52,30 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
         $index = $this->faker->numberBetween(0, 10) % count($answers);
 
         for ($i = 0; $i <10; $i++) {
-            $answer = new DiscreteAnswer(
-                DateTimeImmutable::createFromMutable(
+            /** @var Repeat $lastRepeat */
+            $lastRepeat = $card->getRepeats()->last();
+
+            if($lastRepeat) {
+                $totalTime = $lastRepeat->getInterval() + $card->getCurrentRepeatInterval();
+                $dateAnswer = (new \DateTimeImmutable())->setTimestamp($totalTime);
+            } else {
+                $dateAnswer = DateTimeImmutable::createFromMutable(
                     $this->faker->dateTimeBetween('- 1 month', 'now')
-                ),
+                );
+            }
+
+            $answer = new DiscreteAnswer(
+                $dateAnswer,
                 $this->faker->numberBetween(5, 120),
                 $answers[$index]
             );
+
             $repeat = new Repeat(
                 $card,
                 $answer->getDate(),
                 $answer->getEstimateAnswer(),
-                $answer->getTime()
+                $answer->getTime(),
+                $card->getCurrentRepeatInterval()
             );
             $card->addRepeat($repeat);
 
@@ -78,7 +90,6 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
     {
         return new Card(
             $deck,
-            Id::next(),
             new DateTimeImmutable(),
             $this->faker->name
         );
