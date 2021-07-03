@@ -24,6 +24,7 @@ export default class Repeat {
     get getCard(): string { return this.card }
     get getCreatedAt() { return Date.parse(this.createdAt); }
     get getUpdatedAt(): string { return this.updatedAt; }
+    get updatedAtFormatted(): string { return DateHelper.dateFormat(this.updatedAt); }
     get getTime(): string { return this.time; }
     get getInterval(): number { return this.interval;  }
     get getRatingScore(): number { return this.ratingScore; }
@@ -31,19 +32,8 @@ export default class Repeat {
     public static parseJSON(data: any) {
         let repeatString: string = JSON.stringify(data);
         let parsedRepeat = JSON.parse(repeatString,function (key, value) {
-            if (key === 'card') {
-                return (new Card(value)).getId();
-            }
-
-            // if(key === 'createdAt' || key === 'updatedAt') {
-            //     return DateFormat.methods.dateFormat(value);
-            // }
-
-            if(key === 'interval') {
-                return DateHelper.formatInterval(value);
-            }
-
-
+            if (key === 'card')     { return (new Card(value)).getId()}
+            if (key === 'interval') { return DateHelper.formatInterval(value); }
             return value;
         });
         return new Repeat(parsedRepeat);

@@ -21,7 +21,7 @@ export default class Card {
         this.repeats = repeats || [];
         this.currentRepeatInterval = currentRepeatInterval;
         this.nextRepeatDate = nextRepeatDate;
-        this.isReadyForLearn = isReadyForLearn;
+        this.isReadyForLearn = !!isReadyForLearn;
     }
 
     public getId(): number { return this.id }
@@ -31,6 +31,7 @@ export default class Card {
     public getNextRepeatDate(): string { return this.nextRepeatDate }
     public getLabel(): string { return this.label }
     public getRepeats(): [number] { return this.repeats }
+    public getRecords(): [Record] { return this.records }
 
     get getFrontData(): string {
         let records = this.records.filter((record: Record) => record.isFront());

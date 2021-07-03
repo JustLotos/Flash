@@ -63,7 +63,7 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
                 $dateAnswer = (new \DateTimeImmutable())->setTimestamp($totalTime);
             } else {
                 $dateAnswer = DateTimeImmutable::createFromMutable(
-                    $this->faker->dateTimeBetween('- 1 month', 'now')
+                    $this->faker->dateTimeBetween('- 2 month', '- 1 month')
                 );
             }
 
@@ -80,6 +80,10 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
 
             $newInterval = $managerService->getNewInterval($card, $answer);
             $card->setCurrentRepeatInterval($newInterval);
+
+            if(!$card->isReadyForLearn()) {
+                break;
+            }
         }
 
         return $card;
@@ -96,17 +100,17 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
 
     public function addRecords(Card $card): Card
     {
-        $front = Record::makeFront(
-            $card,
-            $this->faker->text(300),
-            new DateTimeImmutable()
-        );
+        $firstBlock['blocks'][]= [
+            'type' => 'paragraph',
+            'data' => ['text' => $this->faker->text(300)]
+        ];
+        $front = Record::makeFront($card, $firstBlock, new DateTimeImmutable());
 
-        $back = Record::makeBack(
-            $card,
-            $this->faker->text(300),
-            new DateTimeImmutable()
-        );
+        $secondBlock['blocks'][]= [
+            'type' => 'paragraph',
+            'data' => ['text' => $this->faker->text(300)]
+        ];
+        $back = Record::makeBack($card, $secondBlock, new DateTimeImmutable());
 
         $card->addRecord($front);
         $card->addRecord($back);

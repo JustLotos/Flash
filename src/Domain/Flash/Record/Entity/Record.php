@@ -39,8 +39,8 @@ class Record
     private $updatedAt;
 
     /**
-     * @var string
-     * @ORM\Column(type="text", nullable=true)
+     * @var array
+     * @ORM\Column(type="json", nullable=true)
      * @Serializer\Groups({Record::GROUP_LIST, Record::GROUP_ONE})
      */
     private $value;
@@ -64,7 +64,7 @@ class Record
     public const GROUP_ONE = 'RECORD_GROUP_ONE';
 
     public function __construct(
-        string $value,
+        array $value,
         DateTimeImmutable $date
     ) {
         $this->value = $value;
@@ -74,7 +74,7 @@ class Record
 
     public static function makeByCard(
         Card $card,
-        string $value,
+        array $value,
         DateTimeImmutable $date
     ): Record {
         $record = new self($value, $date);
@@ -85,7 +85,7 @@ class Record
 
     public static function makeFront(
         Card $card,
-        string $value,
+        array $value,
         DateTimeImmutable $date
     ): Record {
         $record = self::makeByCard($card, $value, $date);
@@ -95,7 +95,7 @@ class Record
 
     public static function makeBack(
         Card $card,
-        string $value,
+        array $value,
         DateTimeImmutable $date
     ): Record {
         $record = self::makeByCard($card, $value, $date);
@@ -138,13 +138,13 @@ class Record
         return $this->updatedAt;
     }
 
-    public function getValue(): string
+    public function getValue(): array
     {
         return $this->value;
     }
 
     public function update(
-        string $value,
+        array $value,
         DateTimeImmutable $date
     ) {
         $this->value = $value;
@@ -153,7 +153,7 @@ class Record
 
     public static function parseFromJson(
         int $id,
-        string $value,
+        array $value,
         DateTimeImmutable $date
     ): Record {
         $record = new self($value, $date);

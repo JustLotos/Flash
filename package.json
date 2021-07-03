@@ -22,6 +22,10 @@
     "webpack-notifier": "^1.6.0"
   },
   "dependencies": {
+    "@editorjs/editorjs": "^2.22.1",
+    "@editorjs/header": "^2.6.1",
+    "@editorjs/list": "^1.6.2",
+    "@editorjs/paragraph": "^2.8.0",
     "@mdi/js": "^5.3.45",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
@@ -37,6 +41,7 @@
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
     "vue-countup-v2": "^4.0.0",
+    "vue-editor-js": "^2.0.2",
     "vue-i18n": "^8.18.1",
     "vue-jest": "^3.0.5",
     "vue-router": "^3.3.2",

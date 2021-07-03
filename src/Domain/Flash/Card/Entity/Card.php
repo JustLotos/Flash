@@ -223,7 +223,7 @@ class Card
     /**
      * @Serializer\VirtualProperty
      * @Serializer\Type(name="DateTimeImmutable")
-     * @Serializer\Groups({Card::GROUP_ONE, Card::GROUP_FOR_REPEAT})
+     * @Serializer\Groups({Card::GROUP_FOR_REPEAT})
      */
     public function nextRepeatDate(): DateTimeImmutable {
         $repeat = $this->getRepeats()->last();

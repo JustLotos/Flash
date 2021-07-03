@@ -37,6 +37,7 @@ class CardController extends AbstractController
     {
         return $this->response($this->serializer->serialize($card, [
             Card::GROUP_ONE,
+            Card::GROUP_FOR_REPEAT,
             Record::GROUP_ONE,
             Repeat::GROUP_ONE
         ]));

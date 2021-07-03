@@ -13,10 +13,10 @@
                     <control-name v-model="getCard.getLabel()" />
                 </v-col>
                 <v-col cols="12" sm="11" class="ma-0 pa-0 mb-2">
-                    <control-text v-model="getCard.getFrontData" label="Ключ" />
+                  <control-editor v-model="getCard.getFrontData"/>
                 </v-col>
-                <v-col cols="12" sm="11" class="ma-0 pa-0">
-                    <control-text v-model="getCard.getBackData" label="Значение" />
+                <v-col cols="12" sm="11" class="ma-0 pa-0 mb-2">
+                  <control-editor v-model="getCard.getBackData"/>
                 </v-col>
             </v-row>
         </v-flex>
@@ -35,9 +35,10 @@
     import ControlText from "../../../../App/Components/FormElements/ControlText.vue";
     import {AppModule} from "../../../../App/AppModule";
     import Card from "../Card";
+    import ControlEditor from "../../../../App/Components/FormElements/ControlEditor.vue";
     export default {
         name: "CardForm",
-        components: {ControlName, ControlText},
+        components: {ControlEditor, ControlName, ControlText},
         props: {
             card: {
                 type: Card,
@@ -64,6 +65,7 @@
         methods: {
             onSubmitForm() {
                 if (this.$refs.cardForm.validate()) {
+                  // console.log(this.getCard.getRecords());
                     this.$emit('submitted', this.getCard);
                 }
             }

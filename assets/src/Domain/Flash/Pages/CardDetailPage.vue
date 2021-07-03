@@ -15,17 +15,21 @@
                         <v-card-subtitle>Содержимое карточки</v-card-subtitle>
                         <v-col cols="12">
                             <v-card-text>Ключ</v-card-text>
-                            {{ getCard.getFrontData }}
+                            <control-editor v-if="frontData" v-model="frontData" :data="frontData" readonly="true"/>
                         </v-col>
                         <v-col cols="12">
                             <v-card-text>Значение</v-card-text>
-                            {{ getCard.getBackData }}
+                            <control-editor v-if="backData" v-model="backData" readonly="true"/>
                         </v-col>
                     </v-row>
-                  <v-row>
-                    <v-card-subtitle>Следующее повторение {{ nextDateRepeat }}</v-card-subtitle>
-                  </v-row>
-
+                    <v-row>
+                      <v-card-subtitle>
+                        <div>Следующее повторение {{ nextDateRepeat }}</div>
+                        <div>Интервал: {{ getInterval }}</div>
+                        <div v-if="timeRemains.expired">Просрочено на {{timeRemains.dateFormatted}}</div>
+                        <div v-else>Через {{timeRemains.dateFormatted}}</div>
+                      </v-card-subtitle>
+                    </v-row>
                     <v-row>
                       <v-col cols="12">
                         <v-data-table
@@ -100,12 +104,12 @@ import {RawLocation} from "vue-router/types/router";
 import ListObjects from "../../App/Components/List/ListObjects.vue";
 import {RepeatModule} from "../Modules/Repeat/RepeatModule";
 import Repeat from "../Modules/Repeat/Repeat";
-import DateFormat from "../../../Utils/Mixins/DateFormat";
 import {DateHelper} from "../../../Utils/DateHelper";
+import ControlEditor from "../../App/Components/FormElements/ControlEditor.vue";
 
 export default {
         name: "CardDetailPage",
-        components: {ListObjects, CardUpdate, CardDelete},
+        components: {ControlEditor, ListObjects, CardUpdate, CardDelete},
         data: function (){
             return {
                 card: {},
@@ -118,7 +122,7 @@ export default {
         computed: {
             getRepeatHeaders: function () {
                 return [
-                  {text: 'Дата', value: 'updatedAt'},
+                  {text: 'Дата', value: 'updatedAtFormatted'},
                   {text: 'Длительность', value: 'time'},
                   {text: 'Оценка', value: 'ratingScore'},
                   {text: 'Интервал', value: 'interval'},
@@ -129,17 +133,27 @@ export default {
                 let repeatsId: Array<number> = RepeatModule.repeatsByCard(this.getCard.getId());
                 let repeats = RepeatModule.repeats;
                 let resultRepeats = {};
-                repeatsId.map((id: number) => {
-                    resultRepeats[id] = repeats[id];
-                });
+                repeatsId.map((id: number) => { resultRepeats[id] = repeats[id] });
                 return Object.values(resultRepeats);
             },
             getCard: function(): Card {
                 let cardId = new Card(this.card).getId();
                 return CardModule.cardById(cardId) || new Card();
             },
+            frontData: function () {
+                return this.getCard.getFrontData;
+            },
+            backData: function () {
+                return this.getCard.getBackData;
+            },
             nextDateRepeat: function () {
               return DateHelper.dateFormat(this.getCard.getNextRepeatDate());
+            },
+            getInterval: function () {
+              return DateHelper.formatInterval(this.getCard.getCurrentRepeatInterval());
+            },
+            timeRemains: function () {
+                return DateHelper.getDiff(this.getCard.getNextRepeatDate());
             }
         },
         methods: {

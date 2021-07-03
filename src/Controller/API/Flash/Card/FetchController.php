@@ -27,6 +27,9 @@ class FetchController extends AbstractController
      */
     public function fetchCardsByDeck(Handler $handler, Deck $deck): Response
     {
-        return $this->response($this->serializer->serialize($handler->handle($deck), Card::GROUP_LIST));
+        return $this->response($this->serializer->serialize($handler->handle($deck), [
+            Card::GROUP_LIST,
+            Card::GROUP_FOR_REPEAT
+        ]));
     }
 }

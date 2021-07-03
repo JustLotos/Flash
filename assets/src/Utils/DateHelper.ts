@@ -38,4 +38,13 @@ export class DateHelper {
         let m = new Intl.DateTimeFormat('ru', { minute: '2-digit' }).format(d);
         return `${ye} | ${mo} | ${da} | ${hr}:${m}`
     }
+
+    public static getDiff(value: string, firstDate: Date = new Date()) {
+        let date = new Date(value);
+        let diff = date.getTime() - firstDate.getTime();
+        return {
+            dateFormatted: DateHelper.formatInterval(Math.abs(diff / 1000)),
+            expired: diff < 0
+        };
+    }
 }
