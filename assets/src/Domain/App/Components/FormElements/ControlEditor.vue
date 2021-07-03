@@ -84,7 +84,7 @@ export default {
         this.settings.data = this.value
       }
 
-      this.editorJs = new EditorJS(this.settings);
+      // this.editorJs = new EditorJS(this.settings);
       return this.settings;
     }
   },
