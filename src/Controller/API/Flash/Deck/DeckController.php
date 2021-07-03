@@ -9,10 +9,12 @@ use App\Domain\Flash\Card\Entity\Card;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Handler as AddDeckHandler;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Command as AddDeckCommand;
+use App\Domain\Flash\Deck\UseCase\GetDeck\Handler as GetDeckHandler;
 use App\Domain\Flash\Deck\UseCase\UpdateDeck\Command as UpdateDeckCommand;
 use App\Domain\Flash\Deck\UseCase\UpdateDeck\Handler as UpdateDeckHandler;
 use App\Domain\Flash\Deck\UseCase\DeleteDeck\Handler as DeleteDeckHandler;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Domain\Flash\Record\Entity\Record;
+use App\Domain\Flash\Repeat\Entity\Repeat;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController as AdminController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,11 +30,18 @@ class DeckController extends AdminController
      * @param Deck $deck
      * @return Response
      */
-    public function getDeck(Deck $deck): Response
+    public function getDeck(Request $request, Deck $deck, GetDeckHandler $handler): Response
     {
-        return $this->response($this->serializer->serialize($deck, [
-            Deck::GROUP_ONE
-        ]));
+        $groups = [Deck::GROUP_ONE];
+        if($request->get('isLearn')) {
+            $groups = array_merge($groups, [
+                Card::GROUP_ONE,
+                Card::GROUP_FOR_REPEAT,
+                Record::GROUP_ONE,
+                Repeat::GROUP_ONE
+            ]);
+        }
+        return $this->response($this->serializer->serialize($deck, $groups));
     }
 
     /**

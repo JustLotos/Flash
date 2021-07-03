@@ -15,6 +15,7 @@ import {Deck} from "../Modules/Deck/Deck";
 import {DeckModule} from "../Modules/Deck/DeckModule";
 import Router from "../../App/Router";
 import {CardModule} from "../Modules/Card/CardModule";
+import GetDeckDTO from "../DTO/GetDeckDTO";
 
 @Component({ components: { DeckDetail } })
 export default class DeckDetailPage extends Vue {
@@ -28,7 +29,7 @@ export default class DeckDetailPage extends Vue {
 
     async beforeRouteEnter(to, from, next) {
       let deck: Deck = new Deck(to.params);
-      await DeckModule.get(deck).catch(function (data) {
+      await DeckModule.get(new GetDeckDTO(deck)).catch(function (data) {
           console.log(data);
           Router.push({name: 'Collection'});
       });

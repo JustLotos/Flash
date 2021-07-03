@@ -49,11 +49,12 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
     {
         /** @var  $answers */
         $answers = DiscreteAnswer::getStates();
-        $index = $this->faker->numberBetween(0, 10) % count($answers);
+
         for ($i = 0; $i <10; $i++) {
             /** @var Repeat $lastRepeat */
             $lastRepeat = $card->getRepeats()->last();
             $timeRepeat = $this->faker->numberBetween(5, 120);
+            $index = $this->faker->numberBetween(0, 10) % count($answers);
 
             if($lastRepeat) {
                 $totalTime = $timeRepeat

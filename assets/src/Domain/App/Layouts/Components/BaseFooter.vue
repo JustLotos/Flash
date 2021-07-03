@@ -1,5 +1,5 @@
 <template>
-    <v-footer app padless>
+    <v-footer app padless class="hidden">
         <v-row class="flex primary">
             <v-col class="text-center">
                 <v-btn

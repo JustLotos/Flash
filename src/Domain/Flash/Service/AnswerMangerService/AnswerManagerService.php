@@ -15,8 +15,8 @@ use Exception;
 
 class AnswerManagerService
 {
-    const LITTLE = 0.00001;
     const MAX = 2147483600;
+    const MIN = 60;
     /**
      * @param Card $card
      * @param IAnswer $answer
@@ -25,22 +25,22 @@ class AnswerManagerService
     public function getNewInterval(Card $card, IAnswer $answer): int
     {
         $deck = $card->getDeck();
-
         $simpleIndex = $card->getCurrentRepeatInterval() * $answer->getEstimateAnswer();
+
         $totalTime = 0;
-        $successCount = 0;
-        /** @var Repeat $repeat */
+//        $successCount = 0;
+//        /** @var Repeat $repeat */
         foreach ($card->getRepeats() as $repeat) {
             $totalTime += $repeat->getTime();
-            if ($repeat->getRatingScore() > 1) {
-                $successCount +=1;
-            }
+//            if ($repeat->getRatingScore() > 1) {
+//                $successCount +=1;
+//            }
         }
-
-        $averageTime = $totalTime / ($card->getRepeats()->count() + self::LITTLE);
-        $averageTimeIndex = $answer->getTime() / ($averageTime + self::LITTLE);
-        $countRepeatIndex = $successCount / ($card->getRepeats()->count() + self::LITTLE) ;
-        $newInterval = $simpleIndex * $countRepeatIndex / ($averageTimeIndex + self::LITTLE);
+//
+//        $averageTime = $totalTime / ($card->getRepeats()->count() + self::LITTLE);
+//        $averageTimeIndex = $answer->getTime() / ($averageTime + self::LITTLE);
+//        $countRepeatIndex = $successCount / ($card->getRepeats()->count() + self::LITTLE) ;
+        $newInterval = $simpleIndex * ($card->getRepeats()->count()/2); // ($averageTimeIndex + self::LITTLE);
 
         if($newInterval > self::MAX) {
             $newInterval = self::MAX;

@@ -7,6 +7,7 @@ namespace App\Domain\Flash\Card\Entity;
 use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Record\Entity\Record;
 use App\Domain\Flash\Repeat\Entity\Repeat;
+use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
@@ -96,15 +97,17 @@ class Card
      */
     private $label;
 
-    /** @var int
-     *  @ORM\Column(type="integer", nullable=true)
-     *  @Serializer\Groups({Card::GROUP_ONE})
+    /**
+     * @var int
+     * @ORM\Column(type="integer", nullable=true)
+     * @Serializer\Groups({Card::GROUP_ONE})
      * @Serializer\Type(name="integer")
      */
     private $currentRepeatInterval;
 
     public const GROUP_LIST = 'CARD_GROUP_LIST';
     public const GROUP_ONE = 'CARD_GROUP_ONE';
+    public const GROUP_FOR_REPEAT = 'CARD_FOR_REPEAT';
 
     public function __construct(
         Deck $deck,
@@ -202,5 +205,30 @@ class Card
     public function getCurrentRepeatInterval(): int
     {
         return $this->currentRepeatInterval;
+    }
+
+    /**
+     * @Serializer\VirtualProperty
+     * @Serializer\Type(name="bool")
+     * @Serializer\Groups({Card::GROUP_FOR_REPEAT})
+     */
+    public function isReadyForLearn(): bool {
+        $repeat = $this->getRepeats()->last();
+        $currentTime = $repeat->getUpdatedAt()->getTimestamp();
+        $resultTime = $currentTime + $this->getCurrentRepeatInterval();
+        $carbonTime = CarbonImmutable::createFromTimestamp($resultTime);
+        return $carbonTime->lessThan(new DateTimeImmutable());
+    }
+
+    /**
+     * @Serializer\VirtualProperty
+     * @Serializer\Type(name="DateTimeImmutable")
+     * @Serializer\Groups({Card::GROUP_ONE, Card::GROUP_FOR_REPEAT})
+     */
+    public function nextRepeatDate(): DateTimeImmutable {
+        $repeat = $this->getRepeats()->last();
+        $currentTime = $repeat->getUpdatedAt()->getTimestamp();
+        $resultTime = $currentTime + $this->getCurrentRepeatInterval();
+        return CarbonImmutable::createFromTimestamp($resultTime)->toDateTimeImmutable();
     }
 }

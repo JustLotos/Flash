@@ -6,11 +6,11 @@ namespace App\Controller\API\Flash\Repeat;
 
 use App\Controller\ControllerHelper;
 use App\Domain\Flash\Card\Entity\Card;
+use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Record\Entity\Record;
 use App\Domain\Flash\Repeat\Entity\Repeat;
 use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Command as DiscreteRepeatCommand;
 use App\Domain\Flash\Repeat\UseCase\DiscreteRepeat\Handler as DiscreteRepeatHandler;
-use App\Domain\Flash\Repeat\UseCase\GetReadyQueue\Command as GetReadyQueueCommand;
 use App\Domain\Flash\Repeat\UseCase\GetReadyQueue\Handler as GetReadyQueueHandler;
 use App\Domain\Flash\Repeat\UseCase\DeleteRepeat\Handler as DeleteRepeatHandler;
 use Exception;
@@ -44,17 +44,14 @@ class RepeatController extends AbstractController
     }
 
     /**
-     * @Route("/queue/", name="readyQueueRepeat", methods={"GET"})
-     * @param Request $request
+     * @Route("/queue/{id}/", name="readyQueueRepeat", methods={"GET"})
      * @param GetReadyQueueHandler $handler
+     * @param Deck $deck
      * @return Response
      */
-    public function getReadyForRepeatAction(Request $request, GetReadyQueueHandler $handler): Response
+    public function getReadyForRepeatAction(GetReadyQueueHandler $handler, Deck $deck): Response
     {
-        /** @var GetReadyQueueCommand $command */
-        $command = $this->extractData($request, GetReadyQueueCommand::class);
-        $collection = $handler->handle($command);
-
+        $collection = $handler->handle($deck);
         return $this->response($this->serializer->serialize($collection, [ Card::GROUP_LIST ]));
     }
 

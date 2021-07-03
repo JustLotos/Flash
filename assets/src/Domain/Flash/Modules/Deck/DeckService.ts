@@ -1,6 +1,7 @@
 import Axios from "../../../../Plugins/Axios";
 import {ApiRouter} from "../../../App/ApiRouter";
 import {Deck} from "./Deck";
+import GetDeckDTO from "../../DTO/GetDeckDTO";
 
 export default {
     async fetch() {
@@ -17,9 +18,9 @@ export default {
         // @ts-ignore
         return Axios.delete(ApiRouter.getRouteByName('deleteDeck', { id: deck.getId() }).path);
     },
-    async get(deck: Deck) {
-
+    async get(dto: GetDeckDTO) {
         // @ts-ignore
-        return Axios.get(ApiRouter.getRouteByName('getDeck', { id: deck.getId() }).path);
+        let route = ApiRouter.getRouteByName('getDeck', { id: dto.deck.getId() });
+        return Axios.get(route.path, { params:{ isLearn: dto.isForLearn() }});
     }
 };

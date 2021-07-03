@@ -4,6 +4,9 @@ import {AppModule} from "../../../App/AppModule";
 import DeckService from "./DeckService";
 import {Deck} from "./Deck";
 import Vue from "vue";
+import GetDeckDTO from "../../DTO/GetDeckDTO";
+import EventEmitter from "../../../../Utils/EventModule/EventEmitter";
+import Event from "../../../../Utils/EventModule/Event";
 
 @Module({
     dynamic: true,
@@ -82,11 +85,11 @@ class VuexDeck extends VuexModule {
     }
 
     @Action({ rawError: true })
-    public async get(deck: Deck): Promise<any> {
+    public async get(dto: GetDeckDTO): Promise<any> {
         AppModule.loading();
-
-        const response  = await DeckService.get(deck);
+        const response  = await DeckService.get(dto);
         this.FETCH_DECKS([response.data]);
+        EventEmitter.i().emit(new Event('getDeck'), response.data);
         AppModule.unsetLoading();
         return response.data;
     }

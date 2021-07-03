@@ -35,18 +35,11 @@ export default class Repeat {
                 return (new Card(value)).getId();
             }
 
-            if(key === 'createdAt' || key === 'updatedAt') {
-                let d = new Date(value);
-                let ye = new Intl.DateTimeFormat('ru', { year: '2-digit' }).format(d);
-                let mo = new Intl.DateTimeFormat('ru', { month: '2-digit' }).format(d);
-                let da = new Intl.DateTimeFormat('ru', { day: '2-digit' }).format(d);
-                let hr = new Intl.DateTimeFormat('ru', { hour: '2-digit' }).format(d);
-                let m = new Intl.DateTimeFormat('ru', { minute: '2-digit' }).format(d);
-                return `${ye} | ${mo} | ${da} | ${hr}:${m}`
-            }
+            // if(key === 'createdAt' || key === 'updatedAt') {
+            //     return DateFormat.methods.dateFormat(value);
+            // }
 
             if(key === 'interval') {
-                console.log(value);
                 return DateHelper.formatInterval(value);
             }
 

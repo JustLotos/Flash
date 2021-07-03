@@ -27,4 +27,15 @@ export class DateHelper {
 
         return  result;
     }
+
+    public static  dateFormat(value) {
+        if(!value) return '';
+        let d = new Date(value);
+        let ye = new Intl.DateTimeFormat('ru', { year: '2-digit' }).format(d);
+        let mo = new Intl.DateTimeFormat('ru', { month: '2-digit' }).format(d);
+        let da = new Intl.DateTimeFormat('ru', { day: '2-digit' }).format(d);
+        let hr = new Intl.DateTimeFormat('ru', { hour: '2-digit' }).format(d);
+        let m = new Intl.DateTimeFormat('ru', { minute: '2-digit' }).format(d);
+        return `${ye} | ${mo} | ${da} | ${hr}:${m}`
+    }
 }

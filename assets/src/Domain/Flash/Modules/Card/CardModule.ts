@@ -7,6 +7,8 @@ import Card from "./Card";
 import {Deck} from "../Deck/Deck";
 import CardByDeckDTO from "../../DTO/CardByDeckDTO";
 import {RepeatModule} from "../Repeat/RepeatModule";
+import EventEmitter from "../../../../Utils/EventModule/EventEmitter";
+import Event from "../../../../Utils/EventModule/Event";
 
 @Module({
     dynamic: true,
@@ -104,5 +106,9 @@ class VuexCard extends VuexModule {
     }
 }
 
+EventEmitter.i().addEventListener(
+    new Event('getDeck'),
+    data => CardModule.FETCH(data.cards)
+);
 
 export const CardModule = getModule(VuexCard);

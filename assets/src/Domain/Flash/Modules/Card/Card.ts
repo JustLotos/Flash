@@ -6,20 +6,29 @@ export default class Card {
     private readonly id: number;
     private readonly label: string;
     private readonly deck: number;
+    private readonly currentRepeatInterval: number;
+    private readonly isReadyForLearn: boolean;
+    private readonly nextRepeatDate: string;
     private readonly records: [Record] = [];
     private readonly repeats: [number] = [];
 
     // @ts-ignore
-    constructor({id, deck, records, label, repeats} = {}) {
+    constructor({id, deck, records, label, repeats, nextRepeatDate, currentRepeatInterval, isReadyForLearn} = {}) {
         this.id = id || 0;
         this.deck = deck || 0;
         this.records = records || [];
         this.label = label || id || '';
         this.repeats = repeats || [];
+        this.currentRepeatInterval = currentRepeatInterval;
+        this.nextRepeatDate = nextRepeatDate;
+        this.isReadyForLearn = isReadyForLearn;
     }
 
     public getId(): number { return this.id }
     public getDeck(): number { return this.deck }
+    public getCurrentRepeatInterval(): number { return this.currentRepeatInterval }
+    public isReady(): boolean { return this.isReadyForLearn }
+    public getNextRepeatDate(): string { return this.nextRepeatDate }
     public getLabel(): string { return this.label }
     public getRepeats(): [number] { return this.repeats }
 

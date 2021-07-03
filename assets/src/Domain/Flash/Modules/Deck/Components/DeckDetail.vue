@@ -4,16 +4,16 @@
             <v-card :elevation="18" class="pa-12">
                 <v-row justify="center">
                     <v-col cols="12" sm="8">
-                        <v-img v-if="getDeck.avatar" class="white--text align-end justify-center" height="200px">
-                            <v-card-title class="justify-center">{{ getDeck.name }}</v-card-title>
+                        <v-img v-if="false" class="white--text align-end justify-center" height="200px">
+                            <v-card-title class="justify-center">{{ getDeck.getName() }}</v-card-title>
                         </v-img>
                         <v-toolbar dense short flat>
                             <v-row justify="center">
                                 <v-speed-dial v-model="fab" direction="right">
                                     <template v-slot:activator>
                                         <v-btn v-model="fab" elevation="0">
-                                            <v-toolbar-title class="text-center">{{ getDeck.name }}
-                                                <v-icon v-if="fab">mdi-close</v-icon>
+                                            <v-toolbar-title class="text-center">
+                                              {{ getDeck.getName() }}<v-icon v-if="fab">mdi-close</v-icon>
                                             </v-toolbar-title>
                                         </v-btn>
                                     </template>
@@ -26,17 +26,17 @@
                                 </v-speed-dial>
                             </v-row>
                         </v-toolbar>
-                        <v-card-subtitle class="text-center">{{getDeck.description}}</v-card-subtitle>
+                        <v-card-subtitle class="text-center">{{getDeck.getDescription()}}</v-card-subtitle>
                         <v-divider></v-divider>
                         <v-card-actions>
                             <v-flex>
                                 <v-row>
-                                    <v-col cols="12" sm8 v-if="false">
+                                    <v-col cols="12" sm8 >
                                         <v-hover open-delay="0.3s" v-slot:default="{hover}">
                                             <v-btn block depressed x-large color="primary" class="mb-2"
                                                 :elevation="hover ? 24 : 0"
                                                 :class="{'on-hover':hover}"
-                                                :to="{name: 'Collection', params: {id: getDeck.id}}"
+                                                :to="{ name: 'PrepareToLearn', params: {id: getDeck.getId()} }"
                                             >Учить</v-btn>
                                         </v-hover>
                                     </v-col>
@@ -85,7 +85,7 @@
     </v-row>
 </template>
 
-<script>
+<script lang="ts">
     import Modal from "../../../../App/Components/Modal/Modal.vue";
     import DeckUpdate from "./CRUD/DeckUpdate.vue";
     import DeckDelete from "./CRUD/DeckDelete.vue";
@@ -119,7 +119,7 @@
             }
         },
         computed: {
-            getDeck() { return this.deck || {} },
+            getDeck(): Deck { return this.deck || {} },
             getCardsId() {
               return this.cards || {}
             },
@@ -135,7 +135,6 @@
                 this.deleteDeckModal = !this.deleteDeckModal;
             },
             createModalToggle: function() {
-                console.log('123');
                 this.createCardModal = !this.createCardModal;
             },
             onUpdateDeck: function (value) {
@@ -150,8 +149,6 @@
                 Router.push({name: 'Collection'});
             },
             onCreateCard: function (value) {
-              console.log('card created');
-              console.log(value);
               this.createCardModal = !this.createCardModal;
             }
         }

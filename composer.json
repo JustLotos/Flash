@@ -37,7 +37,8 @@
         "symfony/validator": "4.*",
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "4.4.*",
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.0",
+        "nesbot/carbon": "^2.50.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^7.0",

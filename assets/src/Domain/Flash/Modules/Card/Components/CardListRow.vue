@@ -11,6 +11,10 @@
             :to="getLink()"
         >
           {{getCardTitle}}
+
+          <span v-if="!getCard.isReadyForLearn()">+</span>
+          <span v-else>-</span>
+
         </v-btn>
     </v-hover>
 </template>
@@ -31,6 +35,9 @@
             getCard: function () : Card { return this.card; },
             getCardTitle: function () {
                 return this.getCard.getLabel().slice(0 , 25);
+            },
+            getNextTimeRepeat: function () {
+              return ''
             }
         },
         methods: {

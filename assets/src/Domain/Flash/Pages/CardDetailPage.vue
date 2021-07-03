@@ -22,6 +22,10 @@
                             {{ getCard.getBackData }}
                         </v-col>
                     </v-row>
+                  <v-row>
+                    <v-card-subtitle>Следующее повторение {{ nextDateRepeat }}</v-card-subtitle>
+                  </v-row>
+
                     <v-row>
                       <v-col cols="12">
                         <v-data-table
@@ -96,6 +100,8 @@ import {RawLocation} from "vue-router/types/router";
 import ListObjects from "../../App/Components/List/ListObjects.vue";
 import {RepeatModule} from "../Modules/Repeat/RepeatModule";
 import Repeat from "../Modules/Repeat/Repeat";
+import DateFormat from "../../../Utils/Mixins/DateFormat";
+import {DateHelper} from "../../../Utils/DateHelper";
 
 export default {
         name: "CardDetailPage",
@@ -131,6 +137,9 @@ export default {
             getCard: function(): Card {
                 let cardId = new Card(this.card).getId();
                 return CardModule.cardById(cardId) || new Card();
+            },
+            nextDateRepeat: function () {
+              return DateHelper.dateFormat(this.getCard.getNextRepeatDate());
             }
         },
         methods: {
