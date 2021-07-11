@@ -34,11 +34,41 @@ class Payment
      */
     private $customer;
 
+    /**
+     * @ORM\Column(type="string")
+     * @Serializer\Type(name="string")
+     * @Serializer\Groups({Payment::GROUP_DETAIL})
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="string")
+     * @Serializer\Type(name="string")
+     * @Serializer\Groups({Payment::GROUP_DETAIL})
+     */
+    private $amount;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Serializer\Type(name="string")
+     * @Serializer\Groups({Payment::GROUP_DETAIL})
+     */
+    private $singed;
+
+
     public const GROUP_SIMPLE = 'SALE_GROUP_SIMPLE';
     public const GROUP_DETAIL = 'SALE_GROUP_DETAIL';
 
-    public function __construct(Id $id) {
+    public function __construct(
+        Id $id,
+        string $description,
+        string $amount,
+        string $singed
+    ) {
         $this->id = $id;
+        $this->description = $description;
+        $this->amount = $amount;
+        $this->singed = $singed;
     }
 
     public function getId(): int {

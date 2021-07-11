@@ -82,6 +82,10 @@ services:
     App\Domain\Flash\Service\AnswerMangerService\AnswerManagerService:
 #    App\Domain\Flash\Service\EstimateService: ~
 
+    # SALE SERVICE
+    App\Domain\Sale\SingService: ~
+    # SALE SERVICE
+
     #VALIDATORS
     validator.unique.uniqueuser:
         class: App\Validator\UniqueEntityConstraint\UniqueEntityValidator
