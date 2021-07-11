@@ -10,12 +10,20 @@ let Axios = axios.create({
 });
 
 Axios.interceptors.response.use(
-    (response) => { return response },
+    (response) => {
+        debugger
+        return response
+    },
     async function (error) {
+        debugger
         UserModule.UNSET_LOADING();
         const originalRequest: AxiosRequestConfig = error.config;
 
-        if (error.message === "Network Error") return AppModule.getApp.showCommonModal();
+        if (error.message === "Network Error") {
+            console.log(error);
+            // return AppModule.getApp.showCommonModal();
+            debugger
+        }
 
         if (
             error.response?.status === 401 &&
