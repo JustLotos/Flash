@@ -3,6 +3,7 @@ import Router, {RouteConfig} from 'vue-router'
 import {AppRoutes} from "./AppRoutes";
 import {UserRoutes} from "../User/UserRoutes";
 import {FlashRoutes} from "../Flash/FlashRoutes";
+import {SaleRoutes} from "../Sale/SaleRoutes";
 
 class VueRouterEx extends Router {
     matcher: any;
@@ -26,10 +27,11 @@ export const routes: Array<RouteConfig> = [
     ...AppRoutes,
     ...UserRoutes,
     ...FlashRoutes,
-    // {
-    //     path: '*', redirect: '/',
-    //     meta: { menu: false, auth: false }
-    // }
+    ...SaleRoutes,
+    {
+        path: '*', redirect: '/',
+        meta: { menu: false, auth: false }
+    }
 ];
 
 

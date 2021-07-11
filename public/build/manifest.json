@@ -5,5 +5,6 @@
   "build/vendors~app.js": "/build/vendors~app.js",
   "build/emailImage.png": "/build/emailImage.png",
   "build/flash.svg": "/build/flash.svg",
-  "build/vbanner.jpg": "/build/vbanner.jpg"
+  "build/vbanner.jpg": "/build/vbanner.jpg",
+  "build/0.js": "/build/0.js"
 }

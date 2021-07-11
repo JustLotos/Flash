@@ -83,8 +83,8 @@ class User implements UserInterface
      */
     private $updatedAt;
 
-    public const GROUP_SIMPLE = 'GROUP_SIMPLE';
-    public const GROUP_DETAIL = 'GROUP_DETAIL';
+    public const GROUP_SIMPLE = 'USER_GROUP_SIMPLE';
+    public const GROUP_DETAIL = 'USER_GROUP_DETAIL';
 
     private function __construct() {}
 

@@ -1684,16 +1684,16 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v3.3.2",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "9672b09ce29c910fd74fe7769dd709c738ea43d4"
+                "reference": "e2fa1a2b24567c96bbfdcdef8e11a2a7287b2305"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/9672b09ce29c910fd74fe7769dd709c738ea43d4",
-                "reference": "9672b09ce29c910fd74fe7769dd709c738ea43d4",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/e2fa1a2b24567c96bbfdcdef8e11a2a7287b2305",
+                "reference": "e2fa1a2b24567c96bbfdcdef8e11a2a7287b2305",
                 "shasum": ""
             },
             "require": {
@@ -1771,7 +1771,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-05-26T18:53:27+00:00"
+            "time": "2021-07-04T10:48:29+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -2486,16 +2486,16 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "v2.12.1",
+            "version": "v2.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "76f74a12fd53cece7d1ee60fa0134d71eb1c8b78"
+                "reference": "8081ff6df6d9a8358124aa68a7105e9bb978d54e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/76f74a12fd53cece7d1ee60fa0134d71eb1c8b78",
-                "reference": "76f74a12fd53cece7d1ee60fa0134d71eb1c8b78",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/8081ff6df6d9a8358124aa68a7105e9bb978d54e",
+                "reference": "8081ff6df6d9a8358124aa68a7105e9bb978d54e",
                 "shasum": ""
             },
             "require": {
@@ -2589,7 +2589,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-27T22:29:03+00:00"
+            "time": "2021-07-03T14:11:12+00:00"
         },
         {
             "name": "mark-gerarts/auto-mapper-plus",
@@ -2937,16 +2937,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.10.5",
+            "version": "v4.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "4432ba399e47c66624bc73c8c0f811e5c109576f"
+                "reference": "fe14cf3672a149364fb66dfe11bf6549af899f94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4432ba399e47c66624bc73c8c0f811e5c109576f",
-                "reference": "4432ba399e47c66624bc73c8c0f811e5c109576f",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/fe14cf3672a149364fb66dfe11bf6549af899f94",
+                "reference": "fe14cf3672a149364fb66dfe11bf6549af899f94",
                 "shasum": ""
             },
             "require": {
@@ -2985,7 +2985,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2021-05-03T19:11:20+00:00"
+            "time": "2021-07-03T13:36:55+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",

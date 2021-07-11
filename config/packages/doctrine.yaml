@@ -25,6 +25,7 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Domain/User/Entity'
                 prefix: 'App\Domain\User\Entity'
                 alias: User
+            #FLASH START
             Learner:
                 is_bundle: false
                 type: annotation
@@ -55,3 +56,13 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Domain/Flash/Repeat/Entity'
                 prefix: 'App\Domain\Flash\Repeat\Entity'
                 alias: Record
+            # FLASH END
+
+            # SALE START
+            Payment:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Domain/Sale/Entity'
+                prefix: 'App\Domain\Sale\Entity'
+                alias: Payment
+            # SALE END

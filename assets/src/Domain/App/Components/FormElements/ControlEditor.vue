@@ -15,7 +15,11 @@
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import Paragraph from "@editorjs/paragraph";
-import List from "@editorjs/list";
+import NestedList from '@editorjs/nested-list';
+import Underline from '@editorjs/underline';
+import Warning from '@editorjs/warning';
+import Embed from '@editorjs/embed';
+import AttachesTool from '@editorjs/attaches';
 import {makeid} from "../../../../Utils/Helpers";
 
 const EVENT_NAME = 'editorChange'.toLowerCase();
@@ -33,11 +37,39 @@ let editorSettings = function(component){
         class: Header,
         shortcut: "CMD+SHIFT+H"
       },
-      list: {class: List},
+      list: {
+        class: NestedList,
+        inlineToolbar: true,
+      },
       paragraph: {
         class: Paragraph,
         config: {placeholder: "."}
-      }
+      },
+      attaches: {
+        class: AttachesTool,
+        config: {
+          endpoint: 'http://localhost/uploadFile'
+        }
+      },
+      embed: {
+        class: Embed,
+        config: {
+          services: {
+            youtube: true,
+            coub: true
+          }
+        }
+      },
+      underline: Underline,
+      warning: {
+        class: Warning,
+        inlineToolbar: true,
+        shortcut: 'CMD+SHIFT+W',
+        config: {
+          titlePlaceholder: 'Title',
+          messagePlaceholder: 'Message',
+        },
+      },
     },
     data: {
       blocks: [{
@@ -83,6 +115,10 @@ export default {
       } else {
         this.settings.data = this.value
       }
+
+      // if(this.readonly) {
+      delete this.settings.tools.attaches;
+      // }
 
       // this.editorJs = new EditorJS(this.settings);
       return this.settings;
