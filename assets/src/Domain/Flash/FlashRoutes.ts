@@ -20,7 +20,7 @@ export const FlashRoutes: Array<RouteConfig> = [
         meta: { label: 'CardDetail', icon: 'mdi-flash', menu: false, auth: true, layout: BaseLayout, sortRate: 1},
     },
     {
-        path: '/train/', name: 'Train', component: TrainPage,
+        path: '/train/:id/', name: 'Train', component: TrainPage,
         meta: { label: 'Train', icon: 'mdi-flash', menu: false, auth: true, layout: BaseLayout, sortRate: 2},
     },
     {

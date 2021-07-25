@@ -4,8 +4,8 @@ namespace App\Domain\Sale\UseCase\AddPayment;
 
 use App\Domain\Sale\Entity\Payment;
 use App\Domain\Sale\PaymentRepository;
-use App\Domain\User\Entity\User;
 use App\Domain\User\UserRepository;
+use App\Service\FlushService;
 
 class Handler
 {
@@ -17,13 +17,19 @@ class Handler
      * @var UserRepository
      */
     private $userRepository;
+    /**
+     * @var FlushService
+     */
+    private $flushService;
 
     public function __construct(
         PaymentRepository $repository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        FlushService $flushService
     ){
         $this->repository = $repository;
         $this->userRepository = $userRepository;
+        $this->flushService = $flushService;
     }
 
     public function handle(Command $command): Payment
@@ -37,6 +43,7 @@ class Handler
         );
 
         $this->repository->add($payment);
+        $this->flushService->flush();
         return $payment;
     }
 }

@@ -19,7 +19,7 @@ class UserFixtures extends BaseFixture implements ContainerAwareInterface
 {
     public const ADMINS = 'ADMINS';
     public const USERS = 'USERS';
-    public const USER_COUNT = 10;
+    public const USER_COUNT = 0;
 
     public function loadData(ObjectManager $manager) : void
     {

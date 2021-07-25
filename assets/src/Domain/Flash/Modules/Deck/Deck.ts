@@ -21,6 +21,15 @@ export class Deck {
     public getCards(): Array<Number> { return this.cards }
     public setCards(cards: Array<Number>) { this.cards = cards }
 
+    public forRepeat() {
+        let cards = this.cards;
+        return function* () {
+            for (let card of cards) {
+                yield card;
+            }
+        }
+    }
+
     public getFormattedDate() {
         return new Date(this.updatedAt).toLocaleDateString();
     }

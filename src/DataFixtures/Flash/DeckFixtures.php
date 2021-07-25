@@ -20,7 +20,7 @@ class DeckFixtures extends BaseFixture implements DependentFixtureInterface
 
     public function loadData(ObjectManager $manager) : void
     {
-        $this->createMany(100, self::ADMINS_ID, function () {
+        $this->createMany(10, self::ADMINS_ID, function () {
             /** @var Learner $learner */
             $learner = $this->getReferenceByNumber(LearnerFixtures::ADMINS, 0);
             return $this->makeDeck($learner);

@@ -11,7 +11,6 @@ let Axios = axios.create({
 
 Axios.interceptors.response.use(
     (response) => {
-        debugger
         return response
     },
     async function (error) {

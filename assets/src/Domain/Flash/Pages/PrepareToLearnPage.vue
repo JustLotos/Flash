@@ -1,6 +1,6 @@
 <template>
   <v-layout align-center justify-center>
-    <v-flex sm10 md8 lg6>
+    <v-flex sm8  md6 lg4>
       <v-card class="mx-auto" color="#26c6da" dark>
         <v-card-title>
           <v-icon large lef>mdi-twitter</v-icon>
@@ -10,7 +10,9 @@
 
         <v-card-actions>
           <v-list-item class="grow">
-            <v-list-item-action>Test</v-list-item-action>
+            <v-list-item-action>
+              <v-btn v-if="isDeck" :to="start">Начать</v-btn>
+            </v-list-item-action>
             <v-row align="center" justify="end"></v-row>
           </v-list-item>
         </v-card-actions>
@@ -33,10 +35,13 @@ export default {
     }
   },
   computed: {
-
+    isDeck: function () {
+      return this.deck;
+    },
+    start: function () { return {name: 'Train'}; },
   },
   methods: {
-    setDeck: function (deck) { this.deck = deck }
+    setDeck: function (deck) { this.deck = deck },
   },
   async beforeRouteEnter(to, from, next) {
     let deck: Deck = new Deck(to.params);

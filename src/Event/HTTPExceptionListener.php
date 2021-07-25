@@ -30,6 +30,9 @@ class HTTPExceptionListener
 //        var_dump($error->getMessage());
         $response = $this->responseDomainException($error);
 
+        $errorData = ['message' => $error->getMessage(), 'data' => $response];
+        file_put_contents('errorDomain.txt', json_encode($errorData));
+
 //        die();
 //        switch (get_class($error)) {
 //            case ApplicationException::class:

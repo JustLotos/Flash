@@ -26,7 +26,7 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
     {
         $managerService = new AnswerManagerService();
 
-        $this->createMany(500, self::ADMINS_ID, function () use ($managerService) {
+        $this->createMany(50, self::ADMINS_ID, function () use ($managerService) {
             /** @var Deck $deck */
             $deck = $this->getRandomReference(DeckFixtures::ADMINS_ID);
             $card = $this->makeCard($deck);

@@ -7,7 +7,7 @@ namespace App\Domain\Sale;
 class SingService
 {
     public function getSign($requestData): string {
-        unset($requestData['ik_sing']);
+        unset($requestData['ik_sign']);
         ksort($requestData, SORT_STRING);
         array_push($requestData, 'WsePzUygiBVW68NU');
         $singString = implode(':', $requestData);
@@ -15,6 +15,6 @@ class SingService
     }
 
     public function checkService($requestData): bool {
-        return $requestData['ik_sing'] === $this->getSign($requestData);
+        return $requestData['ik_sign'] === $this->getSign($requestData);
     }
 }

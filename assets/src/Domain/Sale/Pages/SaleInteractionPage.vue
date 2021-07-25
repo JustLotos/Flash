@@ -16,7 +16,7 @@
                     <input type="hidden" name="ik_pm_no" :value="orderId" />
                     <input type="hidden" name="ik_cur" value="RUB" />
                     <input type="hidden" name="ik_desc" value="Тестовый платеж" />
-                    <input type="hidden" name="ik_exp" value="2021-07-12" />
+                    <input type="hidden" name="ik_exp" :value="getCurrentDate" />
                     <input type="hidden" name="ik_ltm" value="2592000" />
                     <input type="hidden" name="ik_loc" value="ru" />
                     <input type="hidden" name="ik_enc" value="utf-8" />
@@ -35,7 +35,7 @@
   </v-layout>
 </template>
 
-<script>
+<script lang="ts">
 import {makeid} from "../../../Utils/Helpers";
 import {UserModule} from "../../User/UserModule";
 
@@ -49,7 +49,12 @@ export default {
   computed: {
     orderId: function() { return makeid(10) },
     token: function () { return UserModule.user.accessToken; },
-    email: function () { return UserModule.user.email; }
+    email: function () { return UserModule.user.email; },
+    getCurrentDate: function () {
+      let d = new Date();
+      let month = d.getMonth() + 2;
+      return d.getFullYear() + '-' + month  + '-' + d.getDay() ;
+    }
   },
   methods: {
     pay: function () {

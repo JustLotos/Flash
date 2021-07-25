@@ -27,12 +27,18 @@ class SaleController extends AbstractController
     public function addPayment(Request $request, Handler $handler, SingService $singService): Response
     {
 
+        file_put_contents('data1.txt', json_encode($request->request->all()));
         /** @var Command $command */
-        $command = $this->extractData($request, Command::class);
-        if($singService->checkService($request->request->all())) {
-            $handler->handle($command);
-            return $this->response($this->getSimpleSuccessResponse());
-        }
+        $command = new Command($request->request->all());
+        file_put_contents('email.txt', $command->getEmail());
+        file_put_contents('command.txt', json_encode($command));
+//        if($singService->checkService($request->request->all())) {
+        $payment = $handler->handle($command);
+        file_put_contents('payment.txt', json_encode($payment));
+        return $this->response($this->getSimpleSuccessResponse());
+//        } else {
+//            file_put_contents('sing.txt', 'no');
+//        }
 
         $errorData = [
             'message' => 'Ошибка подписания платежа',
