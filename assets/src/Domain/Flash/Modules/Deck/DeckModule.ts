@@ -93,6 +93,17 @@ class VuexDeck extends VuexModule {
         AppModule.unsetLoading();
         return response.data;
     }
+
+
+    @Action({ rawError: true })
+    public async publish(deck: Deck): Promise<any> {
+        AppModule.loading();
+        const response  = await DeckService.publish(deck);
+        this.FETCH_DECKS([response.data]);
+        EventEmitter.i().emit(new Event('publish'), response.data);
+        AppModule.unsetLoading();
+        return response.data;
+    }
 }
 
 

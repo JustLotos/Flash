@@ -83,6 +83,14 @@ class Deck
      */
     private $cards;
 
+
+    /**
+     * @var string | null
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Serializer\Groups({Deck::GROUP_LIST, Deck::GROUP_ONE})
+     */
+    private $publish;
+
     public const GROUP_LIST = 'DECK_GROUP_LIST';
     public const GROUP_ONE = 'DECK_GROUP_ONE';
 
@@ -101,6 +109,7 @@ class Deck
         $this->updatedAt = $date;
         $this->cards = new ArrayCollection();
         $this->settings = $settings;
+        $this->publish = false;
     }
 
     public function update(string $name, DateTimeImmutable $updatedAt, ?string $description = ''): Deck
@@ -162,5 +171,9 @@ class Deck
         }
 
         return $this;
+    }
+
+    public function publish() {
+        $this->publish = true;
     }
 }

@@ -5,10 +5,12 @@ import DeckDetailPage from "./Pages/DeckDetailPage.vue";
 import CardDetailPage from "./Pages/CardDetailPage.vue";
 import TrainPage from "./Pages/TrainPage.vue";
 import PrepareToLearnPage from "./Pages/PrepareToLearnPage.vue";
+import CommunityPage from "./Pages/Community/CommunityPage.vue";
+import CommunityCollectionPage from "./Pages/Community/CommunityCollectionPage.vue";
 
 export const FlashRoutes: Array<RouteConfig> = [
     {
-        path: '/collection/', name: 'Collection', component: MainPage,
+        path: '/my/collection/', name: 'Collection', component: MainPage,
         meta: { label: 'Коллекция', icon: 'mdi-flash', menu: true, auth: true, layout: BaseLayout, sortRate: 1},
     },
     {
@@ -26,5 +28,15 @@ export const FlashRoutes: Array<RouteConfig> = [
     {
         path: '/prepare/:id/', name: 'PrepareToLearn', component: PrepareToLearnPage,
         meta: { label: 'Учить!', icon: 'mdi-flash', menu: false, auth: true, layout: BaseLayout, sortRate: 2},
+    },
+    {
+        path: '/community/', name: 'Community', component: CommunityPage,
+        meta: { label: 'Сообщество', icon: 'mdi-flash', menu: true, auth: true, layout: BaseLayout, sortRate: 2},
+        children: [
+            {
+                path: 'collection', name: 'CommunityCollection', component: CommunityCollectionPage,
+                meta: { label: 'Коллекции сообщества', icon: 'mdi-flash', menu: true, auth: true, layout: BaseLayout, sortRate: 2},
+            }
+        ]
     }
 ];

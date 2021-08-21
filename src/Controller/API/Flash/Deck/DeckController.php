@@ -10,6 +10,7 @@ use App\Domain\Flash\Deck\Entity\Deck;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Handler as AddDeckHandler;
 use App\Domain\Flash\Deck\UseCase\AddDeck\Command as AddDeckCommand;
 use App\Domain\Flash\Deck\UseCase\GetDeck\Handler as GetDeckHandler;
+use App\Domain\Flash\Deck\UseCase\Publish\Handler as PublishHandler;
 use App\Domain\Flash\Deck\UseCase\UpdateDeck\Command as UpdateDeckCommand;
 use App\Domain\Flash\Deck\UseCase\UpdateDeck\Handler as UpdateDeckHandler;
 use App\Domain\Flash\Deck\UseCase\DeleteDeck\Handler as DeleteDeckHandler;
@@ -26,7 +27,9 @@ class DeckController extends AdminController
 
     /**
      * @Route("/{id}/", name="getDeck", methods={"GET"})
+     * @param Request $request
      * @param Deck $deck
+     * @param GetDeckHandler $handler
      * @return Response
      */
     public function getDeck(Request $request, Deck $deck, GetDeckHandler $handler): Response
@@ -83,6 +86,19 @@ class DeckController extends AdminController
         $handler->handle($deck);
         return $this->response($this->getSimpleSuccessResponse());
     }
+
+    /**
+     * @Route("/{id}/publish/", name="publishDeck", methods={"POST"})
+     * @param Deck $deck
+     * @param PublishHandler $handler
+     * @return Response
+     */
+    public function publishDeck(Deck $deck, PublishHandler $handler): Response
+    {
+        $handler->handle($deck);
+        return $this->response($this->serializer->serialize($deck, Deck::GROUP_ONE));
+    }
+
 
     public static function getEntityFqcn(): string
     {

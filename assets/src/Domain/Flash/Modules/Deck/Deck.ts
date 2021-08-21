@@ -3,15 +3,17 @@ export class Deck {
     private readonly name: String;
     private readonly description: String;
     private readonly updatedAt: string;
+    private readonly publish: boolean;
     private cards: Array<Number>;
 
     // @ts-ignore
-    constructor({id, name, updatedAt, description, cards} = {}) {
+    constructor({id, name, updatedAt, description, cards, publish} = {}) {
         this.id = id || 0;
         this.name = name || '';
         this.description = description || '';
         this.updatedAt = updatedAt || '';
         this.cards = cards || [];
+        this.publish = publish || false;
     }
 
     public getId(): Number|String { return this.id }
@@ -20,6 +22,7 @@ export class Deck {
     public getDescription(): String { return this.description }
     public getCards(): Array<Number> { return this.cards }
     public setCards(cards: Array<Number>) { this.cards = cards }
+    public isPublished(): boolean { return this.publish }
 
     public forRepeat() {
         let cards = this.cards;

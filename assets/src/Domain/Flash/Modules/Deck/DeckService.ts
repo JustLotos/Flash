@@ -22,5 +22,8 @@ export default {
         // @ts-ignore
         let route = ApiRouter.getRouteByName('getDeck', { id: dto.deck.getId() });
         return Axios.get(route.path, { params:{ isLearn: dto.isForLearn() }});
+    },
+    async publish(deck: Deck) {
+        return Axios.post(ApiRouter.getRouteByName('publishDeck', { id: deck.getId() }).path);
     }
 };

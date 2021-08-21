@@ -39,6 +39,24 @@
                                                 :to="{ name: 'PrepareToLearn', params: {id: getDeck.getId()} }"
                                             >Учить</v-btn>
                                         </v-hover>
+                                        <v-btn
+                                            v-if="getDeck.isPublished()"
+                                            block
+                                            depressed
+                                            x-large
+                                            color="lighten"
+                                            class="mb-2"
+                                        >Опубликовано</v-btn>
+
+                                        <v-btn
+                                            v-else
+                                            block
+                                            depressed
+                                            x-large
+                                            color="primary"
+                                            class="mb-2"
+                                            @click="publish"
+                                        >Опубликовать</v-btn>
                                     </v-col>
                                     <v-col cols="12" sm8 v-if="getCardsId.length">
                                         <v-expansion-panels flat hover class="mt-2">
@@ -95,6 +113,7 @@
     import {CardModule} from "../../Card/CardModule";
     import CardList from "../../Card/Components/CardList";
     import CardCreate from "../../Card/Components/CRUD/CardCreate";
+    import {DeckModule} from "../DeckModule";
     export default {
         name: "DeckDetail",
         components: {CardCreate, CardList, ListObjects, DeckDelete, DeckUpdate, Modal},
@@ -150,6 +169,14 @@
             },
             onCreateCard: function (value) {
               this.createCardModal = !this.createCardModal;
+            },
+            publish: function() {
+              DeckModule.publish(this.getDeck).then(function (data) {
+                console.log(data);
+              }).catch(function (error) {
+                console.log(error)
+              });
+
             }
         }
     }

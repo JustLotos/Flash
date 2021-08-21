@@ -21,7 +21,9 @@
                         :pagination="{perPage: 10, buttonsCount: 7}"
                     >
                         <template v-slot:item="deck">
+                          <slot name="deck-item" :deck-item="deck.item">
                             <deck-list-item :deck="deck.item" />
+                          </slot>
                         </template>
                         <template v-slot:empty>
                             <v-row v-if="isLoading" justify="center" style="padding: 150px 100px 150px 100px">
