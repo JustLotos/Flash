@@ -13,10 +13,10 @@ up: docker-up v-dev
 down: docker-down
 
 update: docker-down docker-pull docker-build docker-up composer-update v-dev
-install: docker-pull docker-build docker-up composer-update-fix lexik-jwt-install first_install_db
-first_install_db: create_db  migrate fixtload create_db_test migrate_test fixtload_test
+install: docker-pull docker-build docker-up composer-update-fix lexik-jwt-install first_install_db yarn-install v-dev
+first_install_db: create_db rm_mig_dir migdiff migrate fixtload create_db_test migrate_test fixtload_test
 
-install_db: create_db migrate fixtload
+install_db: create_db migration migrate fixtload
 reset_db: rm_mig_dir drop_db create_db migdiff migrate fixtload
 update_db: migdiff migrate fixtload
 
@@ -40,11 +40,11 @@ docker-build:
 
 #COMPOSER START
 composer-update:
-	@${COMPOSER} update
+	docker-compose exec php sudo composer update
 composer-update-fix:
 	@${PHP} sudo composer self-update 1.10.12
 	@${PHP} sudo php -d memory_limit=-1 /usr/local/bin/composer install --no-scripts
-	@${COMPOSER} update --no-plugins
+	docker-compose exec php sudo composer install
 composer-install:
 	@${COMPOSER} install
 
