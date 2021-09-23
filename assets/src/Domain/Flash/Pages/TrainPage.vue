@@ -93,7 +93,7 @@ export default {
       let deck: Deck = new Deck(to.params as Deck);
       let dto: GetDeckDTO = new GetDeckDTO(deck, GetDeckDTO.FOR_LEARN);
 
-      await DeckModule.get(dto).catch(() => { Router.push({name: 'Collection'}) });
+      await DeckModule.get(dto).catch(() => { Router.push({name: 'Community'}) });
 
       next(function (vm) {
         let fetchedDeck: Deck = DeckModule.deckById(deck.getId());

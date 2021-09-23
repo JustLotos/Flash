@@ -31,12 +31,12 @@ export default class DeckDetailPage extends Vue {
       let deck: Deck = new Deck(to.params);
       await DeckModule.get(new GetDeckDTO(deck)).catch(function (data) {
           console.log(data);
-          Router.push({name: 'Collection'});
+          Router.push({name: 'Community'});
       });
 
       await CardModule.fetchCardsByDeck(deck).catch(function (data) {
           console.log(data);
-          Router.push({name: 'Collection'});
+          Router.push({name: 'Community'});
       })
 
       next(function (vm) {

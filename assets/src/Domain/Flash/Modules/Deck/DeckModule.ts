@@ -14,7 +14,7 @@ import Event from "../../../../Utils/EventModule/Event";
     name: 'DeckModule',
     namespaced: true
 })
-class VuexDeck extends VuexModule {
+export class VuexDeck extends VuexModule {
     allIds = [];
     byId = {};
 
@@ -26,6 +26,7 @@ class VuexDeck extends VuexModule {
 
     @Action({ rawError: true })
     public async fetchDecks(): Promise<any> {
+        debugger
         AppModule.loading();
         const response  = await DeckService.fetch();
         this.FETCH_DECKS(response.data);
@@ -34,16 +35,17 @@ class VuexDeck extends VuexModule {
     }
 
     @Mutation
-    private FETCH_DECKS(data: any) {
+    protected FETCH_DECKS(data: any, module = null) {
+        let self = module ? module : this;
         data.forEach((dataItem: any)=>{
             let deck: Deck = Deck.parseJSON(dataItem);
 
             // @ts-ignore
-            Vue.set(this.byId, deck.getId(), deck);
+            Vue.set(self.byId, deck.getId(), deck);
             // @ts-ignore
-            if (!this.allIds.includes(deck.getId())) {
+            if (!self.allIds.includes(deck.getId())) {
                 // @ts-ignore
-                this.allIds.push(deck.getId());
+                self.allIds.push(deck.getId());
             }
         });
     }

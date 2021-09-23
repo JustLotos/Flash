@@ -49,7 +49,7 @@ export default {
 
     await DeckModule.get(dto).catch(function (data) {
       console.log(data);
-      Router.push({name: 'Collection'});
+      Router.push({name: 'Community'});
     });
 
     next(function (vm) {

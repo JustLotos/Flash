@@ -46,6 +46,8 @@ class DeckFixtures extends BaseFixture implements DependentFixtureInterface
             $this->faker->sentence
         );
 
+        if(rand(0,1) < 0.5) { $deck->publish(); }
+
         $learner->addDeck($deck);
         return $deck;
     }
