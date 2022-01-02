@@ -9,7 +9,7 @@ docker-clear:
 	docker rm -f $(docker ps -a -q)
 
 
-up: docker-up v-dev
+up: docker-up
 down: docker-down
 
 update: docker-down docker-pull docker-build docker-up composer-update v-dev
@@ -36,6 +36,12 @@ docker-pull:
 
 docker-build:
 	@${COMPOSE} build
+docker-clean:
+	docker-compose down
+	docker rm -f $(docker ps -a -q)
+	docker volume rm $(docker volume ls -q)
+	docker-compose up -d
+
 #DOCKER-COMPOSE
 
 #COMPOSER START
@@ -92,13 +98,13 @@ yarn-install:
 	@${COMPOSE} run --user root node chmod -R 777 /app/node_modules
 	@${COMPOSE} run --user root node touch yarn-error.log
 	@${COMPOSE} run --user root node chmod -R 777 /app/yarn-error.log
-	@${COMPOSE} run node yarn install
 	@${COMPOSE} run node yarn add @babel/compat-data
 	@${COMPOSE} run node yarn add @babel/preset-env
 yarn-upgrade:
 	@${COMPOSE} run node yarn upgrade
 
 v-dev:
+	@${COMPOSE} run node export NODE_OPTIONS=--openssl-legacy-provider
 	@${COMPOSE} run node yarn encore dev --watch
 v-prod:
 	@${COMPOSE} run node yarn encore production

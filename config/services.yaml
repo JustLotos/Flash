@@ -96,3 +96,26 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: ExistEntity }
 
+
+    #ES COMMANDS
+    # INDICES
+    app.command.es-create-indices:
+        class: App\Domain\ElasticSearch\BaseIndex\UseCase\IndicesManagement\CreateIndicesCommand
+        tags:
+            - { name: console.command }
+    app.command.es-delete-indices:
+        class: App\Domain\ElasticSearch\BaseIndex\UseCase\IndicesManagement\DeleteIndicesCommand
+        tags:
+            - { name: console.command }
+    # INDICES
+    # DOCUMENTS
+    app.command.es-get-index-documents:
+        class: App\Domain\ElasticSearch\BaseIndex\UseCase\IndexingDocuments\GetIndexCommand
+        tags:
+            - { name: console.command }
+    app.command.es-reindex-documents:
+        class: App\Domain\ElasticSearch\BaseIndex\UseCase\IndexingDocuments\ReindexDocumentCommand
+        tags:
+            - { name: console.command }
+    # DOCUMENTS
+    #ES COMMANDS

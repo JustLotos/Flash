@@ -36,11 +36,11 @@ class CardFixtures extends BaseFixture implements DependentFixtureInterface
 
 
         //
-//        $this->createMany(UserFixtures::USER_COUNT * 100, self::USERS_ID, function () {
-//            /** @var Deck $deck */
-//            $deck = $this->getRandomReference(DeckFixtures::USERS_ID);
-//            return $this->makeCard($deck);
-//        });
+        $this->createMany(UserFixtures::USER_COUNT * 100, self::USERS_ID, function () {
+            /** @var Deck $deck */
+            $deck = $this->getRandomReference(DeckFixtures::USERS_ID);
+            return $this->makeCard($deck);
+        });
 
         $manager->flush();
     }

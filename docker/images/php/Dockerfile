@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
         libpq-dev \
     && pecl install mcrypt-1.0.1 \
     && pecl install xdebug-2.7.1 \
-    && docker-php-ext-install -j$(nproc) intl bcmath soap pgsql pdo_pgsql zip mbstring \
+    && docker-php-ext-install -j$(nproc) intl bcmath soap pgsql pdo_pgsql zip mbstring xml json\
     && docker-php-ext-configure mbstring --enable-mbstring \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
