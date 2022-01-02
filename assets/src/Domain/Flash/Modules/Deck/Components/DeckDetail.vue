@@ -165,7 +165,7 @@
                 this.deleteDeckModal = !this.deleteDeckModal;
                 this.successMessage = value;
                 this.successModal = !this.successModal;
-                Router.push({name: 'Collection'});
+                Router.push({name: 'Community'});
             },
             onCreateCard: function (value) {
               this.createCardModal = !this.createCardModal;

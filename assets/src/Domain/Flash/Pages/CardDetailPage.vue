@@ -181,7 +181,7 @@ export default {
             let card = new Card(to.params as Card);
             await CardModule.get(card).catch(function (error) {
                 console.log(error)
-                next({name: 'Collection'});
+                next({name: 'Community'});
             });
 
             next(vm => vm.setCard(CardModule.cardById(card.getId())));

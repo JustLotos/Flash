@@ -33,6 +33,16 @@ class FetchController extends AbstractController
     }
 
     /**
+     * @Route("/community/deck/", name="fetchCommunityDecks", methods={"GET"})
+     * @param DeckRepository $repository
+     * @return Response
+     */
+    public function fetchCommunityDecks(DeckRepository $repository): Response {
+        $decks = $repository->findBy(['publish' => true]);
+        return $this->response($this->serializer->serialize($decks));
+    }
+
+    /**
      * @Route("/es/deck/", name="fetchFormEsDecks", methods={"GET"})
      * @param ElasticService $elasticService
      * @return Response
