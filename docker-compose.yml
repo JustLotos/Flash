@@ -58,34 +58,34 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
-  elasticsearch:
-    container_name: es-container
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
-    environment:
-      - node.name=es01
-      - xpack.security.enabled=false
-      - "discovery.type=single-node"
-    networks:
-      - es-net
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - elastic01:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-  kibana:
-    container_name: kb-container
-    image: docker.elastic.co/kibana/kibana:7.2.0
-    environment:
-      - ELASTICSEARCH_HOSTS=http://172.17.0.1:9200
-    networks:
-      - es-net
-    depends_on:
-      - elasticsearch
-    ports:
-      - "5601:5601"
+#  elasticsearch:
+#    container_name: es-container
+#    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+#    environment:
+#      - node.name=es01
+#      - xpack.security.enabled=false
+#      - "discovery.type=single-node"
+#    networks:
+#      - es-net
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    volumes:
+#      - elastic01:/usr/share/elasticsearch/data
+#    ports:
+#      - "9200:9200"
+#  kibana:
+#    container_name: kb-container
+#    image: docker.elastic.co/kibana/kibana:7.2.0
+#    environment:
+#      - ELASTICSEARCH_HOSTS=http://172.17.0.1:9200
+#    networks:
+#      - es-net
+#    depends_on:
+#      - elasticsearch
+#    ports:
+#      - "5601:5601"
 networks:
   es-net:
     driver: bridge
