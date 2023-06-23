@@ -122,3 +122,8 @@ lexik-jwt-install:
 	mkdir -p config/jwt
 	openssl genpkey -out config/jwt/private.pem -aes256 -pass pass:root  -algorithm rsa -pkeyopt rsa_keygen_bits:4096
 	openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout -passin pass:root
+
+
+build-image-php:
+ 	docker build -t ghcr.io/justlotos/php:latest --file ./docker/images/php/Dockerfile .
+

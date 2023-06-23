@@ -35,9 +35,9 @@ RUN pecl install -o -f redis \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
 # Добавим свой php.ini, можем в нем определять свои значения конфига
-ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
+#ADD ./php.ini /usr/local/etc/php/conf.d/40-custom.ini
 
 # Указываем рабочую директорию для PHP
 WORKDIR /app
 
-CMD ["php-fpm"]
+CMD ["/start.sh"]
